@@ -2,10 +2,11 @@
 This project is in early alpha. Expect bugs.
 
 ### Possibly Working:
-* Potion Chance Indicator
+* Potion chance indicator (now with future chances as well)
+* Preliminary event chances
+* Preliminary card chances (very rough UI, will probably get its own component in the future)
 
 ### TODO:
-* Card chances (rares)
-* Event chances (event vs. fight vs. shop etc.)
 * SlayTheRelics twitch integration
 * Additional UI improvements
+* Monster attack patterns?
