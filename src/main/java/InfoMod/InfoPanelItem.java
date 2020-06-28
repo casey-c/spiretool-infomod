@@ -14,7 +14,13 @@ import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
 import com.megacrit.cardcrawl.screens.stats.CharStat;
+import com.megacrit.cardcrawl.vfx.GenericSmokeEffect;
+import com.megacrit.cardcrawl.vfx.PetalEffect;
+import com.megacrit.cardcrawl.vfx.SpotlightEffect;
+import com.megacrit.cardcrawl.vfx.combat.BlizzardEffect;
 import com.megacrit.cardcrawl.vfx.combat.CardPoofEffect;
+import com.megacrit.cardcrawl.vfx.combat.FireballEffect;
+import com.megacrit.cardcrawl.vfx.combat.GrandFinalEffect;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -115,6 +121,7 @@ public class InfoPanelItem extends TopPanelItem {
         System.out.println("OJB: info panel item clicked!");
 
         AbstractDungeon.effectList.add(new CardPoofEffect(500, 500));
+
     }
 
     @Override

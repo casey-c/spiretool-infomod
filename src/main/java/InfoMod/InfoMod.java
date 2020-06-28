@@ -4,22 +4,21 @@ import basemod.BaseMod;
 import basemod.interfaces.PostBattleSubscriber;
 import basemod.interfaces.PostDungeonUpdateSubscriber;
 import basemod.interfaces.PostInitializeSubscriber;
-import basemod.patches.com.megacrit.cardcrawl.saveAndContinue.SaveAndContinue.Save;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
+import com.megacrit.cardcrawl.cards.CardSave;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.EventHelper;
-import com.megacrit.cardcrawl.helpers.SaveHelper;
+import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import com.megacrit.cardcrawl.saveAndContinue.SaveFile;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Vector;
+import java.util.*;
 
 @SpireInitializer
-public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, PostDungeonUpdateSubscriber {
+public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, PostDungeonUpdateSubscriber {;
 
     private static int curr_potion_chance = -1;
     private static int curr_rare_chance = -1;
@@ -28,9 +27,15 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
     private static PotionPanelItem potionPanelItem;
     private static InfoPanelItem infoPanelItem;
 
+    private static DeckDropdownItem deckDropdownItem;
+
+    private static int cards_hash = 0;
+    private static int upgrade_cards_hash = 0;
+
     public InfoMod() {
         BaseMod.subscribe(this);
 
+        //cards = new ArrayList<>();
     }
 
     public static void initialize() {
@@ -38,7 +43,9 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
 
         // does some crazy shit
         // also useful for hitboxes
-//        Settings.isDebug = true;
+        //Settings.isDebug = true;
+
+        deckDropdownItem = new DeckDropdownItem();
 
     }
 
@@ -96,6 +103,79 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
 
         infoPanelItem.setProbabilities(prRare, prRareElite, prUnc, prUncElite, numCards, numCardsElite);
 
+    }
+
+    // TODO: make this more efficient / no need to run every frame.
+    //     figure out a way to subscribe to a card upgrade / removal / transform event (e.g. from events / campfires)
+    // right now searing blow won't update asap. oh well
+    private boolean updateCards() {
+        int new_cards_hash = AbstractDungeon.player.masterDeck.getCardNames().hashCode();
+        int new_upgrade_cards_hash = AbstractDungeon.player.masterDeck.getUpgradableCards().getCardNames().hashCode();
+
+        // TODO: maybe add special logic for searing blow, but probably nah (don't want to make this check expensive)
+        // boolean hasSearingBlow = CardHelper.hasCardWithID("Searing Blow");
+
+        // TODO: make this not super awful and inefficient
+        if (cards_hash != new_cards_hash || upgrade_cards_hash != new_upgrade_cards_hash) {
+            ArrayList<CardSave> cards = AbstractDungeon.player.masterDeck.getCardDeck();
+
+            HashMap<String, Integer> cleanedCardStrings = new HashMap<>();
+            StringBuilder sb = new StringBuilder();
+            for (CardSave card : cards) {
+                sb.setLength(0);
+
+                CardStrings s = CardCrawlGame.languagePack.getCardStrings(card.id);
+                sb.append(s.NAME);
+
+                if (card.upgrades > 0)
+                    sb.append("+");
+                if (card.upgrades > 1)
+                    sb.append(card.upgrades);
+
+                // More efficient ways exist, but we want unique keys and the count of each
+                // E.g. don't want Strike, Strike, Strike, Strike+ but:
+                //   [3] Strike, Strike+
+                String key = sb.toString();
+                int count = cleanedCardStrings.containsKey(key) ? cleanedCardStrings.get(key) : 0;
+                cleanedCardStrings.put(key, count + 1);
+            }
+
+            // Sort by card name
+            ArrayList<Pair<String, Integer>> finalCards = new ArrayList<>();
+            for (Map.Entry<String, Integer> pair : cleanedCardStrings.entrySet())
+                finalCards.add(Pair.of(pair.getKey(), pair.getValue()));
+            finalCards.sort(Comparator.comparing(Pair::getLeft));
+
+            // To a single string
+            sb.setLength(0);
+            int index = 0;
+
+            for (Pair<String, Integer> pair : finalCards) {
+                String key = pair.getLeft();
+                int count = pair.getRight();
+
+                // e.g. [4] Strike
+                if (count > 1) {
+                    sb.append("[");
+                    sb.append(count);
+                    sb.append("] ");
+                }
+                sb.append(key);
+
+                if (index < cleanedCardStrings.size() - 1)
+                    sb.append(" NL ");
+
+                ++index;
+            }
+
+            deckDropdownItem.setString(sb.toString());
+
+            cards_hash = new_cards_hash;
+            upgrade_cards_hash = new_upgrade_cards_hash;
+            return true;
+        }
+
+        return false;
     }
 
 
@@ -164,17 +244,17 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
                 // Update UI
                 infoPanelItem.setEventsAndShrines(eventList, shrineList, prEvent, prMonster, prShop, prTreasure);
 
-                for (String y : eventList) {
-                    System.out.println("events: " + y);
-                }
-                for (String y : shrineList) {
-                    System.out.println("shrines: " + y);
-                }
+//                for (String y : eventList) { System.out.println("events: " + y); }
+//                for (String y : shrineList) { System.out.println("shrines: " + y); }
             }
+
+            // Cards
+            if (updateCards())
+                anyChanges = true;
 
             // Logging
             if (anyChanges) {
-
+                System.out.println("OJB: update found changes");
                 System.out.println("--------------------------------------");
             }
         }
