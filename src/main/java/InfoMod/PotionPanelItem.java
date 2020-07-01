@@ -83,6 +83,8 @@ public class PotionPanelItem extends TopPanelItem {
     public void setPotionChance(int p) {
         this.potion_chance = p;
         future_tip.body = buildFutureChances(p);
+
+        SlayTheRelicsIntegration.update("potionPanelItem", hitbox, tips);
     }
 
     @Override

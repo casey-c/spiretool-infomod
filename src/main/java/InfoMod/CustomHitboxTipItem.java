@@ -69,12 +69,10 @@ public class CustomHitboxTipItem implements PostRenderSubscriber, HitboxListener
     protected PowerTip primary_tip;
     protected ArrayList<PowerTip> tips;
 
-    // Slay the relics integration format
-    public static ArrayList<Hitbox> slayTheRelicsHitboxes = new ArrayList<>();
-    public static ArrayList<ArrayList<PowerTip>> slayTheRelicsPowerTips = new ArrayList<>();
-
+    protected String id = "";
 
     /// Params:
+    /// id : for SlayTheRelics integration (unique for a tip box)
     /// w : width of hitbox (nonscaled)
     /// h : height of hitbox (nonscaled)
     /// hbx : hitbox x position (will be moved according to HB_POS_TYPE)
@@ -86,7 +84,7 @@ public class CustomHitboxTipItem implements PostRenderSubscriber, HitboxListener
     ///
     /// NOTE: may provide cleaner constructors in the future; or allow derived classes to ignore this boilerplate
     /// TODO: probably should scale w/h of hitbox like the others [oops!]
-    public CustomHitboxTipItem(float w, float h, float hbx, float hby, HB_POS_TYPE hb_type,
+    public CustomHitboxTipItem(String id, float w, float h, float hbx, float hby, HB_POS_TYPE hb_type,
                                float tipx, float tipy, TIP_POS_TYPE tip_type, String header, String body) {
         BaseMod.subscribe(this);
 
@@ -103,6 +101,9 @@ public class CustomHitboxTipItem implements PostRenderSubscriber, HitboxListener
         this.tip_moveY = tipy;
 
         tips = new ArrayList<>();
+        tips.add(primary_tip);
+
+        this.id = id;
     }
 
     // Can move scaled hitbox locations here
@@ -154,6 +155,7 @@ public class CustomHitboxTipItem implements PostRenderSubscriber, HitboxListener
         hb.encapsulatedUpdate(this);
 
         if (usePrimaryTip && AbstractDungeon.isPlayerInDungeon() && hb.hovered) {
+            // TODO look over this more (probably don't need to clear and readd every frame)
             tips.clear();
             tips.add(primary_tip);
 
@@ -161,7 +163,6 @@ public class CustomHitboxTipItem implements PostRenderSubscriber, HitboxListener
             TipHelper.queuePowerTips(PRIMARY_TIP_X, PRIMARY_TIP_Y, tips);
             //TipHelper.renderGenericTip(TIP_X, TIP_Y, "Current Deck", tip_body);
 
-            // TODO look over this more
         }
     }
 
@@ -177,35 +178,18 @@ public class CustomHitboxTipItem implements PostRenderSubscriber, HitboxListener
 
     ////////////////////////////////////////////////////////////////////////////////
 
-    protected void slayTheRelicsClear() {
-        slayTheRelicsHitboxes.clear();
-        slayTheRelicsPowerTips.clear();
-    }
-
-    protected void setSlayTheRelicsAdd() {
-        slayTheRelicsHitboxes.add(hb);
-        slayTheRelicsPowerTips.add(tips);
-    }
-
-    protected void slayTheRelicsUpdate() {
-        slayTheRelicsClear();
-        setSlayTheRelicsAdd();
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////
-
     // Setters
     public void setPrimaryTipHeader(String h) {
         primary_tip.header = h;
-        slayTheRelicsUpdate();
+        SlayTheRelicsIntegration.update(id, hb, tips);
     }
     public void setPrimaryTipBody(String b) {
         primary_tip.body = b;
-        slayTheRelicsUpdate();
+        SlayTheRelicsIntegration.update(id, hb, tips);
     }
     public void setPrimaryTipBoth(String header, String body) {
         primary_tip.header = header;
         primary_tip.body = body;
-        slayTheRelicsUpdate();
+        SlayTheRelicsIntegration.update(id, hb, tips);
     }
 }

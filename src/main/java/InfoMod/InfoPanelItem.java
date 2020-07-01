@@ -104,6 +104,7 @@ public class InfoPanelItem extends TopPanelItem {
         sb.append(String.format("#gTreasure (%.02f%%) NL ", prTreasure * 100.0f));
 
         event_tip.body = sb.toString();
+        SlayTheRelicsIntegration.update("infoPanelItem", hitbox, tips);
     }
 
     public void setProbabilities(double rare, double rareElite, double unc, double uncElite, int numCards, int numCardsElite) {
@@ -116,6 +117,8 @@ public class InfoPanelItem extends TopPanelItem {
         sb.append(String.format("#bUncommon: NL #b%.02f%% #b(%.02f%%)", unc * 100.0, uncElite * 100.0));
 
         card_tip.body = sb.toString();
+
+        SlayTheRelicsIntegration.update("infoPanelItem", hitbox, tips);
     }
 
 

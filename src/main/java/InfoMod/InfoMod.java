@@ -2,6 +2,7 @@ package InfoMod;
 
 import basemod.BaseMod;
 import basemod.interfaces.PostBattleSubscriber;
+import basemod.interfaces.PostDeathSubscriber;
 import basemod.interfaces.PostDungeonUpdateSubscriber;
 import basemod.interfaces.PostInitializeSubscriber;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
@@ -18,16 +19,19 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.*;
 
 @SpireInitializer
-public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, PostDungeonUpdateSubscriber {;
+public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, PostDungeonUpdateSubscriber, PostDeathSubscriber {;
 
     private static int curr_potion_chance = -1;
     private static int curr_rare_chance = -1;
     private static int curr_floor = -1;
 
+    private static String curr_boss = "";
+
     private static PotionPanelItem potionPanelItem;
     private static InfoPanelItem infoPanelItem;
 
     private static CustomHitboxTipItem deckTipItem;
+    private static CustomHitboxTipItem bossTipItem;
 
     private static int cards_hash = 0;
     private static int upgrade_cards_hash = 0;
@@ -46,6 +50,7 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
         //Settings.isDebug = true;
 
         deckTipItem = new CustomHitboxTipItem(
+                "deckTipItem",
                 67,
                 67,
                 117.0f,
@@ -55,6 +60,20 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
                 0.0f,
                 CustomHitboxTipItem.TIP_POS_TYPE.TOP_RIGHT,
                 "Deck",
+                "..."
+        );
+
+        bossTipItem = new CustomHitboxTipItem(
+                "bossTipItem",
+                67,
+                67,
+                190.0f,
+                33.0f,
+                CustomHitboxTipItem.HB_POS_TYPE.SCALED_FROM_TOP_RIGHT,
+                0.0f,
+                0.0f,
+                CustomHitboxTipItem.TIP_POS_TYPE.TOP_RIGHT,
+                "Current Boss",
                 "..."
         );
 
@@ -266,10 +285,22 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
             if (updateCards())
                 anyChanges = true;
 
+            // Boss
+            if (AbstractDungeon.bossList.size() > 0 && AbstractDungeon.bossList.get(0) != curr_boss) {
+                curr_boss = AbstractDungeon.bossList.get(0);
+                System.out.println("OJB: boss update: " + curr_boss);
+                bossTipItem.setPrimaryTipBody(curr_boss);
+                anyChanges = true;
+            }
+
             // Logging
             if (anyChanges) {
                 System.out.println("OJB: update found changes");
                 System.out.println("--------------------------------------");
+
+                SlayTheRelicsIntegration.print();
+
+                System.out.println("OJB: str integration found: " +SlayTheRelicsIntegration.slayTheRelicsHitboxes.size() + " " + SlayTheRelicsIntegration.slayTheRelicsPowerTips.size());
             }
         }
     }
@@ -281,5 +312,12 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
 
         BaseMod.addTopPanelItem(infoPanelItem);
         BaseMod.addTopPanelItem(potionPanelItem);
+    }
+
+    @Override
+    public void receivePostDeath() {
+        // TODO: put this in a better spot? might want to check the deck at the end maybe?
+        //SlayTheRelicsIntegration.reset();
+        //SlayTheRelicsIntegration.print();
     }
 }
