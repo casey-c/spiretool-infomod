@@ -66,25 +66,11 @@ public class DeckDropdownItem implements PostRenderSubscriber, HitboxListener, P
     }
 
     @Override
-    public void hoverStarted(Hitbox hitbox) {
-
-        if (hitbox == hb) {
-            System.out.println("OJB: hb");
-        }
-        else {
-            System.out.println("OJB: not hb");
-        }
-    }
-
+    public void hoverStarted(Hitbox hitbox) { }
 
     @Override
-    public void startClicking(Hitbox hitbox) {
-
-    }
+    public void startClicking(Hitbox hitbox) { }
 
     @Override
-    public void clicked(Hitbox hitbox) {
-
-    }
-
+    public void clicked(Hitbox hitbox) { }
 }

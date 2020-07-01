@@ -27,7 +27,7 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
     private static PotionPanelItem potionPanelItem;
     private static InfoPanelItem infoPanelItem;
 
-    private static DeckDropdownItem deckDropdownItem;
+    private static CustomHitboxTipItem deckTipItem;
 
     private static int cards_hash = 0;
     private static int upgrade_cards_hash = 0;
@@ -45,7 +45,21 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
         // also useful for hitboxes
         //Settings.isDebug = true;
 
-        deckDropdownItem = new DeckDropdownItem();
+        deckTipItem = new CustomHitboxTipItem(
+                67,
+                67,
+                117.0f,
+                33.0f,
+                CustomHitboxTipItem.HB_POS_TYPE.SCALED_FROM_TOP_RIGHT,
+                0.0f,
+                0.0f,
+                CustomHitboxTipItem.TIP_POS_TYPE.TOP_RIGHT,
+                "Deck",
+                "..."
+        );
+
+        float cx = (float)Settings.WIDTH - 117.0f * Settings.scale;
+        float cy = (float)Settings.HEIGHT - 33.0f * Settings.scale;
 
     }
 
@@ -60,7 +74,6 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
 //        System.out.println("room.blizzardPotionMod:" + abstractRoom.blizzardPotionMod);
 //        System.out.println("EventHelper.getChances()" + EventHelper.getChances());
 //        System.out.println("------------------------");
-
     }
 
     private void updateCardChances(int new_rare_chance) {
@@ -168,7 +181,8 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
                 ++index;
             }
 
-            deckDropdownItem.setString(sb.toString());
+//            deckDropdownItem.setString(sb.toString());
+            deckTipItem.setPrimaryTipBody(sb.toString());
 
             cards_hash = new_cards_hash;
             upgrade_cards_hash = new_upgrade_cards_hash;

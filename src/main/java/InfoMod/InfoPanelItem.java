@@ -3,6 +3,7 @@ package InfoMod;
 import basemod.TopPanelItem;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.gikk.twirk.SETTINGS;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
@@ -28,14 +29,20 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
+@SpireInitializer
 public class InfoPanelItem extends TopPanelItem {
     private static final Texture IMG = new Texture("images/icon.png");
     public static final String ID = "ojb_infomod:InfoIcon";
 
     private int potion_chance = 40;
 
+
     private ArrayList<PowerTip> tips;
     private PowerTip event_tip, card_tip, help_tip;
+
+    // SlayTheRelics integration
+    public static ArrayList<Hitbox> slayTheRelicsHitboxes = new ArrayList<>();
+    public static ArrayList<ArrayList<PowerTip>> slayTheRelicsPowerTips = new ArrayList<>();
 
     boolean isHovered = false;
 
@@ -65,8 +72,9 @@ public class InfoPanelItem extends TopPanelItem {
         StringBuilder sb = new StringBuilder();
 
         // Events
+        sb.append("#g");
         sb.append(eventList.size());
-        sb.append(String.format(" Available events (%.02f%%): NL NL ", ((prEvent * 0.75f) * 100.0f)));
+        sb.append(String.format(" #gAvailable #gevents (%.02f%%): NL NL ", ((prEvent * 0.75f) * 100.0f)));
 
         Vector<String> eventVec = new Vector<>(eventList);
         for (int i = 0; i < eventVec.size(); ++i) {
@@ -78,8 +86,9 @@ public class InfoPanelItem extends TopPanelItem {
         sb.append(" NL NL ");
 
         // Shrines
+        sb.append("#g");
         sb.append(shrineList.size());
-        sb.append(String.format(" Available shrines (%.02f%%): NL NL ", ((prEvent * 0.25f) * 100.0f)));
+        sb.append(String.format(" #gAvailable #gshrines (%.02f%%): NL NL ", ((prEvent * 0.25f) * 100.0f)));
 
         Vector<String> shrineVec = new Vector<>(shrineList);
         for (int i = 0; i < shrineVec.size(); ++i) {
@@ -90,9 +99,9 @@ public class InfoPanelItem extends TopPanelItem {
         }
 
         // Extra
-        sb.append(String.format(" NL NL Monster (%.02f%%) NL ", prMonster * 100.0f));
-        sb.append(String.format("Shop (%.02f%%) NL ", prShop * 100.0f));
-        sb.append(String.format("Treasure (%.02f%%) NL ", prTreasure * 100.0f));
+        sb.append(String.format(" NL NL #gMonster (%.02f%%) NL ", prMonster * 100.0f));
+        sb.append(String.format("#gShop (%.02f%%) NL ", prShop * 100.0f));
+        sb.append(String.format("#gTreasure (%.02f%%) NL ", prTreasure * 100.0f));
 
         event_tip.body = sb.toString();
     }
@@ -100,17 +109,11 @@ public class InfoPanelItem extends TopPanelItem {
     public void setProbabilities(double rare, double rareElite, double unc, double uncElite, int numCards, int numCardsElite) {
         StringBuilder sb = new StringBuilder();
 
+        // TODO: figure out what #e #r etc. do
+        // NOTE: [E] is the energy symbol
         sb.append(String.format("Next %d cards (%d for elite) NL NL ", numCards, numCardsElite) );
-        sb.append(String.format("Rare: NL %.02f%% (%.02f%%) NL NL ", rare * 100.0, rareElite * 100.0));
-        sb.append(String.format("Uncommon: NL %.02f%% (%.02f%%)", unc * 100.0, uncElite * 100.0));
-
-//        sb.append("Rare Cards: NL ");
-//        sb.append(String.format("Regular: %.02f NL ", rare));
-//        sb.append(String.format("Elite: %.02f NL ", rareElite));
-//
-//        sb.append("NL Uncommon Cards: NL ");
-//        sb.append(String.format("Regular: %.02f NL ", unc));
-//        sb.append(String.format("Elite: %.02f NL ", uncElite));
+        sb.append(String.format("#yRare: NL #y%.02f%% #y(%.02f%%) NL NL ", rare * 100.0, rareElite * 100.0));
+        sb.append(String.format("#bUncommon: NL #b%.02f%% #b(%.02f%%)", unc * 100.0, uncElite * 100.0));
 
         card_tip.body = sb.toString();
     }
@@ -137,28 +140,9 @@ public class InfoPanelItem extends TopPanelItem {
         float TIP_Y = (float)Settings.HEIGHT - 120.0F * Settings.scale;
         //float TOP_RIGHT_TIP_X = 1550.0F * Settings.scale;
         //float TOP_RIGHT_TIP_X = (float) Settings.WIDTH - 683.0f * Settings.scale;
-        // TODO: move with mouse
-        //float TOP_RIGHT_TIP_X = (float) Settings.WIDTH - 683.0f * Settings.scale;
         float TOP_RIGHT_TIP_X = (float) InputHelper.mX * Settings.scale;
 
         // Add to render queue
         TipHelper.queuePowerTips(TOP_RIGHT_TIP_X, TIP_Y, tips);
-
-        // Debug (fires only on change to avoid spamming logger)
-        if (!isHovered) {
-            isHovered = true;
-            System.out.println("OJB: hovered");
-            System.out.println("tip y = " + TIP_Y);
-        }
-    }
-
-    @Override
-    protected void onUnhover() {
-        super.onUnhover();
-
-        if (isHovered) {
-            isHovered = false;
-            System.out.println("OJB: unhovered");
-        }
     }
 }
