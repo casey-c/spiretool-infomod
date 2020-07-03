@@ -13,9 +13,8 @@ import java.util.Map;
   Slay The Relics (Twitch extension) integration. (WIP)
 
  NOTE:  I don't like the idea of clearing / rebuilding the hitboxes on every render as suggested (seems like there are
-   a number of better solutions to try). Right now, I rebuild on a change (but only allow a single at a time). Since we
-   have multiple items with hitboxes that can update at a lot of different times, we'll need to expand this
-   implementation a bit further to handle these async updates.
+   a number of better solutions to try). Right now I update a hash map and every time that changes rebuild the list from
+   the map items.
  */
 @SpireInitializer
 public class SlayTheRelicsIntegration {

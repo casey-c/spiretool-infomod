@@ -18,6 +18,9 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 
+// TODO: lots of refactoring and cleanup
+// this mod is still very new so it's been low priority to make the code nice
+
 @SpireInitializer
 public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, PostDungeonUpdateSubscriber, PostDeathSubscriber {;
 
@@ -268,14 +271,26 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
                 ArrayList<Float> eventChanceList = AbstractDungeon.loading_post_combat ? EventHelper.getChancesPreRoll() : EventHelper.getChances();
                 Vector<Float> eventChanceVec = new Vector<>(eventChanceList);
 
-                // elite (useless), monster, shop, treasure
+                // eventChanceVec: elite (useless), monster, shop, treasure
                 float prMonster = eventChanceVec.get(1);
                 float prShop = eventChanceVec.get(2);
                 float prTreasure = eventChanceVec.get(3);
                 float prEvent = 1.0f - prMonster - prShop - prTreasure;
 
+                // JUZU BRACELET fix
+                if (player != null && player.hasRelic("Juzu Bracelet")) {
+                    prEvent += prMonster;
+                    prMonster = 0.0f;
+                }
+
+                int totalEventsInPool = eventList.size();
+                float[] pr = ProbabiltyUtils.chanceOfSeeingEventAfter2(prMonster, prTreasure, prShop, totalEventsInPool);
+
+                System.out.println("OJB: total events in pool: " + totalEventsInPool);
+                System.out.println("OJB: probability after 1: " + pr[0] + ", pr after 2: " + pr[1]);
+
                 // Update UI
-                infoPanelItem.setEventsAndShrines(eventList, shrineList, prEvent, prMonster, prShop, prTreasure);
+                infoPanelItem.setEventsAndShrines(eventList, shrineList, AbstractDungeon.specialOneTimeEventList, pr, prEvent, prMonster, prShop, prTreasure);
 
 //                for (String y : eventList) { System.out.println("events: " + y); }
 //                for (String y : shrineList) { System.out.println("shrines: " + y); }
@@ -286,11 +301,15 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
                 anyChanges = true;
 
             // Boss
-            if (AbstractDungeon.bossList.size() > 0 && AbstractDungeon.bossList.get(0) != curr_boss) {
-                curr_boss = AbstractDungeon.bossList.get(0);
-                System.out.println("OJB: boss update: " + curr_boss);
-                bossTipItem.setPrimaryTipBody(curr_boss);
-                anyChanges = true;
+            // TODO: ignore 16, 33, 50 to avoid cheats
+            int floor = AbstractDungeon.floorNum;
+            if ((floor != 16 && floor != 33 && floor != 50) || (room.isBattleOver)) {
+                if (AbstractDungeon.bossList.size() > 0 && AbstractDungeon.bossList.get(0) != curr_boss) {
+                    curr_boss = AbstractDungeon.bossList.get(0);
+                    System.out.println("OJB: boss update: " + curr_boss);
+                    bossTipItem.setPrimaryTipBody(curr_boss);
+                    anyChanges = true;
+                }
             }
 
             // Logging

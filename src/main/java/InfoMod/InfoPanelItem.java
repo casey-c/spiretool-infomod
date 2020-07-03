@@ -68,7 +68,7 @@ public class InfoPanelItem extends TopPanelItem {
         tips.add(help_tip);
     }
 
-    public void setEventsAndShrines(ArrayList<String> eventList, ArrayList<String> shrineList, float prEvent, float prMonster, float prShop, float prTreasure) {
+    public void setEventsAndShrines(ArrayList<String> eventList, ArrayList<String> shrineList, ArrayList<String> specialList, float[] prAfter, float prEvent, float prMonster, float prShop, float prTreasure) {
         StringBuilder sb = new StringBuilder();
 
         // Events
@@ -102,6 +102,24 @@ public class InfoPanelItem extends TopPanelItem {
         sb.append(String.format(" NL NL #gMonster (%.02f%%) NL ", prMonster * 100.0f));
         sb.append(String.format("#gShop (%.02f%%) NL ", prShop * 100.0f));
         sb.append(String.format("#gTreasure (%.02f%%) NL ", prTreasure * 100.0f));
+
+        // TODO: cleanup
+        sb.append(" NL NL Chance to see specific: NL ");
+        sb.append(String.format("%.02f%% NL ", prAfter[0] * 100.0f));
+        sb.append(" NL After 2 floors: NL ");
+        sb.append(String.format("%.02f%%", prAfter[1] * 100.0f));
+
+//        // TMP TODO: remove after testing
+        // TODO: add proper one time events to the shrine list!
+//        sb.append(" NL NL SPECIAL ONE TIME EVENTS NL ");
+//        int index = 0;
+//        for (String s : specialList) {
+//            sb.append(s);
+//
+//            if (index < specialList.size() - 1)
+//                sb.append(", ");
+//            ++index;
+//        }
 
         event_tip.body = sb.toString();
         SlayTheRelicsIntegration.update("infoPanelItem", hitbox, tips);
