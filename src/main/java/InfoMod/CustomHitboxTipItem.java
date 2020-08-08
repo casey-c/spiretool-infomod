@@ -34,7 +34,7 @@ import java.util.ArrayList;
     implementation as needed
  */
 
-@SpireInitializer
+//@SpireInitializer
 public class CustomHitboxTipItem implements PostRenderSubscriber, HitboxListener, PostInitializeSubscriber {
     // For setting the hitbox position in the constructor
     public enum HB_POS_TYPE {

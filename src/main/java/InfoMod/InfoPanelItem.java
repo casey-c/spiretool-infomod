@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
-@SpireInitializer
+//@SpireInitializer
 public class InfoPanelItem extends TopPanelItem {
     private static final Texture IMG = new Texture("images/icon.png");
     public static final String ID = "ojb_infomod:InfoIcon";
@@ -39,6 +39,12 @@ public class InfoPanelItem extends TopPanelItem {
 
     private ArrayList<PowerTip> tips;
     private PowerTip event_tip, card_tip, help_tip;
+
+    // TODO: remove / clean up
+    private CardPlays cardPlays;
+
+    // TESTING / tmp
+    private MonsterInfoOverlay monsterOverlay;
 
     // SlayTheRelics integration
     public static ArrayList<Hitbox> slayTheRelicsHitboxes = new ArrayList<>();
@@ -66,6 +72,16 @@ public class InfoPanelItem extends TopPanelItem {
         tips.add(event_tip);
         tips.add(card_tip);
         tips.add(help_tip);
+
+        System.out.println("OJB: infopanelitem creating card plays now");
+        cardPlays = new CardPlays();
+
+        monsterOverlay = new MonsterInfoOverlay();
+
+        System.out.println("---------------------------------------------------------");
+        System.out.println("---------------------------------------------------------");
+        System.out.println("---------------------------------------------------------");
+        System.out.println("---------------------------------------------------------");
     }
 
     public void setEventsAndShrines(ArrayList<String> eventList, ArrayList<String> shrineList, ArrayList<String> specialList, float[] prAfter, float prEvent, float prMonster, float prShop, float prTreasure) {
@@ -144,8 +160,10 @@ public class InfoPanelItem extends TopPanelItem {
     protected void onClick() {
         System.out.println("OJB: info panel item clicked!");
 
-        AbstractDungeon.effectList.add(new CardPoofEffect(500, 500));
+        //AbstractDungeon.effectList.add(new CardPoofEffect(500, 500));
 
+        cardPlays.toggleVisibility();
+        //monsterOverlay.toggleVisibility();
     }
 
     @Override
@@ -153,6 +171,9 @@ public class InfoPanelItem extends TopPanelItem {
         super.render(sb);
 
     }
+
+
+    boolean alreadyHovered = false;
 
     @Override
     protected void onHover() {
@@ -165,5 +186,17 @@ public class InfoPanelItem extends TopPanelItem {
 
         // Add to render queue
         TipHelper.queuePowerTips(TOP_RIGHT_TIP_X, TIP_Y, tips);
+
+        // Play sound if first time hovered
+        if (!alreadyHovered) {
+            SoundHelper.playUIHoverSound();
+            alreadyHovered = true;
+        }
+    }
+
+    @Override
+    protected void onUnhover() {
+        super.onUnhover();
+        alreadyHovered = false;
     }
 }

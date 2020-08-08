@@ -12,6 +12,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.EventHelper;
+import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import org.apache.commons.lang3.tuple.Pair;
@@ -36,6 +37,7 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
     private static CustomHitboxTipItem deckTipItem;
     private static CustomHitboxTipItem bossTipItem;
 
+
     private static int cards_hash = 0;
     private static int upgrade_cards_hash = 0;
 
@@ -43,6 +45,7 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
         BaseMod.subscribe(this);
 
         //cards = new ArrayList<>();
+
     }
 
     public static void initialize() {
@@ -80,8 +83,9 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
                 "..."
         );
 
-        float cx = (float)Settings.WIDTH - 117.0f * Settings.scale;
-        float cy = (float)Settings.HEIGHT - 33.0f * Settings.scale;
+
+        //float cx = (float)Settings.WIDTH - 117.0f * Settings.scale;
+        //float cy = (float)Settings.HEIGHT - 33.0f * Settings.scale;
 
     }
 

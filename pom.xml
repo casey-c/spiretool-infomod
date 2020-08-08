@@ -32,6 +32,11 @@
         <scope>system</scope>
         <systemPath>${basedir}/../lib/ModTheSpire.jar</systemPath>
     </dependency>
+    <dependency>
+        <groupId>org.jetbrains</groupId>
+        <artifactId>annotations</artifactId>
+        <version>13.0</version>
+    </dependency>
 </dependencies>
 
 <build>
@@ -55,7 +60,7 @@
                     <phase>package</phase>
                     <configuration>
                         <target>
-                            <copy file="target/InfoMod.jar" tofile="../lib/InfoMod.jar"/>
+                            <copy file="target/InfoMod.jar" tofile="/home/casey/.steam/steam/steamapps/common/SlayTheSpire/mods/InfoMod.jar"/>
                         </target>
                     </configuration>
                     <goals>
