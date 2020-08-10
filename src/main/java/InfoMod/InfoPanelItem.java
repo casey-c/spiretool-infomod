@@ -29,7 +29,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
-//@SpireInitializer
+// TODO: lots of refactoring / documentation improvments
+
 public class InfoPanelItem extends TopPanelItem {
     private static final Texture IMG = new Texture("images/icon.png");
     public static final String ID = "ojb_infomod:InfoIcon";
@@ -44,25 +45,12 @@ public class InfoPanelItem extends TopPanelItem {
     private CardPlays cardPlays;
 
     // TESTING / tmp
-    private MonsterInfoOverlay monsterOverlay;
-
-    // SlayTheRelics integration
-    public static ArrayList<Hitbox> slayTheRelicsHitboxes = new ArrayList<>();
-    public static ArrayList<ArrayList<PowerTip>> slayTheRelicsPowerTips = new ArrayList<>();
-
-    boolean isHovered = false;
+    //private MonsterInfoOverlay monsterOverlay;
 
     public InfoPanelItem() {
         super(IMG, ID);
 
-        //this.hitbox.width = 221.0f;
-        //this.hitbox.move(this.hitbox.cX -158.0f, this.hitbox.cY);
-        //setX(this.hitbox.cX - 158.0f);
-        //setX(700.0f);
-        //hb_w = 100.0f;
-
         hb_w = 216.0f;
-
 
         tips = new ArrayList<>();
         event_tip = new PowerTip("Event Chance", "TODO");
@@ -73,15 +61,9 @@ public class InfoPanelItem extends TopPanelItem {
         tips.add(card_tip);
         tips.add(help_tip);
 
-        System.out.println("OJB: infopanelitem creating card plays now");
         cardPlays = new CardPlays();
 
-        monsterOverlay = new MonsterInfoOverlay();
-
-        System.out.println("---------------------------------------------------------");
-        System.out.println("---------------------------------------------------------");
-        System.out.println("---------------------------------------------------------");
-        System.out.println("---------------------------------------------------------");
+        //monsterOverlay = new MonsterInfoOverlay();
     }
 
     public void setEventsAndShrines(ArrayList<String> eventList, ArrayList<String> shrineList, ArrayList<String> specialList, float[] prAfter, float prEvent, float prMonster, float prShop, float prTreasure) {
@@ -144,8 +126,6 @@ public class InfoPanelItem extends TopPanelItem {
     public void setProbabilities(double rare, double rareElite, double unc, double uncElite, int numCards, int numCardsElite) {
         StringBuilder sb = new StringBuilder();
 
-        // TODO: figure out what #e #r etc. do
-        // NOTE: [E] is the energy symbol
         sb.append(String.format("Next %d cards (%d for elite) NL NL ", numCards, numCardsElite) );
         sb.append(String.format("#yRare: NL #y%.02f%% #y(%.02f%%) NL NL ", rare * 100.0, rareElite * 100.0));
         sb.append(String.format("#bUncommon: NL #b%.02f%% #b(%.02f%%)", unc * 100.0, uncElite * 100.0));
@@ -162,7 +142,13 @@ public class InfoPanelItem extends TopPanelItem {
 
         //AbstractDungeon.effectList.add(new CardPoofEffect(500, 500));
 
+        // TODO: uncomment this again
         cardPlays.toggleVisibility();
+
+        // TODO: remove this cheat (for debugging)
+        //AbstractDungeon.getCurrRoom().endBattle();
+
+
         //monsterOverlay.toggleVisibility();
     }
 

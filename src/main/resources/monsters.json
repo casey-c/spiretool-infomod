@@ -618,7 +618,7 @@
           "name": "Mug",
           "details": {
             "d0": "11",
-            "d0c": "Damage"
+            "d0c": "DAMAGE"
           }
         },
         {
@@ -655,7 +655,7 @@
           "name": "Bite",
           "details": {
             "d0": "D",
-            "d0c": "Damage"
+            "d0c": "DAMAGE"
           }
         },
         {
@@ -678,7 +678,7 @@
           "name": "Bite",
           "details": {
             "d0": "D",
-            "d0c": "Damage"
+            "d0c": "DAMAGE"
           }
         },
         {
@@ -701,7 +701,7 @@
           "name": "Scratch",
           "details": {
             "d0": "5",
-            "d0c": "Damage"
+            "d0c": "DAMAGE"
           }
         }
       ],
@@ -809,7 +809,7 @@
             "d0": "9",
             "d0c": "DAMAGE",
             "d1": "Frail 2",
-            "d1c": "Debuff"
+            "d1c": "DEBUFF"
           }
         }
       ],

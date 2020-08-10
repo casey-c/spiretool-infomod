@@ -4,22 +4,16 @@ import com.badlogic.gdx.graphics.Color;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.monsters.beyond.AwakenedOne;
-import com.megacrit.cardcrawl.monsters.ending.SpireShield;
-import com.megacrit.cardcrawl.monsters.ending.SpireSpear;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
 /*
-   Utility class for storing data about the monster's moveset and AI
-   This data will be available to the player in game (like a built-in version of the reference spreadsheet).
-
-   Moves are stored in a slightly convoluted format in order to help out the rendering later.
-
-   TODO: a master MonsterDatabase class to load all the AI moveset information from JSON at the start
-   TODO: an overlay class which will display the information contained in these objects when requested.
+   Utility class for storing data about the monster's moveset and AI. MonsterInfoDatabase loads this information from
+   a JSON file included in the JAR at the start of the game. MonsterInfoOverlay will display these details in a nicer
+   user-friendly manner. Because the overlay requires some additional layout information built in, the moves are
+   stored in a slightly convoluted format.
 */
 public class MonsterInfo {
     // A move available in this monster's AI toolkit. The spreadsheet has space for 6 moves total in the monster AI.
@@ -28,7 +22,6 @@ public class MonsterInfo {
     // effects. (Not all detailed strings may contain content; and they may not be contiguous, e.g. d0 and d4 may be
     // the only ones if d0 has a lot of text -- this is up to the JSON creator to make a judgement to avoid overlap)
     public static class Move {
-        //public boolean exists;
         public String move_name;
         public String d0, d1, d2, d3, d4, d5;
         public Color c0, c1, c2, c3, c4, c5;
@@ -38,37 +31,33 @@ public class MonsterInfo {
             c0 = c1 = c2 = c3 = c4 = c5 = RenderingUtils.OJB_DARK_GRAY_COLOR;
         }
 
-        // TODO: refactor away from builders (builders were helpful in the original testing, now they're stupid again)
-
-        public Move d0(String d0, Color c0) {
-            this.d0 = d0;
-            this.c0 = c0;
-            return this;
-        }
-        public Move d1(String d1, Color c1) {
-            this.d1 = d1;
-            this.c1 = c1;
-            return this;
-        }
-        public Move d2(String d2, Color c2) {
-            this.d2 = d2;
-            this.c2 = c2;
-            return this;
-        }
-        public Move d3(String d3, Color c3) {
-            this.d3 = d3;
-            this.c3 = c3;
-            return this;
-        }
-        public Move d4(String d4, Color c4) {
-            this.d4 = d4;
-            this.c4 = c4;
-            return this;
-        }
-        public Move d5(String d5, Color c5) {
-            this.d5 = d5;
-            this.c5 = c5;
-            return this;
+        // Set the detail/color string in a particular slot (param "which" specifies the slot location)
+        // Better ways to do this definitely exist, but this works well enough
+        public void setDetail(String which, String d, String c) {
+            if (which == "d0") {
+                this.d0 = d;
+                this.c0 = stringToColor(c);
+            }
+            else if (which == "d1") {
+                this.d1 = d;
+                this.c1 = stringToColor(c);
+            }
+            else if (which == "d2") {
+                this.d2 = d;
+                this.c2 = stringToColor(c);
+            }
+            else if (which == "d3") {
+                this.d3 = d;
+                this.c3 = stringToColor(c);
+            }
+            else if (which == "d4") {
+                this.d4 = d;
+                this.c4 = stringToColor(c);
+            }
+            else if (which == "d5") {
+                this.d5 = d;
+                this.c5 = stringToColor(c);
+            }
         }
     }
 
@@ -78,12 +67,6 @@ public class MonsterInfo {
     private String hp_string;
 
     // Moves available
-    //private int num_moves = 0;
-    //private boolean m0_exists = false, m1_exists = false, m2_exists = false, m3_exists = false, m4_exists = false, m5_exists = false;
-    //private Move m0, m1, m2, m3, m4, m5;
-
-    //private int num_moves = 0;
-    //private static final int MAX_MOVES = 6;
     ArrayList<Move> moves = new ArrayList<>();
 
     // Describes the AI behavior / when to take each of the moves
@@ -91,10 +74,6 @@ public class MonsterInfo {
 
     // Describes additional details about the monster (e.g. does it start with innate artifact / powers? etc.)
     private String notes;
-
-    public MonsterInfo() {
-        //FontHelper.renderFontLeftTopAligned(sb, FontHelper.tipHeaderFont);
-    }
 
     public MonsterInfo(String id, String name, String hp_string, String ai, String notes) {
         this.id = id;
@@ -126,7 +105,20 @@ public class MonsterInfo {
             case "SKIP":
                 return RenderingUtils.OJB_GRAY_COLOR;
             default:
+                System.out.println("OJB: invalid color at some point (bug in monsters.JSON!)");
+                System.out.println("OJB: invalid color is: " + s);
                 return RenderingUtils.OJB_DARK_GRAY_COLOR;
+        }
+    }
+
+    // Checks to see if a detail exists in the given "dx/dxc" detail slot (x is the slot number, e.g. d0/d0c)
+    // If it does, put it into the given move in the proper place
+    private static void updateMoveWithDetail(String dx, String dxc, JsonObject details, Move created_move) {
+        boolean detailStringOK = (details.has(dx) && details.get(dx).isJsonPrimitive());
+        boolean detailColorOK = (details.has(dxc) && details.get(dxc).isJsonPrimitive());
+
+        if (detailStringOK && detailColorOK) {
+            created_move.setDetail(dx, details.get(dx).getAsString(), details.get(dxc).getAsString());
         }
     }
 
@@ -164,53 +156,33 @@ public class MonsterInfo {
                 String move_name = m.get("name").getAsString();
                 Move created_move = new Move(move_name);
 
-                // Details are optional (e.g. "Split" from a slime has no effects technically but spawning)
+                // Details are optional and can fit in 6 different slots
                 if (m.has("details") && m.get("details").isJsonObject()) {
                     JsonObject details = m.getAsJsonObject("details");
 
-                    // i'm so so so so so so so so so sorry this has happened to your poor, poor soul
-                    if (details.has("d0") && details.get("d0").isJsonPrimitive() && details.has("d0c") && details.get("d0c").isJsonPrimitive())
-                        created_move = created_move.d0( details.get("d0").getAsString(), stringToColor( details.get("d0c").getAsString()) );
-                    if (details.has("d1") && details.get("d1").isJsonPrimitive() && details.has("d1c") && details.get("d1c").isJsonPrimitive())
-                        created_move = created_move.d1( details.get("d1").getAsString(), stringToColor( details.get("d1c").getAsString()) );
-                    if (details.has("d2") && details.get("d2").isJsonPrimitive() && details.has("d2c") && details.get("d2c").isJsonPrimitive())
-                        created_move = created_move.d2( details.get("d2").getAsString(), stringToColor( details.get("d2c").getAsString()) );
-                    if (details.has("d3") && details.get("d3").isJsonPrimitive() && details.has("d3c") && details.get("d3c").isJsonPrimitive())
-                        created_move = created_move.d3( details.get("d3").getAsString(), stringToColor( details.get("d3c").getAsString()) );
-                    if (details.has("d4") && details.get("d4").isJsonPrimitive() && details.has("d4c") && details.get("d4c").isJsonPrimitive())
-                        created_move = created_move.d4( details.get("d4").getAsString(), stringToColor( details.get("d4c").getAsString()) );
-                    if (details.has("d5") && details.get("d5").isJsonPrimitive() && details.has("d5c") && details.get("d5c").isJsonPrimitive())
-                        created_move = created_move.d5( details.get("d5").getAsString(), stringToColor( details.get("d5c").getAsString()) );
+                    updateMoveWithDetail("d0", "d0c", details, created_move);
+                    updateMoveWithDetail("d1", "d1c", details, created_move);
+                    updateMoveWithDetail("d2", "d2c", details, created_move);
+                    updateMoveWithDetail("d3", "d3c", details, created_move);
+                    updateMoveWithDetail("d4", "d4c", details, created_move);
+                    updateMoveWithDetail("d5", "d5c", details, created_move);
                 }
 
                 // TODO: change from builder
-                monster = monster.with_move(created_move);
-
+                monster.moves.add(created_move);
             }
         }
 
         return monster;
     }
 
-    public MonsterInfo with_move(Move move) {
-//        if (num_moves > MAX_MOVES)
-//           return this;
-
-        moves.add(move);
-
-        return this;
-    }
-
-    public MonsterInfo with_ai(String ai) {
-        this.ai_description = ai;
-        return this;
-    }
-
+    // DEBUG
     public void print() {
         System.out.println("Monster name: " + name + " (" + id + ") -- " + hp_string);
 
+        System.out.println("\t");
         for (Move m : moves) {
-            System.out.print("Move: " + m.move_name + " | ");
+            System.out.print(m.move_name + ", ");
         }
         System.out.println();
     }
@@ -220,8 +192,6 @@ public class MonsterInfo {
     public String getNameAndHP() { return name + "  " +  hp_string; }
     public String getAI() { return ai_description; }
     public String getNotes() { return notes; }
-
-    //public boolean moveExists(int i) { return num_moves > i; }
 
     public @Nullable
     Move getMove(int i) {

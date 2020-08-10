@@ -4,16 +4,20 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.stream.Collectors;
 
+/*
+  Random assortment of utility functions to pull on that don't belong anywhere else. Math / probability specific
+  functions can be found in ProbabilityUtils instead, while rendering and graphics related utilities can be found in
+  RenderingUtils. This is for the rest that don't fall into those groups.
+ */
 public class MiscUtils {
+    // Builds a string from an input stream
     public static String resourceStreamToString(InputStream in) throws IOException {
         StringBuilder sb = new StringBuilder();
         BufferedReader br = new BufferedReader(new InputStreamReader(in));
-        String read;
 
+        String read;
         while ((read=br.readLine()) != null) {
-            //System.out.println(read);
             sb.append(read);
         }
 

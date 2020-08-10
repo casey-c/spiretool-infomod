@@ -1,21 +1,25 @@
 package InfoMod;
 
 import basemod.BaseMod;
-import basemod.interfaces.PostBattleSubscriber;
-import basemod.interfaces.PostDeathSubscriber;
-import basemod.interfaces.PostDungeonUpdateSubscriber;
-import basemod.interfaces.PostInitializeSubscriber;
+import basemod.abstracts.CustomSavableRaw;
+import basemod.interfaces.*;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.megacrit.cardcrawl.cards.CardSave;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.EventHelper;
+import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
+import com.megacrit.cardcrawl.saveAndContinue.SaveFile;
+import com.megacrit.cardcrawl.ui.panels.TopPanel;
 import org.apache.commons.lang3.tuple.Pair;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -23,19 +27,28 @@ import java.util.*;
 // this mod is still very new so it's been low priority to make the code nice
 
 @SpireInitializer
-public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, PostDungeonUpdateSubscriber, PostDeathSubscriber {;
+public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, PostDungeonUpdateSubscriber, PostDeathSubscriber, PostDungeonInitializeSubscriber, CustomSavableRaw {;
 
     private static int curr_potion_chance = -1;
     private static int curr_rare_chance = -1;
     private static int curr_floor = -1;
 
-    private static String curr_boss = "";
+    //private static String curr_boss = "";
+
+//    private static String boss_act1 = "";
+//    private static String boss_act2 = "";
+//    private static String boss_act3_1 = "";
+//    private static String boss_act3_2 = "";
+//    private static String boss_act4 = "";
+
+    private BossStringsSaveable bossStringsSaveable = new BossStringsSaveable();
 
     private static PotionPanelItem potionPanelItem;
     private static InfoPanelItem infoPanelItem;
 
     private static CustomHitboxTipItem deckTipItem;
     private static CustomHitboxTipItem bossTipItem;
+    //private static CustomHitboxTipItem goldTipItem; // TODO
 
 
     private static int cards_hash = 0;
@@ -45,15 +58,11 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
         BaseMod.subscribe(this);
 
         //cards = new ArrayList<>();
-
+        BaseMod.addSaveField("ojb_bosses", this);
     }
 
     public static void initialize() {
         new InfoMod();
-
-        // does some crazy shit
-        // also useful for hitboxes
-        //Settings.isDebug = true;
 
         deckTipItem = new CustomHitboxTipItem(
                 "deckTipItem",
@@ -82,6 +91,8 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
                 "Current Boss",
                 "..."
         );
+
+
 
 
         //float cx = (float)Settings.WIDTH - 117.0f * Settings.scale;
@@ -146,7 +157,8 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
 
     // TODO: make this more efficient / no need to run every frame.
     //     figure out a way to subscribe to a card upgrade / removal / transform event (e.g. from events / campfires)
-    // right now searing blow won't update asap. oh well
+    //     will probably need to spire patch unfortunately :(
+    //     NOTE: right now searing blow won't update properly
     private boolean updateCards() {
         int new_cards_hash = AbstractDungeon.player.masterDeck.getCardNames().hashCode();
         int new_upgrade_cards_hash = AbstractDungeon.player.masterDeck.getUpgradableCards().getCardNames().hashCode();
@@ -218,35 +230,130 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
         return false;
     }
 
+    // Boss
+    // TODO: more testing to make sure it's ok. I think it might be working finally after hours of retries.
+    //   This final version uses the BaseMod saving mechanism to make sure the info is loaded with the game correctly
+    //   It also makes sure we don't cheat by seeing future bosses in advance, by adding a couple of annoying hardcoded
+    //   edge cases to only update this string at the proper times
+    // NOTE: this still updates every tick, not when the room is changed, so we can have it update on boss chest
+    //   floors and let you see the text on the map starting page
+    private void updateBoss() {
+        ArrayList<String> bossList = AbstractDungeon.bossList;
+
+        if ((curr_floor == 0) && (bossList.size() > 1)) {
+            bossStringsSaveable.act1 = bossList.get(0);
+
+            bossStringsSaveable.combined = RenderingUtils.colorify("#g", bossStringsSaveable.act1);
+            bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
+        } else if ((curr_floor == 17) && (bossList.size() == 3)) { // updates after hitting proceed
+            bossStringsSaveable.act2 = bossList.get(0);
+            //bossTipItem.setPrimaryTipBody(bossStringsSaveable.act1 + " NL " + RenderingUtils.colorify("#g", bossStringsSaveable.act2));
+
+            bossStringsSaveable.combined = bossStringsSaveable.act1 + " NL " + RenderingUtils.colorify("#g", bossStringsSaveable.act2);
+            bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
+        } else if ((curr_floor == 34) && (bossList.size() == 3)) {
+            bossStringsSaveable.act3_1 = bossList.get(0);
+            bossStringsSaveable.act3_2 = bossList.get(1);
+            //bossTipItem.setPrimaryTipBody(bossStringsSaveable.act1 + " NL " + bossStringsSaveable.act2 + " NL " + RenderingUtils.colorify("#g", bossStringsSaveable.act3_1));
+
+            bossStringsSaveable.combined = bossStringsSaveable.act1 + " NL " + bossStringsSaveable.act2 + " NL " + RenderingUtils.colorify("#g", bossStringsSaveable.act3_1);
+            bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
+        }
+        else if (curr_floor == 51) {
+            //bossTipItem.setPrimaryTipBody(bossStringsSaveable.act1 + " NL " + bossStringsSaveable.act2 + " NL " +  bossStringsSaveable.act3_1 + " NL " + RenderingUtils.colorify("#g", bossStringsSaveable.act3_2));
+            bossStringsSaveable.combined = bossStringsSaveable.act1 + " NL " + bossStringsSaveable.act2 + " NL " +  bossStringsSaveable.act3_1 + " NL " + RenderingUtils.colorify("#g", bossStringsSaveable.act3_2);
+            bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
+        }
+        else if (curr_floor == 52) {
+            //bossTipItem.setPrimaryTipBody(bossStringsSaveable.act1 + " NL " + bossStringsSaveable.act2 + " NL " +  bossStringsSaveable.act3_1 + " NL " + bossStringsSaveable.act3_2 + " NL " + "#gThe #gHeart");
+            bossStringsSaveable.combined = bossStringsSaveable.act1 + " NL " + bossStringsSaveable.act2 + " NL " +  bossStringsSaveable.act3_1 + " NL " + bossStringsSaveable.act3_2 + " NL " + "#gThe #gHeart";
+            bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
+        }
+    }
+
+    private boolean updateEvents(@Nullable AbstractPlayer player) {
+        boolean anyChanges = false;
+
+        int new_curr_floor = AbstractDungeon.floorNum;
+        if (curr_floor != new_curr_floor) {
+            curr_floor = new_curr_floor;
+
+            anyChanges = true;
+
+            ArrayList<String> eventList = new ArrayList<String>(AbstractDungeon.eventList);
+            //eventList.addAll(AbstractDungeon.specialOneTimeEventList);
+            ArrayList<String> shrineList = new ArrayList<String>(AbstractDungeon.shrineList);
+
+            // Sort to avoid cheating
+            eventList.sort(String::compareTo);
+            shrineList.sort(String::compareTo);
+
+            // Compute probabilities
+            System.out.println("Loading post combat?: " + AbstractDungeon.loading_post_combat);
+            ArrayList<Float> eventChanceList = AbstractDungeon.loading_post_combat ? EventHelper.getChancesPreRoll() : EventHelper.getChances();
+            Vector<Float> eventChanceVec = new Vector<>(eventChanceList);
+
+            // eventChanceVec: elite (useless), monster, shop, treasure
+            float prMonster = eventChanceVec.get(1);
+            float prShop = eventChanceVec.get(2);
+            float prTreasure = eventChanceVec.get(3);
+            float prEvent = 1.0f - prMonster - prShop - prTreasure;
+
+            // JUZU BRACELET fix
+            if (player != null && player.hasRelic("Juzu Bracelet")) {
+                prEvent += prMonster;
+                prMonster = 0.0f;
+            }
+
+            int totalEventsInPool = eventList.size();
+            float[] pr = ProbabiltyUtils.chanceOfSeeingEventAfter2(prMonster, prTreasure, prShop, totalEventsInPool);
+
+            System.out.println("OJB: total events in pool: " + totalEventsInPool);
+            System.out.println("OJB: probability after 1: " + pr[0] + ", pr after 2: " + pr[1]);
+
+            // Update UI
+            infoPanelItem.setEventsAndShrines(eventList, shrineList, AbstractDungeon.specialOneTimeEventList, pr, prEvent, prMonster, prShop, prTreasure);
+
+        }
+
+        return anyChanges;
+
+    }
+
+    private boolean updatePotions(AbstractRoom room, AbstractPlayer player) {
+        boolean anyChanges = false;
+
+        // Potions
+        int new_potion_chance = room.blizzardPotionMod + 40;
+
+        // Relic overrides
+        if (player != null) {
+            if (player.hasRelic("White Beast Statue")) {
+                new_potion_chance = 100;
+            }
+            if (player.hasRelic("Sozu")) {
+                new_potion_chance = 0;
+            }
+        }
+
+        // Update UI
+        if (curr_potion_chance != new_potion_chance) {
+            anyChanges = true;
+            curr_potion_chance = new_potion_chance;
+
+            System.out.println("OJB UPDATE: Potion Chance = " + curr_potion_chance);
+            potionPanelItem.setPotionChance(curr_potion_chance);
+        }
+
+        return anyChanges;
+    }
+
 
     @Override
     public void receivePostDungeonUpdate() {
         AbstractRoom room = AbstractDungeon.getCurrRoom();
         if (room != null) {
             boolean anyChanges = false;
-
-            // Potions
-            int new_potion_chance = room.blizzardPotionMod + 40;
-
-            // Relic overrides
-            AbstractPlayer player = AbstractDungeon.player;
-            if (player != null) {
-                if (player.hasRelic("White Beast Statue")) {
-                    new_potion_chance = 100;
-                }
-                if (player.hasRelic("Sozu")) {
-                    new_potion_chance = 0;
-                }
-            }
-
-            // Update UI
-            if (curr_potion_chance != new_potion_chance) {
-                anyChanges = true;
-                curr_potion_chance = new_potion_chance;
-
-                System.out.println("OJB UPDATE: Potion Chance = " + curr_potion_chance);
-                potionPanelItem.setPotionChance(curr_potion_chance);
-            }
 
             // Rare chances
             int new_rare_chance = AbstractDungeon.cardBlizzRandomizer;
@@ -256,65 +363,12 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
             }
 
             // Event chances
-            int new_curr_floor = AbstractDungeon.floorNum;
-            if (curr_floor != new_curr_floor) {
-                curr_floor = new_curr_floor;
+            AbstractPlayer player = AbstractDungeon.player;
 
-                anyChanges = true;
-
-                ArrayList<String> eventList = new ArrayList<String>(AbstractDungeon.eventList);
-                //eventList.addAll(AbstractDungeon.specialOneTimeEventList);
-                ArrayList<String> shrineList = new ArrayList<String>(AbstractDungeon.shrineList);
-
-                // Sort to avoid cheating
-                eventList.sort(String::compareTo);
-                shrineList.sort(String::compareTo);
-
-                // Compute probabilities
-                System.out.println("Loading post combat?: " + AbstractDungeon.loading_post_combat);
-                ArrayList<Float> eventChanceList = AbstractDungeon.loading_post_combat ? EventHelper.getChancesPreRoll() : EventHelper.getChances();
-                Vector<Float> eventChanceVec = new Vector<>(eventChanceList);
-
-                // eventChanceVec: elite (useless), monster, shop, treasure
-                float prMonster = eventChanceVec.get(1);
-                float prShop = eventChanceVec.get(2);
-                float prTreasure = eventChanceVec.get(3);
-                float prEvent = 1.0f - prMonster - prShop - prTreasure;
-
-                // JUZU BRACELET fix
-                if (player != null && player.hasRelic("Juzu Bracelet")) {
-                    prEvent += prMonster;
-                    prMonster = 0.0f;
-                }
-
-                int totalEventsInPool = eventList.size();
-                float[] pr = ProbabiltyUtils.chanceOfSeeingEventAfter2(prMonster, prTreasure, prShop, totalEventsInPool);
-
-                System.out.println("OJB: total events in pool: " + totalEventsInPool);
-                System.out.println("OJB: probability after 1: " + pr[0] + ", pr after 2: " + pr[1]);
-
-                // Update UI
-                infoPanelItem.setEventsAndShrines(eventList, shrineList, AbstractDungeon.specialOneTimeEventList, pr, prEvent, prMonster, prShop, prTreasure);
-
-//                for (String y : eventList) { System.out.println("events: " + y); }
-//                for (String y : shrineList) { System.out.println("shrines: " + y); }
-            }
-
-            // Cards
-            if (updateCards())
-                anyChanges = true;
-
-            // Boss
-            // TODO: ignore 16, 33, 50 to avoid cheats
-            int floor = AbstractDungeon.floorNum;
-            if ((floor != 16 && floor != 33 && floor != 50) || (room.isBattleOver)) {
-                if (AbstractDungeon.bossList.size() > 0 && AbstractDungeon.bossList.get(0) != curr_boss) {
-                    curr_boss = AbstractDungeon.bossList.get(0);
-                    System.out.println("OJB: boss update: " + curr_boss);
-                    bossTipItem.setPrimaryTipBody(curr_boss);
-                    anyChanges = true;
-                }
-            }
+            anyChanges |= updatePotions(room, player);
+            anyChanges |= updateEvents(player);
+            anyChanges |= updateCards();
+            updateBoss();
 
             // Logging
             if (anyChanges) {
@@ -335,6 +389,9 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
 
         BaseMod.addTopPanelItem(infoPanelItem);
         BaseMod.addTopPanelItem(potionPanelItem);
+
+        // After loading in the saved tip, make sure to set it in our tip renderer class
+        //bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
     }
 
     @Override
@@ -342,5 +399,76 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
         // TODO: put this in a better spot? might want to check the deck at the end maybe?
         //SlayTheRelicsIntegration.reset();
         //SlayTheRelicsIntegration.print();
+    }
+
+    @Override
+    public void receivePostDungeonInitialize() {
+        // TODO: (this won't work nicely yet, but it might be possible with this direction)
+        // the problem with the regular approach is that the goldHb moves depending on the character (as different
+        // characters' names have different lengths; it's not fixed like the right hand side ones we used prior)
+        // alternative approach is to use a patch, though i couldn't figure out the replace method
+        // the idea here is to use the TopPanel.goldHb object itself (which is nice and public), but this isn't the
+        // subscriber event to have it fire correctly unfortunately. (other init events have a null AbstractDungeon,
+        // we might need to put it into a startRun() sort of event or load event or something idk.) -- this at least will
+        // print out the stuff correctly as AbstractDungeon isn't null, but it still has issues on reloads.
+
+//        Hitbox goldHb = AbstractDungeon.topPanel.goldHb;
+//        System.out.println("*******************************************************************");
+//        System.out.println("OJB: gold hitbox cX" + goldHb.cX);
+//        System.out.println("OJB: gold hitbox cY" + goldHb.cY);
+//        System.out.println("OJB: gold hitbox x" + goldHb.x);
+//        System.out.println("OJB: gold hitbox y" + goldHb.y);
+//        System.out.println("*******************************************************************");
+//
+//        //goldHb.width
+//
+//        goldTipItem = new CustomHitboxTipItem(
+//                "goldTipItem",
+//                goldHb.width,
+//                goldHb.height,
+//                goldHb.x,
+//                goldHb.y,
+//                CustomHitboxTipItem.HB_POS_TYPE.ABSOLUTE,
+//                0.0f,
+//                0.0f,
+//                CustomHitboxTipItem.TIP_POS_TYPE.TOP_CENTERED_UNDER_HB,
+//                "Gold",
+//                "TODO WIP"
+//        );
+    }
+
+    @Override
+    public JsonElement onSaveRaw() {
+        JsonArray elt = new JsonArray();
+        elt.add(bossStringsSaveable.act1);
+        elt.add(bossStringsSaveable.act2);
+        elt.add(bossStringsSaveable.act3_1);
+        elt.add(bossStringsSaveable.act3_2);
+        elt.add(bossStringsSaveable.combined);
+        return elt;
+    }
+
+    @Override
+    public void onLoadRaw(JsonElement jsonElement) {
+        if (jsonElement.isJsonArray()) {
+            JsonArray arr = jsonElement.getAsJsonArray();
+
+            // probably don't need to do all this checking lol
+            if (arr.size() == 5) {
+                if (arr.get(0).isJsonPrimitive())
+                    bossStringsSaveable.act1 = arr.get(0).getAsString();
+                if (arr.get(1).isJsonPrimitive())
+                    bossStringsSaveable.act2 = arr.get(1).getAsString();
+                if (arr.get(2).isJsonPrimitive())
+                    bossStringsSaveable.act3_1 = arr.get(2).getAsString();
+                if (arr.get(3).isJsonPrimitive())
+                    bossStringsSaveable.act3_2 = arr.get(3).getAsString();
+                if (arr.get(4).isJsonPrimitive())
+                    bossStringsSaveable.combined = arr.get(4).getAsString();
+
+                // Make sure to set the actual thing
+                bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
+            }
+        }
     }
 }

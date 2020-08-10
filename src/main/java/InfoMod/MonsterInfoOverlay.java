@@ -1,12 +1,15 @@
 package InfoMod;
 
 import basemod.BaseMod;
+import basemod.interfaces.PostInitializeSubscriber;
 import basemod.interfaces.PreRenderSubscriber;
 import basemod.interfaces.RenderSubscriber;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
@@ -17,12 +20,22 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.monsters.MonsterGroup;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 
-public class MonsterInfoOverlay implements RenderSubscriber, PreRenderSubscriber {
+/*
+  This class handles the rendering of the monster information screen. It tracks the right clicks of the user and shows
+  the screen if they right click on a monster's hitbox while in combat. It's primary purpose is to render the data
+  stored in individual MonsterInfo objects (which are stored by their in-game ID in the MonsterInfoDatabase) in a user
+  friendly screen.
+ */
+@SpireInitializer
+public class MonsterInfoOverlay implements PostInitializeSubscriber, RenderSubscriber, PreRenderSubscriber {
     private boolean visible = false;
 
     private static final String IMG_URL = "images/monster_screen.png";
     private Texture img = null;
 
+
+    // Needed for my own janky right click behavior
+    private boolean mouseDownRight = false;
 
     //--------------------------------------------------------------
     // Positioning information
@@ -38,14 +51,10 @@ public class MonsterInfoOverlay implements RenderSubscriber, PreRenderSubscriber
     private float left_x, right_x;
     private float top_header_y;
     private float notes_header_y;
-    private float header_body_spacing;
 
     private float right_ai_body_y;
     private float right_notes_body_y;
 
-    private float move_vertical_spacing;
-    private float move_title_detail_horizontal_gap;
-    private float move_detail_horizontal_gap;
     private float m0_y, m1_y, m2_y, m3_y, m4_y, m5_y;
     private float md0_x, md1_x, md2_x, md3_x, md4_x, md5_x;
 
@@ -54,14 +63,20 @@ public class MonsterInfoOverlay implements RenderSubscriber, PreRenderSubscriber
     // Text contents
     //--------------------------------------------------------------
 
-    private String monster_name = "Darkling (48 - 56 HP)";
     private String currentlySelectedMonsterID = "";
 
     //------------------------------------------------------------------------------------------------------------------
 
     public MonsterInfoOverlay() {
         BaseMod.subscribe(this);
+    }
 
+    public static void initialize() {
+        new MonsterInfoOverlay();
+    }
+
+    @Override
+    public void receivePostInitialize() {
         // Setup the image information
         img = ImageMaster.loadImage(IMG_URL);
         if (img != null) {
@@ -71,9 +86,10 @@ public class MonsterInfoOverlay implements RenderSubscriber, PreRenderSubscriber
             img_w2 = (float)img_w / 2.0f;
             img_h2 = (float)img_h / 2.0f;
 
-            // Setup all the positioning information
+            // Setup all the positioning information.
+            // Note: needs to run after the Settings object is properly initialized or the values will be zero and not
+            // visible. This is why we set up in the post-initialize event.
             setupPositions();
-            setupDefaults();
         }
         else {
             System.out.println("OJB: ERROR---------------------------------");
@@ -93,7 +109,7 @@ public class MonsterInfoOverlay implements RenderSubscriber, PreRenderSubscriber
         top_header_y = cy + 317.0f * Settings.scale;
         notes_header_y = cy - 178.0f * Settings.scale;
 
-        header_body_spacing = 62.0f * Settings.scale;
+        float header_body_spacing = 62.0f * Settings.scale;
         right_ai_body_y = top_header_y - header_body_spacing;
         right_notes_body_y = notes_header_y - header_body_spacing;
 
@@ -103,7 +119,7 @@ public class MonsterInfoOverlay implements RenderSubscriber, PreRenderSubscriber
 
         // Moves
         m0_y = top_header_y - header_body_spacing - (56.0f * Settings.scale); // with additional (lazy) shift down to try and center
-        move_vertical_spacing = 93.0f * Settings.scale;
+        float move_vertical_spacing = 93.0f * Settings.scale;
 
         m1_y = m0_y - move_vertical_spacing;
         m2_y = m1_y - move_vertical_spacing;
@@ -112,8 +128,8 @@ public class MonsterInfoOverlay implements RenderSubscriber, PreRenderSubscriber
         m5_y = m4_y - move_vertical_spacing;
 
         // Move details
-        move_title_detail_horizontal_gap = 210.0f * Settings.scale;
-        move_detail_horizontal_gap = 93.0f * Settings.scale;
+        float move_title_detail_horizontal_gap = 210.0f * Settings.scale;
+        float move_detail_horizontal_gap = 93.0f * Settings.scale;
 
         md0_x = left_x + move_title_detail_horizontal_gap;
         md1_x = md0_x + move_detail_horizontal_gap;
@@ -122,25 +138,6 @@ public class MonsterInfoOverlay implements RenderSubscriber, PreRenderSubscriber
         md4_x = md3_x + move_detail_horizontal_gap;
         md5_x = md4_x + move_detail_horizontal_gap;
     }
-
-    // Setup some default values for the text strings
-    private void setupDefaults() {
-        // todo: remove this (deprecated? useless?)
-    }
-
-    // Show / hide this overlay
-    public void toggleVisibility() {
-        //visible = !visible;
-
-        // use our special methods instead (these will swap the visibility bool as well, but do other stuff like sound
-        if (visible)
-            hide();
-        else
-            show();
-    }
-
-    // TODO: figure out the current monster and integrate with some sort of data storage mechanism to recall the proper
-    //   text for the associated monster
 
     private void renderMoveText(SpriteBatch sb, float move_y, MonsterInfo.Move move) {
         if (move != null) {
@@ -178,35 +175,23 @@ public class MonsterInfoOverlay implements RenderSubscriber, PreRenderSubscriber
 
 
         // HEADERS
-
-        //FontHelper.renderFontLeftTopAligned(sb, FontHelper.bannerFont, monster_name, left_x, top_header_y, Settings.GOLD_COLOR);
         FontHelper.renderFontLeftTopAligned(sb, FontHelper.bannerFont, curr_monster.getNameAndHP(), left_x, top_header_y, Settings.GOLD_COLOR);
-
-
         FontHelper.renderFontLeftTopAligned(sb, FontHelper.bannerFont, "AI", right_x, top_header_y, Settings.GOLD_COLOR);
         FontHelper.renderFontLeftTopAligned(sb, FontHelper.bannerFont, "Notes", right_x, notes_header_y, Settings.GOLD_COLOR);
-
-        // TODO: hide / show notes header/body if no notes exist (similar to moves? or keep dark gray? idk)
 
         // AI text
         RenderingUtils.renderSmartText(sb,
                 FontHelper.tipBodyFont,
-                //"On turn 1, 50% chance of either #wNip or #wHarden.  Afterwards, has a 30-40-30 split between #wNip, #wChomp, and #wHarden, but #wHarden and #wChomp both cannot be used twice in a row, and #wNip cannot be used three times in a row. The middle Darkling cannot #wChomp and has a 50-50 split instead. When \"half-dead\", uses #w???, followed by #wReincarnate.\n",
                 curr_monster.getAI(),
-                //50.0f,
-                //540.0f,
                 right_x,
                 right_ai_body_y,
                 smart_width, //445.0f
                 smart_line_spacing,
-                //30.0f,
-                //Settings.CREAM_COLOR);
                 RenderingUtils.OJB_GRAY_COLOR);
 
         // Notes text
         RenderingUtils.renderSmartText(sb,
                 FontHelper.tipBodyFont,
-                //"None",
                 curr_monster.getNotes(),
                 right_x,
                 right_notes_body_y,
@@ -215,6 +200,7 @@ public class MonsterInfoOverlay implements RenderSubscriber, PreRenderSubscriber
                 RenderingUtils.OJB_GRAY_COLOR);
 
 
+        // TODO: less stupid ways of doing this exist
         // MOVES (these are potentially null)
         MonsterInfo.Move m0 = curr_monster.getMove(0);
         MonsterInfo.Move m1 = curr_monster.getMove(1);
@@ -229,35 +215,9 @@ public class MonsterInfoOverlay implements RenderSubscriber, PreRenderSubscriber
         if (m3 != null) renderMoveText(sb, m3_y, m3);
         if (m4 != null) renderMoveText(sb, m4_y, m4);
         if (m5 != null) renderMoveText(sb, m5_y, m5);
-
-
-
-        /*
-        RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "Perplexing Glare", left_x, m0_y, smart_width, smart_line_spacing, Settings.CREAM_COLOR);
-        //RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "[ MOVE 0 ]", left_x, m0_y, smart_width, smart_line_spacing, RenderingUtils.OJB_DARK_GRAY_COLOR);
-
-        RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "Encourage", left_x, m1_y, smart_width, smart_line_spacing, Settings.CREAM_COLOR);
-        //RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "[ MOVE 1 ]", left_x, m1_y, smart_width, smart_line_spacing, RenderingUtils.OJB_DARK_GRAY_COLOR);
-
-        RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "Chomp", left_x, m2_y, smart_width, smart_line_spacing, Settings.CREAM_COLOR);
-        //RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "[ MOVE 2 ]", left_x, m2_y, smart_width, smart_line_spacing, RenderingUtils.OJB_DARK_GRAY_COLOR);
-
-        RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "[ MOVE 3 ]", left_x, m3_y, smart_width, smart_line_spacing, RenderingUtils.OJB_DARK_GRAY_COLOR);
-        RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "[ MOVE 4 ]", left_x, m4_y, smart_width, smart_line_spacing, RenderingUtils.OJB_DARK_GRAY_COLOR);
-        RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "[ MOVE 5 ]", left_x, m5_y, smart_width, smart_line_spacing, RenderingUtils.OJB_DARK_GRAY_COLOR);
-
-        // MOVE DETAILS
-        RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "Block 10", md0_x, m0_y, smart_width, smart_line_spacing, Settings.BLUE_TEXT_COLOR);
-        RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "Weak 2", md1_x, m0_y, smart_width, smart_line_spacing, RenderingUtils.OJB_DEBUFF_COLOR);
-
-        RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "#uParty: #uStr #u+5", md0_x, m1_y, smart_width, smart_line_spacing, Settings.CREAM_COLOR);
-        RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "#bMinions: #bBlock #b10", md2_x, m1_y, smart_width, smart_line_spacing, Settings.CREAM_COLOR);
-
-        RenderingUtils.renderSmartText(sb, FontHelper.tipBodyFont, "8x2", md0_x, m2_y, smart_width, smart_line_spacing, Settings.RED_TEXT_COLOR);
-         */
-
     }
 
+    // Makes this overlay disappear, playing the closing sound only if necessary
     public void hide() {
         if (visible)
             SoundHelper.playMapCloseSound();
@@ -265,68 +225,65 @@ public class MonsterInfoOverlay implements RenderSubscriber, PreRenderSubscriber
         visible = false;
     }
 
+    // Makes this overlay appear, playing the opening sound
     public void show() {
         visible = true;
-        //AbstractDungeon.actionManager.addToBottom(new SFXAction());
         SoundHelper.playMapSelectSound();
     }
 
-    private boolean mouseDownRight = false;
+    // Figure out if we right clicked on a monster in a combat (this behavior can pull from the base game)
+    private void rightClickHandler() {
+        AbstractRoom room = AbstractDungeon.getCurrRoom();
+        if (room == null)
+            return;
 
+        MonsterGroup monsters = room.monsters;
+        if (monsters == null)
+            return;
+
+        AbstractMonster hovered = monsters.hoveredMonster;
+        if (hovered != null) {
+            String name = hovered.name;
+            String id = hovered.id;
+
+            System.out.println("OJB: right clicked on: " + name + " (" + id + ")");
+
+            // Special case: Close if already open and clicked on same monster as is visible
+            if (visible && currentlySelectedMonsterID == id)
+                hide();
+            else {
+                currentlySelectedMonsterID = id;
+                show();
+            }
+        }
+        else { // Not hovered on a monster
+            hide();
+        }
+    }
+
+
+    // This runs every tick to check for right clicks on monsters and update the visibility settings / details if required.
     @Override
     public void receiveCameraRender(OrthographicCamera orthographicCamera) {
-        // This pre render can fire before the dungeon is even made, so it's possible to crash here
+        // This pre render can fire before the dungeon is even made, so it's possible to crash here unless we handle this case
         if (!CardCrawlGame.isInARun() || CardCrawlGame.dungeon == null)
             return;
 
-        // Don't activate if left click is also down (we probably have a card in hand already?)
+        // Special Case: Don't activate if left click is also down (we probably have a card in hand already?)
         if (InputHelper.isMouseDown) {
             mouseDownRight = false;
             return;
         }
 
-        // Start tracking the mouse down
         if (InputHelper.isMouseDown_R) {
             mouseDownRight = true;
-        }
-        else {
-            // We already had the mouse down, and now we released, so fire our click event
+        } else {
+            // We already had the mouse down, and now we released, so fire our right click event
             if (mouseDownRight) {
+                rightClickHandler();
                 mouseDownRight = false;
-
-                // Do the magic test
-                AbstractRoom room = AbstractDungeon.getCurrRoom();
-                if (room != null) {
-                    MonsterGroup monsters = room.monsters;
-                    if (monsters != null) {
-                        AbstractMonster hovered = monsters.hoveredMonster;
-                        if (hovered != null) {
-                            String name = hovered.name;
-                            String id = hovered.id;
-                            System.out.println("OJB: right clicked on: " + name + " (" + id + ")");
-
-                            // Close if already open and clicked on same monster as is visible
-                            if (visible && currentlySelectedMonsterID == id)
-                                hide();
-                            else {
-                                currentlySelectedMonsterID = id;
-
-                                // Show this overlay
-                                monster_name = name + " (" + id + ")";
-                                show();
-                            }
-
-                        }
-                        else {
-                            System.out.println("OJB: not hovered on a monster");
-                            hide();
-                        }
-                    }
-                }
-            }
-            else {
-                //System.out.println("OJB: inputhelper mouse is not down | mouseDownRight is NOT set");
             }
         }
     }
+
 }

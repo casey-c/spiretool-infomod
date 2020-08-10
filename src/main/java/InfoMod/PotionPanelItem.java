@@ -95,13 +95,20 @@ public class PotionPanelItem extends TopPanelItem {
         float textX = (float) Settings.WIDTH - TEXT_SHIFT * Settings.scale;
         float textY = (float)Settings.HEIGHT - 26.0F * Settings.scale;
 
-        FontHelper.renderFontLeftTopAligned(
-                sb,
-                FontHelper.tipBodyFont,
-                "!Potions: " + potion_chance + "%",
-                textX,
-                textY,
-                Settings.CREAM_COLOR);
+        // TODO: lock this behind an optional setting or remove in future updates (temporary to get a terr80 laugh)
+        if (potion_chance == 80) {
+            RenderingUtils.renderRainbowTextTipFont(sb, "!Potions: " + potion_chance + "%", textX, textY);
+        }
+        else {
+            FontHelper.renderFontLeftTopAligned(
+                    sb,
+                    FontHelper.topPanelAmountFont,
+                    "!Potions: " + potion_chance + "%",
+                    textX,
+                    textY,
+                    Settings.CREAM_COLOR);
+        }
+
     }
 
     @Override

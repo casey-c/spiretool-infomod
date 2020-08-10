@@ -3,7 +3,7 @@
   "name": "ojb's Info Mod",
   "author_list": ["ojb"],
   "description": "Displays tedious to calculate information",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "sts_version": "06-22-2020",
   "mts_version": "2.6.0",
   "dependencies": ["basemod"]
