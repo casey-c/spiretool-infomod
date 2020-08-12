@@ -5,6 +5,7 @@ import basemod.interfaces.PostInitializeSubscriber;
 import basemod.interfaces.PostRenderSubscriber;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.Hitbox;
@@ -36,6 +37,9 @@ import java.util.ArrayList;
 
 //@SpireInitializer
 public class CustomHitboxTipItem implements PostRenderSubscriber, HitboxListener, PostInitializeSubscriber {
+    // Whether to show this tool tip
+    protected boolean enabled = true;
+
     // For setting the hitbox position in the constructor
     public enum HB_POS_TYPE {
         ABSOLUTE,
@@ -151,10 +155,11 @@ public class CustomHitboxTipItem implements PostRenderSubscriber, HitboxListener
 
     @Override
     public void receivePostRender(SpriteBatch spriteBatch) {
-        // copied over from old code: unsure if this is actually needed
+        // copied over from old code: unsure if this is actually needed or what it even does
         hb.encapsulatedUpdate(this);
 
-        if (usePrimaryTip && AbstractDungeon.isPlayerInDungeon() && hb.hovered) {
+        // might just need isInARun() not isPlayerInDungeon which didn't seem to work
+        if (enabled && usePrimaryTip && AbstractDungeon.isPlayerInDungeon() && CardCrawlGame.isInARun() && hb.hovered) {
             // TODO look over this more (probably don't need to clear and readd every frame)
             tips.clear();
             tips.add(primary_tip);
@@ -181,15 +186,29 @@ public class CustomHitboxTipItem implements PostRenderSubscriber, HitboxListener
     // Setters
     public void setPrimaryTipHeader(String h) {
         primary_tip.header = h;
-        SlayTheRelicsIntegration.update(id, hb, tips);
+
+        if (enabled)
+            SlayTheRelicsIntegration.update(id, hb, tips);
     }
     public void setPrimaryTipBody(String b) {
         primary_tip.body = b;
-        SlayTheRelicsIntegration.update(id, hb, tips);
+
+        if (enabled)
+            SlayTheRelicsIntegration.update(id, hb, tips);
     }
     public void setPrimaryTipBoth(String header, String body) {
         primary_tip.header = header;
         primary_tip.body = body;
-        SlayTheRelicsIntegration.update(id, hb, tips);
+
+        if (enabled)
+            SlayTheRelicsIntegration.update(id, hb, tips);
+    }
+
+    public void setEnabled(boolean b) {
+        this.enabled = b;
+
+        // refresh slay the relics
+        if (this.enabled)
+            SlayTheRelicsIntegration.update(id, hb, tips);
     }
 }

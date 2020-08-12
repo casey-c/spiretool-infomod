@@ -155,6 +155,9 @@ public class MonsterInfoOverlay implements PostInitializeSubscriber, RenderSubsc
 
     @Override
     public void receiveRender(SpriteBatch sb) {
+        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_MONSTER_DETAILS) == false)
+            return;
+
         if (!visible || img == null)
             return;
 
@@ -267,6 +270,10 @@ public class MonsterInfoOverlay implements PostInitializeSubscriber, RenderSubsc
     public void receiveCameraRender(OrthographicCamera orthographicCamera) {
         // This pre render can fire before the dungeon is even made, so it's possible to crash here unless we handle this case
         if (!CardCrawlGame.isInARun() || CardCrawlGame.dungeon == null)
+            return;
+
+        // Only if the config is set do we try and handle clicks
+        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_MONSTER_DETAILS) == false)
             return;
 
         // Special Case: Don't activate if left click is also down (we probably have a card in hand already?)

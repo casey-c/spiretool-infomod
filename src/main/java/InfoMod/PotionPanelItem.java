@@ -84,6 +84,9 @@ public class PotionPanelItem extends TopPanelItem {
         this.potion_chance = p;
         future_tip.body = buildFutureChances(p);
 
+        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_POTIONS) == false)
+            return;
+
         SlayTheRelicsIntegration.update("potionPanelItem", hitbox, tips);
     }
 
@@ -91,12 +94,15 @@ public class PotionPanelItem extends TopPanelItem {
     public void render(SpriteBatch sb) {
         super.render(sb);
 
+        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_POTIONS) == false)
+            return;
+
         // Font stuff
         float textX = (float) Settings.WIDTH - TEXT_SHIFT * Settings.scale;
         float textY = (float)Settings.HEIGHT - 26.0F * Settings.scale;
 
-        // TODO: lock this behind an optional setting or remove in future updates (temporary to get a terr80 laugh)
-        if (potion_chance == 80) {
+        // Special rainbow text is locked behind the Terr80 setting
+        if ((potion_chance == 80) && ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.TERR80)) {
             RenderingUtils.renderRainbowTextTipFont(sb, "!Potions: " + potion_chance + "%", textX, textY);
         }
         else {
@@ -114,6 +120,9 @@ public class PotionPanelItem extends TopPanelItem {
     @Override
     protected void onHover() {
         super.onHover();
+
+        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_POTIONS) == false)
+            return;
 
         float TIP_Y = (float) Settings.HEIGHT - 120.0F * Settings.scale;
         float TOP_RIGHT_TIP_X = Math.min(1550.0F, InputHelper.mX) * Settings.scale;

@@ -1,8 +1,6 @@
 package InfoMod;
 
 import basemod.BaseMod;
-import basemod.ModLabel;
-import basemod.ModLabeledToggleButton;
 import basemod.ModPanel;
 import basemod.abstracts.CustomSavableRaw;
 import basemod.interfaces.*;
@@ -25,42 +23,28 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 
 // TODO: lots of refactoring and cleanup
-// this mod is still very new so it's been low priority to make the code nice
+//   potion tracking and event tracking will eventually have their own self contained classes
 
 @SpireInitializer
-public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, PostDungeonUpdateSubscriber, PostDeathSubscriber, PostDungeonInitializeSubscriber, CustomSavableRaw {;
+public class InfoMod implements PostInitializeSubscriber, PostDungeonUpdateSubscriber, PostDungeonInitializeSubscriber, CustomSavableRaw {;
 
     private static int curr_potion_chance = -1;
     private static int curr_rare_chance = -1;
     private static int curr_floor = -1;
 
-    //private static String curr_boss = "";
-
-//    private static String boss_act1 = "";
-//    private static String boss_act2 = "";
-//    private static String boss_act3_1 = "";
-//    private static String boss_act3_2 = "";
-//    private static String boss_act4 = "";
-
     private BossStringsSaveable bossStringsSaveable = new BossStringsSaveable();
-
-    private ConfigHelper configHelper = new ConfigHelper();
 
     private static PotionPanelItem potionPanelItem;
     private static InfoPanelItem infoPanelItem;
 
     private static CustomHitboxTipItem deckTipItem;
     private static CustomHitboxTipItem bossTipItem;
-    //private static CustomHitboxTipItem goldTipItem; // TODO
-
 
     private static int cards_hash = 0;
     private static int upgrade_cards_hash = 0;
 
     public InfoMod() {
         BaseMod.subscribe(this);
-
-        //cards = new ArrayList<>();
         BaseMod.addSaveField("ojb_bosses", this);
     }
 
@@ -94,26 +78,6 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
                 "Current Boss",
                 "..."
         );
-
-
-
-
-        //float cx = (float)Settings.WIDTH - 117.0f * Settings.scale;
-        //float cy = (float)Settings.HEIGHT - 33.0f * Settings.scale;
-
-    }
-
-    @Override
-    public void receivePostBattle(AbstractRoom abstractRoom) {
-        // TODO maybe
-
-//        System.out.println("OJB: post battle");
-//        System.out.println("baseRareCardChance:" + abstractRoom.baseRareCardChance);
-//        System.out.println("rareCardChance:" + abstractRoom.rareCardChance);
-//        System.out.println("isBattleOver:" + abstractRoom.isBattleOver);
-//        System.out.println("room.blizzardPotionMod:" + abstractRoom.blizzardPotionMod);
-//        System.out.println("EventHelper.getChances()" + EventHelper.getChances());
-//        System.out.println("------------------------");
     }
 
     private void updateCardChances(int new_rare_chance) {
@@ -222,7 +186,6 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
                 ++index;
             }
 
-//            deckDropdownItem.setString(sb.toString());
             deckTipItem.setPrimaryTipBody(sb.toString());
 
             cards_hash = new_cards_hash;
@@ -250,25 +213,19 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
             bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
         } else if ((curr_floor == 17) && (bossList.size() == 3)) { // updates after hitting proceed
             bossStringsSaveable.act2 = bossList.get(0);
-            //bossTipItem.setPrimaryTipBody(bossStringsSaveable.act1 + " NL " + RenderingUtils.colorify("#g", bossStringsSaveable.act2));
-
             bossStringsSaveable.combined = bossStringsSaveable.act1 + " NL " + RenderingUtils.colorify("#g", bossStringsSaveable.act2);
             bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
         } else if ((curr_floor == 34) && (bossList.size() == 3)) {
             bossStringsSaveable.act3_1 = bossList.get(0);
             bossStringsSaveable.act3_2 = bossList.get(1);
-            //bossTipItem.setPrimaryTipBody(bossStringsSaveable.act1 + " NL " + bossStringsSaveable.act2 + " NL " + RenderingUtils.colorify("#g", bossStringsSaveable.act3_1));
-
             bossStringsSaveable.combined = bossStringsSaveable.act1 + " NL " + bossStringsSaveable.act2 + " NL " + RenderingUtils.colorify("#g", bossStringsSaveable.act3_1);
             bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
         }
         else if (curr_floor == 51) {
-            //bossTipItem.setPrimaryTipBody(bossStringsSaveable.act1 + " NL " + bossStringsSaveable.act2 + " NL " +  bossStringsSaveable.act3_1 + " NL " + RenderingUtils.colorify("#g", bossStringsSaveable.act3_2));
             bossStringsSaveable.combined = bossStringsSaveable.act1 + " NL " + bossStringsSaveable.act2 + " NL " +  bossStringsSaveable.act3_1 + " NL " + RenderingUtils.colorify("#g", bossStringsSaveable.act3_2);
             bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
         }
         else if (curr_floor == 52) {
-            //bossTipItem.setPrimaryTipBody(bossStringsSaveable.act1 + " NL " + bossStringsSaveable.act2 + " NL " +  bossStringsSaveable.act3_1 + " NL " + bossStringsSaveable.act3_2 + " NL " + "#gThe #gHeart");
             bossStringsSaveable.combined = bossStringsSaveable.act1 + " NL " + bossStringsSaveable.act2 + " NL " +  bossStringsSaveable.act3_1 + " NL " + bossStringsSaveable.act3_2 + " NL " + "#gThe #gHeart";
             bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
         }
@@ -284,7 +241,6 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
             anyChanges = true;
 
             ArrayList<String> eventList = new ArrayList<String>(AbstractDungeon.eventList);
-            //eventList.addAll(AbstractDungeon.specialOneTimeEventList);
             ArrayList<String> shrineList = new ArrayList<String>(AbstractDungeon.shrineList);
 
             // Sort to avoid cheating
@@ -292,7 +248,6 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
             shrineList.sort(String::compareTo);
 
             // Compute probabilities
-            System.out.println("Loading post combat?: " + AbstractDungeon.loading_post_combat);
             ArrayList<Float> eventChanceList = AbstractDungeon.loading_post_combat ? EventHelper.getChancesPreRoll() : EventHelper.getChances();
             Vector<Float> eventChanceVec = new Vector<>(eventChanceList);
 
@@ -311,8 +266,8 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
             int totalEventsInPool = eventList.size();
             float[] pr = ProbabiltyUtils.chanceOfSeeingEventAfter2(prMonster, prTreasure, prShop, totalEventsInPool);
 
-            System.out.println("OJB: total events in pool: " + totalEventsInPool);
-            System.out.println("OJB: probability after 1: " + pr[0] + ", pr after 2: " + pr[1]);
+//            System.out.println("OJB: total events in pool: " + totalEventsInPool);
+//            System.out.println("OJB: probability after 1: " + pr[0] + ", pr after 2: " + pr[1]);
 
             // Update UI
             infoPanelItem.setEventsAndShrines(eventList, shrineList, AbstractDungeon.specialOneTimeEventList, pr, prEvent, prMonster, prShop, prTreasure);
@@ -344,7 +299,7 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
             anyChanges = true;
             curr_potion_chance = new_potion_chance;
 
-            System.out.println("OJB UPDATE: Potion Chance = " + curr_potion_chance);
+            //System.out.println("OJB UPDATE: Potion Chance = " + curr_potion_chance);
             potionPanelItem.setPotionChance(curr_potion_chance);
         }
 
@@ -373,14 +328,12 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
             anyChanges |= updateCards();
             updateBoss();
 
-            // Logging
+            // DEBUG Logging
             if (anyChanges) {
-                System.out.println("OJB: update found changes");
-                System.out.println("--------------------------------------");
-
-                SlayTheRelicsIntegration.print();
-
-                System.out.println("OJB: str integration found: " +SlayTheRelicsIntegration.slayTheRelicsHitboxes.size() + " " + SlayTheRelicsIntegration.slayTheRelicsPowerTips.size());
+//                System.out.println("OJB: update found changes");
+//                System.out.println("--------------------------------------");
+//                SlayTheRelicsIntegration.print();
+//                System.out.println("OJB: str integration found: " +SlayTheRelicsIntegration.slayTheRelicsHitboxes.size() + " " + SlayTheRelicsIntegration.slayTheRelicsPowerTips.size());
             }
         }
     }
@@ -393,21 +346,14 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
         BaseMod.addTopPanelItem(infoPanelItem);
         BaseMod.addTopPanelItem(potionPanelItem);
 
-
-
-        // Setup all the user facing options
-
+        // Setup all the user facing Config options (i.e. Main Menu -> Mods -> Info Mod -> Config)
         ModPanel modPanel = new ModPanel();
-        //float titleY = 761.0f * Settings.scale;
         float titleY = 745.0f * Settings.scale;
-        float titleOverviewY = 700.0f * Settings.scale;
 
         float leftColX = 400.0f * Settings.scale;
         float rightColX = 1014.0f * Settings.scale;
 
-        //float firstDescY = 622.0f * Settings.scale;
         float firstDescY = 661.0f * Settings.scale;
-
         float itemOffsetY = 144.0f * Settings.scale; // 130.0 height / 14 gap
 
         modPanel.addUIElement(new InfoModConfigWrappedLabel("Info Mod Config", leftColX, titleY, Settings.CREAM_COLOR, FontHelper.bannerFont, modPanel));
@@ -418,12 +364,7 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
                 "Monster Compendium",
                 "Right click an enemy while in combat to see their AI and moveset. Right click again to close this overlay.",
                 modPanel,
-                configHelper,
                 ConfigHelper.BooleanSettings.SHOW_MONSTER_DETAILS
-//                modToggleButton -> {
-//                    System.out.println("OJB: pressed modToggleButton on monster compendium?");
-//                    configHelper.setBool(ConfigHelper.BooleanSettings.SHOW_MONSTER_DETAILS, modToggleButton.enabled);
-//                }
         ));
 
         modPanel.addUIElement(new InfoModConfigDescBool(
@@ -431,22 +372,14 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
                 "Potion Chance Tracker",
                 "Displays the chance to see a potion after the next few combats. Shown as text on the top bar.",
                 modPanel,
-                configHelper,
                 ConfigHelper.BooleanSettings.SHOW_POTIONS
-//                modToggleButton -> {
-//                    configHelper.setBool(ConfigHelper.BooleanSettings.SHOW_POTIONS, modToggleButton.enabled);
-//                }
         ));
         modPanel.addUIElement(new InfoModConfigDescBool(
                 leftColX, firstDescY - itemOffsetY - itemOffsetY,
                 "Event Chance Tracker",
                 "Displays the possible events you can get in the remaining question mark floors of the act. Shown as a [?] box on the top bar.",
                 modPanel,
-                configHelper,
                 ConfigHelper.BooleanSettings.SHOW_QBOX
-//                modToggleButton -> {
-//                    configHelper.setBool(ConfigHelper.BooleanSettings.SHOW_QBOX, modToggleButton.enabled);
-//                }
         ));
 
         // Second column
@@ -455,79 +388,34 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
                 "Map Tool Tip Override (Show Bosses)",
                 "Mousing over the map icon in the top right now shows the bosses you face throughout the run.",
                 modPanel,
-                configHelper,
-                ConfigHelper.BooleanSettings.SHOW_MAP_TIP
-//                modToggleButton -> {
-//                    configHelper.setBool(ConfigHelper.BooleanSettings.SHOW_QBOX, modToggleButton.enabled);
-//                }
+                ConfigHelper.BooleanSettings.SHOW_MAP_TIP,
+                modToggleButton -> {
+                    bossTipItem.enabled = modToggleButton.enabled;
+                }
         ));
         modPanel.addUIElement(new InfoModConfigDescBool(
                 rightColX, firstDescY - itemOffsetY,
                 "Deck Tool Tip Override",
                 "Mousing over the deck icon in the top right now shows the contents of your deck in a quick access tool tip.",
                 modPanel,
-                configHelper,
-                ConfigHelper.BooleanSettings.SHOW_DECK_TIP
-//                modToggleButton -> {
-//                    configHelper.setBool(ConfigHelper.BooleanSettings.SHOW_DECK_TIP, modToggleButton.enabled);
-//                }
+                ConfigHelper.BooleanSettings.SHOW_DECK_TIP,
+                modToggleButton -> {
+                    deckTipItem.enabled = modToggleButton.enabled;
+                }
         ));
         modPanel.addUIElement(new InfoModConfigDescBool(
                 rightColX, firstDescY - itemOffsetY - itemOffsetY,
                 "Special 80% Potion Chance Effect",
                 "Inspired by twitch.tv/terrenceMHS",
                 modPanel,
-                configHelper,
                 ConfigHelper.BooleanSettings.TERR80
-//                modToggleButton -> {
-//                    configHelper.setBool(ConfigHelper.BooleanSettings.TERR80, modToggleButton.enabled);
-//                }
         ));
-
-//        modPanel.addUIElement(new InfoModConfigWrappedLabel(
-//                "Right click an enemy while in combat to see their AI and moveset. Right click again to close.",
-//                414.0f, 597.0f,
-//                460.0f,
-//                30.0f,
-//                modPanel,
-//                Settings.CREAM_COLOR,
-//                FontHelper.tipBodyFont,
-//                ignored -> {}
-//        ));
-
-//        modPanel.addUIElement(new ModLabel());
-//
-//        modPanel.addUIElement(new ModLabeledToggleButton(
-//                "Testing",
-//                350.0f, 665.0f,
-//                Settings.CREAM_COLOR,
-//                FontHelper.tipBodyFont,
-//                configHelper.getBool(ConfigHelper.BooleanSettings.SHOW_BOX),
-//                modPanel,
-//                modLabel -> {},
-//                modToggleButton -> {
-//                    configHelper.setBool(ConfigHelper.BooleanSettings.SHOW_BOX, modToggleButton.enabled);
-//                }
-//        ));
 
         BaseMod.registerModBadge(new Texture("images/icon_32.png"),
                 "Info Mod",
                 "ojb",
                 "Displays tedious to calculate information",
                 modPanel);
-
-        //modPanel.addUIElement(new ModLabel());
-        //modPanel.addUIElement(new ModLabeledToggleButton());
-        //SpireConfig
-        //BaseMod.registerModBadge();
-
-    }
-
-    @Override
-    public void receivePostDeath() {
-        // TODO: put this in a better spot? might want to check the deck at the end maybe?
-        //SlayTheRelicsIntegration.reset();
-        //SlayTheRelicsIntegration.print();
     }
 
     @Override

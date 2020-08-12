@@ -21,6 +21,10 @@ public class MonsterInfo {
     // move interaction can have its own font color; there are (hopefully) enough to provide ample space for longer
     // effects. (Not all detailed strings may contain content; and they may not be contiguous, e.g. d0 and d4 may be
     // the only ones if d0 has a lot of text -- this is up to the JSON creator to make a judgement to avoid overlap)
+    //
+    // TODO: the Champ and the Guardian both may require special handling as they go over the 6 moves limit with 7 each
+    //   I did not account for 2-stage bosses while considering the 6 move maximum based on the spreadsheet. improvements
+    //   are probably necessary in the future
     public static class Move {
         public String move_name;
         public String d0, d1, d2, d3, d4, d5;
@@ -180,7 +184,7 @@ public class MonsterInfo {
     public void print() {
         System.out.println("Monster name: " + name + " (" + id + ") -- " + hp_string);
 
-        System.out.println("\t");
+        System.out.print("\t");
         for (Move m : moves) {
             System.out.print(m.move_name + ", ");
         }

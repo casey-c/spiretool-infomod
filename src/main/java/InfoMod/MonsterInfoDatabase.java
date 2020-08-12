@@ -99,6 +99,6 @@ public class MonsterInfoDatabase implements PostInitializeSubscriber {
             System.out.println("OJB ERROR: could not load monsters.json");
         }
 
-        printAll();
+        //printAll();
     }
 }

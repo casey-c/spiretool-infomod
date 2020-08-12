@@ -9,8 +9,14 @@ import java.util.Properties;
     A wrapper class for SpireConfig. InfoMod specific options can be reached from the ConfigSettings enum
  */
 public class ConfigHelper {
-    private Properties defaults;
-    private SpireConfig spireConfig;
+    // Singleton pattern
+    private static class ConfigHolder {
+        private static final ConfigHelper INSTANCE = new ConfigHelper();
+    }
+
+    public static ConfigHelper getInstance() {
+        return ConfigHolder.INSTANCE;
+    }
 
     // Alternative to lots of static strings -- not sure which is more efficient / better to use.
     public enum BooleanSettings {
@@ -33,7 +39,10 @@ public class ConfigHelper {
         }
     }
 
-    ConfigHelper() {
+    private Properties defaults;
+    private SpireConfig spireConfig;
+
+    private ConfigHelper() {
         defaults = new Properties();
         defaults.put(ConfigHelper.BooleanSettings.SHOW_QBOX.toString(), true);
         defaults.put(ConfigHelper.BooleanSettings.SHOW_POTIONS.toString(), true);

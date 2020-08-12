@@ -3,30 +3,11 @@ package InfoMod;
 import basemod.TopPanelItem;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
-import com.gikk.twirk.SETTINGS;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.PowerTip;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
-import com.megacrit.cardcrawl.screens.charSelect.CharacterSelectScreen;
-import com.megacrit.cardcrawl.screens.stats.CharStat;
-import com.megacrit.cardcrawl.vfx.GenericSmokeEffect;
-import com.megacrit.cardcrawl.vfx.PetalEffect;
-import com.megacrit.cardcrawl.vfx.SpotlightEffect;
-import com.megacrit.cardcrawl.vfx.combat.BlizzardEffect;
-import com.megacrit.cardcrawl.vfx.combat.CardPoofEffect;
-import com.megacrit.cardcrawl.vfx.combat.FireballEffect;
-import com.megacrit.cardcrawl.vfx.combat.GrandFinalEffect;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
 import java.util.Vector;
 
 // TODO: lots of refactoring / documentation improvements
@@ -35,17 +16,11 @@ public class InfoPanelItem extends TopPanelItem {
     private static final Texture IMG = new Texture("images/icon.png");
     public static final String ID = "ojb_infomod:InfoIcon";
 
-    private int potion_chance = 40;
-
-
     private ArrayList<PowerTip> tips;
     private PowerTip event_tip, card_tip, help_tip;
 
     // TODO: remove / clean up
     private CardPlays cardPlays;
-
-    // TESTING / tmp
-    //private MonsterInfoOverlay monsterOverlay;
 
     public InfoPanelItem() {
         super(IMG, ID);
@@ -62,8 +37,6 @@ public class InfoPanelItem extends TopPanelItem {
         tips.add(help_tip);
 
         cardPlays = new CardPlays();
-
-        //monsterOverlay = new MonsterInfoOverlay();
     }
 
     public void setEventsAndShrines(ArrayList<String> eventList, ArrayList<String> shrineList, ArrayList<String> specialList, float[] prAfter, float prEvent, float prMonster, float prShop, float prTreasure) {
@@ -120,6 +93,10 @@ public class InfoPanelItem extends TopPanelItem {
 //        }
 
         event_tip.body = sb.toString();
+
+        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+            return;
+
         SlayTheRelicsIntegration.update("infoPanelItem", hitbox, tips);
     }
 
@@ -132,28 +109,33 @@ public class InfoPanelItem extends TopPanelItem {
 
         card_tip.body = sb.toString();
 
+        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+            return;
+
         SlayTheRelicsIntegration.update("infoPanelItem", hitbox, tips);
     }
 
 
     @Override
     protected void onClick() {
-        System.out.println("OJB: info panel item clicked!");
+        // TODO: might need to quit early if config setting is ignored by this function call
+        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+            return;
 
         //AbstractDungeon.effectList.add(new CardPoofEffect(500, 500));
 
-        // TODO: uncomment this again
+        // TODO: uncomment this again (WIP)
         cardPlays.toggleVisibility();
 
         // TODO: remove this cheat (for debugging)
         //AbstractDungeon.getCurrRoom().endBattle();
-
-
-        //monsterOverlay.toggleVisibility();
     }
 
     @Override
     public void render(SpriteBatch sb) {
+        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+            return;
+
         super.render(sb);
 
     }
@@ -163,11 +145,13 @@ public class InfoPanelItem extends TopPanelItem {
 
     @Override
     protected void onHover() {
+        // TODO: after super call?
+        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+            return;
+
         super.onHover();
 
         float TIP_Y = (float)Settings.HEIGHT - 120.0F * Settings.scale;
-        //float TOP_RIGHT_TIP_X = 1550.0F * Settings.scale;
-        //float TOP_RIGHT_TIP_X = (float) Settings.WIDTH - 683.0f * Settings.scale;
         float TOP_RIGHT_TIP_X = (float) InputHelper.mX * Settings.scale;
 
         // Add to render queue
