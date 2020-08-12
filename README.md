@@ -2,9 +2,9 @@
 
 InfoMod is a mod for Slay The Spire designed to help make hidden or lesser known game mechanics more visible to the player seeking to improve their game. It is *NOT* a cheat mod, and does not provide any additional information that the player cannot access without it (via tedious calculation or lookup). It is an in-game spiritual successor to SpireTool, an external application that parsed save files to try and compute useful information to help improve decision making. 
 
-It is heavily influenced by the ever-useful [reference spreadsheet](https://docs.google.com/spreadsheets/d/1ZsxNXebbELpcCi8N7FVOTNGdX_K9-BRC_LMgx4TORo4/edit#gid=1146624812) and seeks to provide a lot of that information in game.
+It is heavily influenced by the ever-useful [reference spreadsheet](https://docs.google.com/spreadsheets/d/1ZsxNXebbELpcCi8N7FVOTNGdX_K9-BRC_LMgx4TORo4/edit#gid=1146624812) and seeks to provide a lot of that information in game. InfoMod also supports the [SlayTheRelics Twitch extension](https://steamcommunity.com/sharedfiles/filedetails/?id=1989770578) to allow the tool tips provided by this mod to be accessed by viewers.
 
-InfoMod supports the [SlayTheRelics Twitch extension](https://steamcommunity.com/sharedfiles/filedetails/?id=1989770578) to allow the tool tips provided by this mod to be accessed by viewers.
+Jump down to the [Installation](https://github.com/casey-c/spiretool-infomod/blob/master/README.md#installation) section below to learn how to get this mod in your game!
 
 ## Optional Modules
 
@@ -64,7 +64,7 @@ Future releases of InfoMod will come to the Steam Workshop to make this process 
 
 If you find a bug / crash or other issue with InfoMod, please start an issue [here on Github](https://github.com/casey-c/spiretool-infomod/issues) with as many details as you can provide, as well as any helpful information that might help me reproduce the problem on my end.
 
-If you find any typos or errors within the Monster Compendium (wrong AI / damage etc.) please let me know after you confirm the mistake against the [reference spreadsheet](https://docs.google.com/spreadsheets/d/1ZsxNXebbELpcCi8N7FVOTNGdX_K9-BRC_LMgx4TORo4/edit#gid=1146624812)! I had to transcode a lot of these details manually, so it is more than possible that I made mistakes! Please note that currently the Monster Compendium is only built for A20 movesets (as it was a ton of work just to get that working!), but if you would like to help build it for lower ascensions, please leave me a message [here on the issues page](https://github.com/casey-c/spiretool-infomod/issues).
+If you find any typos or errors within the Monster Compendium (wrong AI / damage etc.), please let me know after you confirm the mistake against the [reference spreadsheet](https://docs.google.com/spreadsheets/d/1ZsxNXebbELpcCi8N7FVOTNGdX_K9-BRC_LMgx4TORo4/edit#gid=1146624812). I had to transcode a lot of these details manually, so it is more than possible that I made mistakes! Please note that currently the Monster Compendium is only built for A20 movesets (as it was a ton of work just to get that working!), but if you would like to help build it for lower ascensions, please leave me a message [here on the issues page](https://github.com/casey-c/spiretool-infomod/issues).
 
 ## Future Suggestions
 
