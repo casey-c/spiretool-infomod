@@ -29,7 +29,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
-// TODO: lots of refactoring / documentation improvments
+// TODO: lots of refactoring / documentation improvements
 
 public class InfoPanelItem extends TopPanelItem {
     private static final Texture IMG = new Texture("images/icon.png");

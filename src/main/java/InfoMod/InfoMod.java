@@ -1,8 +1,12 @@
 package InfoMod;
 
 import basemod.BaseMod;
+import basemod.ModLabel;
+import basemod.ModLabeledToggleButton;
+import basemod.ModPanel;
 import basemod.abstracts.CustomSavableRaw;
 import basemod.interfaces.*;
+import com.badlogic.gdx.graphics.Texture;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -12,12 +16,9 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.EventHelper;
-import com.megacrit.cardcrawl.helpers.Hitbox;
-import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import com.megacrit.cardcrawl.saveAndContinue.SaveFile;
-import com.megacrit.cardcrawl.ui.panels.TopPanel;
 import org.apache.commons.lang3.tuple.Pair;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,6 +43,8 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
 //    private static String boss_act4 = "";
 
     private BossStringsSaveable bossStringsSaveable = new BossStringsSaveable();
+
+    private ConfigHelper configHelper = new ConfigHelper();
 
     private static PotionPanelItem potionPanelItem;
     private static InfoPanelItem infoPanelItem;
@@ -390,8 +393,134 @@ public class InfoMod implements PostInitializeSubscriber, PostBattleSubscriber, 
         BaseMod.addTopPanelItem(infoPanelItem);
         BaseMod.addTopPanelItem(potionPanelItem);
 
-        // After loading in the saved tip, make sure to set it in our tip renderer class
-        //bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
+
+
+        // Setup all the user facing options
+
+        ModPanel modPanel = new ModPanel();
+        //float titleY = 761.0f * Settings.scale;
+        float titleY = 745.0f * Settings.scale;
+        float titleOverviewY = 700.0f * Settings.scale;
+
+        float leftColX = 400.0f * Settings.scale;
+        float rightColX = 1014.0f * Settings.scale;
+
+        //float firstDescY = 622.0f * Settings.scale;
+        float firstDescY = 661.0f * Settings.scale;
+
+        float itemOffsetY = 144.0f * Settings.scale; // 130.0 height / 14 gap
+
+        modPanel.addUIElement(new InfoModConfigWrappedLabel("Info Mod Config", leftColX, titleY, Settings.CREAM_COLOR, FontHelper.bannerFont, modPanel));
+        //modPanel.addUIElement(new InfoModConfigWrappedLabel("Info mod has a selection of optional modules for customizing the level of detail provided. While in a run, mousing over a particular module will usually provide additional details in the form of a tool tip.", leftColX, titleOverviewY, Settings.CREAM_COLOR, FontHelper.tipBodyFont, modPanel));
+
+        modPanel.addUIElement(new InfoModConfigDescBool(
+                leftColX, firstDescY,
+                "Monster Compendium",
+                "Right click an enemy while in combat to see their AI and moveset. Right click again to close this overlay.",
+                modPanel,
+                configHelper,
+                ConfigHelper.BooleanSettings.SHOW_MONSTER_DETAILS
+//                modToggleButton -> {
+//                    System.out.println("OJB: pressed modToggleButton on monster compendium?");
+//                    configHelper.setBool(ConfigHelper.BooleanSettings.SHOW_MONSTER_DETAILS, modToggleButton.enabled);
+//                }
+        ));
+
+        modPanel.addUIElement(new InfoModConfigDescBool(
+                leftColX, firstDescY - itemOffsetY,
+                "Potion Chance Tracker",
+                "Displays the chance to see a potion after the next few combats. Shown as text on the top bar.",
+                modPanel,
+                configHelper,
+                ConfigHelper.BooleanSettings.SHOW_POTIONS
+//                modToggleButton -> {
+//                    configHelper.setBool(ConfigHelper.BooleanSettings.SHOW_POTIONS, modToggleButton.enabled);
+//                }
+        ));
+        modPanel.addUIElement(new InfoModConfigDescBool(
+                leftColX, firstDescY - itemOffsetY - itemOffsetY,
+                "Event Chance Tracker",
+                "Displays the possible events you can get in the remaining question mark floors of the act. Shown as a [?] box on the top bar.",
+                modPanel,
+                configHelper,
+                ConfigHelper.BooleanSettings.SHOW_QBOX
+//                modToggleButton -> {
+//                    configHelper.setBool(ConfigHelper.BooleanSettings.SHOW_QBOX, modToggleButton.enabled);
+//                }
+        ));
+
+        // Second column
+        modPanel.addUIElement(new InfoModConfigDescBool(
+                rightColX, firstDescY,
+                "Map Tool Tip Override (Show Bosses)",
+                "Mousing over the map icon in the top right now shows the bosses you face throughout the run.",
+                modPanel,
+                configHelper,
+                ConfigHelper.BooleanSettings.SHOW_MAP_TIP
+//                modToggleButton -> {
+//                    configHelper.setBool(ConfigHelper.BooleanSettings.SHOW_QBOX, modToggleButton.enabled);
+//                }
+        ));
+        modPanel.addUIElement(new InfoModConfigDescBool(
+                rightColX, firstDescY - itemOffsetY,
+                "Deck Tool Tip Override",
+                "Mousing over the deck icon in the top right now shows the contents of your deck in a quick access tool tip.",
+                modPanel,
+                configHelper,
+                ConfigHelper.BooleanSettings.SHOW_DECK_TIP
+//                modToggleButton -> {
+//                    configHelper.setBool(ConfigHelper.BooleanSettings.SHOW_DECK_TIP, modToggleButton.enabled);
+//                }
+        ));
+        modPanel.addUIElement(new InfoModConfigDescBool(
+                rightColX, firstDescY - itemOffsetY - itemOffsetY,
+                "Special 80% Potion Chance Effect",
+                "Inspired by twitch.tv/terrenceMHS",
+                modPanel,
+                configHelper,
+                ConfigHelper.BooleanSettings.TERR80
+//                modToggleButton -> {
+//                    configHelper.setBool(ConfigHelper.BooleanSettings.TERR80, modToggleButton.enabled);
+//                }
+        ));
+
+//        modPanel.addUIElement(new InfoModConfigWrappedLabel(
+//                "Right click an enemy while in combat to see their AI and moveset. Right click again to close.",
+//                414.0f, 597.0f,
+//                460.0f,
+//                30.0f,
+//                modPanel,
+//                Settings.CREAM_COLOR,
+//                FontHelper.tipBodyFont,
+//                ignored -> {}
+//        ));
+
+//        modPanel.addUIElement(new ModLabel());
+//
+//        modPanel.addUIElement(new ModLabeledToggleButton(
+//                "Testing",
+//                350.0f, 665.0f,
+//                Settings.CREAM_COLOR,
+//                FontHelper.tipBodyFont,
+//                configHelper.getBool(ConfigHelper.BooleanSettings.SHOW_BOX),
+//                modPanel,
+//                modLabel -> {},
+//                modToggleButton -> {
+//                    configHelper.setBool(ConfigHelper.BooleanSettings.SHOW_BOX, modToggleButton.enabled);
+//                }
+//        ));
+
+        BaseMod.registerModBadge(new Texture("images/icon_32.png"),
+                "Info Mod",
+                "ojb",
+                "Displays tedious to calculate information",
+                modPanel);
+
+        //modPanel.addUIElement(new ModLabel());
+        //modPanel.addUIElement(new ModLabeledToggleButton());
+        //SpireConfig
+        //BaseMod.registerModBadge();
+
     }
 
     @Override
