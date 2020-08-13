@@ -4,7 +4,7 @@ InfoMod is a mod for Slay The Spire designed to help make hidden or lesser known
 
 It is heavily influenced by the ever-useful [reference spreadsheet](https://docs.google.com/spreadsheets/d/1ZsxNXebbELpcCi8N7FVOTNGdX_K9-BRC_LMgx4TORo4/edit#gid=1146624812) and seeks to provide a lot of that information in game. InfoMod also supports the [SlayTheRelics Twitch extension](https://steamcommunity.com/sharedfiles/filedetails/?id=1989770578) to allow the tool tips provided by this mod to be accessed by viewers.
 
-Jump down to the [Installation](https://github.com/casey-c/spiretool-infomod/blob/master/README.md#installation) section below to learn how to get this mod in your game!
+Jump down to the [Installation](#installation) section below to learn how to get this mod in your game!
 
 ## Optional Modules
 
