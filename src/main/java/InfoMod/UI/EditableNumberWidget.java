@@ -1,5 +1,7 @@
 package InfoMod.UI;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -89,14 +91,19 @@ public class EditableNumberWidget implements IScreenWidget {
         plusButton = ButtonFactory.buildPlusButton(x + textArea.TEX_WIDTH + TEXT_BUTTON_GAP,
                 y + PLUS_OFFSET_Y,
                 buttonWidget -> {
-                    // TODO: hold shift to add 10?
-                    add(1);
+                    if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+                        add(10);
+                    else
+                        add(1);
                 });
 
         minusButton = ButtonFactory.buildMinusButton(x + textArea.TEX_WIDTH + TEXT_BUTTON_GAP,
                 y + MINUS_OFFSET_Y,
                 buttonWidget -> {
-                    add(-1);
+                    if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
+                        add(-10);
+                    else
+                        add(-1);
                 });
 
         show();

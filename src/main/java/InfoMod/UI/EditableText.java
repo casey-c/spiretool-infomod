@@ -6,7 +6,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
@@ -149,6 +151,19 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
 
         // Render the text
         FontHelper.renderFontLeftTopAligned(sb, font, text, x + textOffsetX, y + textOffsetY, fontColor);
+
+        // Render the glowy "_" at the end
+        if (focused) {
+            float tmpAlpha = (MathUtils.cosDeg((float)(System.currentTimeMillis() / 3L % 360L)) + 1.25F) / 3.0F * fontColor.a;
+            FontHelper.renderSmartText(sb,
+                    font,
+                    "_",
+                    x + textOffsetX + FontHelper.getSmartWidth(font, text, 1000000.0F, 0.0F),
+                    y + textOffsetY,
+                    100000.0F,
+                    0.0F,
+                    new Color(1.0F, 1.0F, 1.0F, tmpAlpha));
+        }
 
         // DEBUG
         hb.render(sb);

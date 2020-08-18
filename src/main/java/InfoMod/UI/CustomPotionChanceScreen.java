@@ -4,6 +4,7 @@ import InfoMod.RenderingUtils;
 import basemod.BaseMod;
 import basemod.interfaces.PostRenderSubscriber;
 import basemod.interfaces.RenderSubscriber;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -11,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
+import com.megacrit.cardcrawl.helpers.input.InputHelper;
 
 public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
     private boolean visible = false;
@@ -28,9 +30,13 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
     private static final float CONTENT_X = 637.0f;
     private static final float CLOSE_X = 1270.0f;
 
-    private static final float CONFIRM_BUTTON_X = 1053.0f;
+    //private static final float CONFIRM_BUTTON_X = 1053.0f;
+    private static final float CONFIRM_BUTTON_X = 1088.0f;
+
     private static final float SHORT_INFO_GAP = 26.0f;
-    private static final float TEXTY_X = 880.0f;
+
+    //private static final float TEXTY_X = 880.0f;
+    private static final float TEXTY_X = 920.0f;
 
     private static final float TITLE_TEXT_Y = 784.0f;
     private static final float MAIN_EDIT_Y = 644.0f;
@@ -64,23 +70,35 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
         confirmButton = new ColorableSmallTextButton(
                 CONFIRM_BUTTON_X,
                 BUTTON_Y,
+                21.0f,
+                -2.0f,
                 "Save",
                 RenderingUtils.OJB_GREEN_BUTTON_COLOR,
                 button -> { saveAndClose(); });
 
-        cancelButton = ButtonFactory.buildCloseButton(
+        cancelButton = (SimpleButtonWidget) ButtonFactory.buildCloseButton(
                 CLOSE_X,
                 CLOSE_Y,
-                button -> { revertAndClose(); });
+                button -> { revertAndClose(); })
+                .with_tooltip("Cancel", "Revert all changes and close this popup.");
 
-        resetButton = ButtonFactory.buildResetButton(
+        resetButton = (SimpleButtonWidget) ButtonFactory.buildResetButton(
                 CLOSE_X,
                 RESET_Y,
                 button -> {
-                    // TODO
-                    System.out.println("OJB: reset button pressed");
-                    revertStashedSettings();
-                });
+                    if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+                        System.out.println("OJB: shift is pressed");
+
+                        // TODO: revert to InfoMod default values using some sort of Properties thingy like we save with
+                        revertStashedSettings();
+                        // remember to update the tool tip when you get to this, future me
+                    }
+                    else {
+                        revertStashedSettings();
+                    }
+
+                })
+                .with_tooltip("Reset", "Resets all settings in this dialog to their initial values.");
 
         mainTextArea = new EditableTextLong(CONTENT_X,
                 MAIN_EDIT_Y,
@@ -91,16 +109,6 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
                 editableText -> { tab(); },
                 editableText -> { hide(); },
                 editableText -> { saveAndClose(); } );
-
-//        textX = new EditableTextShort(CONTENT_X + SHORT_INFO_GAP,
-//                POSITION_BOTTOM_Y,
-//                "1494",
-//                FontHelper.tipBodyFont,
-//                Settings.CREAM_COLOR,
-//                editableText -> { setFocus(editableText); },
-//                editableText -> { tab(); },
-//                editableText -> { hide(); },
-//                editableText -> { saveAndClose(); } );
 
         textX = new EditableNumberWidget(
                 CONTENT_X + SHORT_INFO_GAP,
@@ -127,16 +135,6 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
                 editableNumberWidget -> { tab(); },
                 editableNumberWidget -> { hide(); },
                 editableNumberWidget -> { saveAndClose(); } );
-
-//        textY = new EditableTextShort(TEXTY_X + SHORT_INFO_GAP,
-//                POSITION_BOTTOM_Y,
-//                "1060",
-//                FontHelper.tipBodyFont,
-//                Settings.CREAM_COLOR,
-//                editableText -> { setFocus(editableText); },
-//                editableText -> { tab(); },
-//                editableText -> { hide(); },
-//                editableText -> { saveAndClose(); } );
 
         show();
     }

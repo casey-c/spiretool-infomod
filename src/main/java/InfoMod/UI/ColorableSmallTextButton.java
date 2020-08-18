@@ -26,15 +26,25 @@ public class ColorableSmallTextButton extends ButtonWidget {
     private static final float textOffsetX = 70.0f;
     private static final float textOffsetY = 54.0f;
 
+    private float additionalTextOffsetX = 0.0f;
+    private float additionalTextOffsetY = 0.0f;
+
     private static final Texture TEX_NORMAL_COLOR = new Texture("images/button_normal_color.png");
     private static final Texture TEX_NORMAL_FRAME = new Texture("images/button_normal_frame.png");
     private static final Texture TEX_PRESSED_FRAME = new Texture("images/button_pressed_frame.png");
 
-    public ColorableSmallTextButton(float x, float y, String text, Color buttonColor, Consumer<ButtonWidget> onClick) {
+    public ColorableSmallTextButton(float x, float y, float additionalTextOffsetX, float additionalTextOffsetY, String text, Color buttonColor, Consumer<ButtonWidget> onClick) {
         super(x, y, BUTTON_WIDTH, BUTTON_HEIGHT, onClick);
 
         this.text = text;
         this.buttonColor = buttonColor;
+
+        this.additionalTextOffsetX = additionalTextOffsetX;
+        this.additionalTextOffsetY = additionalTextOffsetY;
+    }
+
+    public ColorableSmallTextButton(float x, float y, String text, Color buttonColor, Consumer<ButtonWidget> onClick) {
+        this(x, y, 0.0f, 0.0f, text, buttonColor, onClick);
     }
 
     @Override
@@ -56,7 +66,7 @@ public class ColorableSmallTextButton extends ButtonWidget {
             sb.draw(TEX_PRESSED_FRAME, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
 
         // Render the text
-        FontHelper.renderFontLeftTopAligned(sb, font, text, x + textOffsetX, y + textOffsetY, fontColor);
+        FontHelper.renderFontLeftTopAligned(sb, font, text, x + textOffsetX + additionalTextOffsetX, y + textOffsetY + additionalTextOffsetY, fontColor);
     }
 }
 

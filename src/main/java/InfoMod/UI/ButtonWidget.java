@@ -1,12 +1,17 @@
 package InfoMod.UI;
 
 import basemod.BaseMod;
+import basemod.helpers.TooltipInfo;
+import basemod.interfaces.PostRenderSubscriber;
 import basemod.interfaces.PostUpdateSubscriber;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.Hitbox;
+import com.megacrit.cardcrawl.helpers.PowerTip;
+import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 
+import javax.swing.*;
 import java.util.function.Consumer;
 
 /*
@@ -14,6 +19,9 @@ import java.util.function.Consumer;
  */
 public abstract class ButtonWidget implements IScreenWidget, PostUpdateSubscriber {
     protected boolean visible = false;
+
+    protected boolean hasToolTip = false;
+    protected String toolTipHeader, toolTipBody;
 
     protected float x, y;
     protected float width, height;
@@ -54,6 +62,10 @@ public abstract class ButtonWidget implements IScreenWidget, PostUpdateSubscribe
             return;
 
         // TODO: subclasses should override this render and draw their own textures
+        if (hasToolTip && hb.hovered) {
+            //TipHelper.renderGenericTip(x, y, toolTipHeader, toolTipBody);
+            TipHelper.renderGenericTip(InputHelper.mX + 40.0f, InputHelper.mY, toolTipHeader, toolTipBody);
+        }
 
         // DEBUG
         hb.render(sb);
@@ -82,7 +94,12 @@ public abstract class ButtonWidget implements IScreenWidget, PostUpdateSubscribe
             // Handle
             onClick.accept(this);
         }
+    }
 
-
+    public ButtonWidget with_tooltip(String header, String body) {
+        hasToolTip = true;
+        toolTipHeader = header;
+        toolTipBody = body;
+        return this;
     }
 }
