@@ -5,9 +5,12 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.potions.EntropicBrew;
+import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -23,6 +26,11 @@ public class RenderingUtils {
     public static final Color OJB_BLOCK_COLOR = Settings.BLUE_TEXT_COLOR;
     public static final Color OJB_DAMAGE_COLOR = Settings.RED_TEXT_COLOR;
     public static final Color OJB_BUFF_COLOR = new Color(1.0f, 0.875f, 0.0f, 1.0f);
+
+    public static final Color OJB_DIM_COLOR = new Color(0.0f, 0.0f, 0.0f, 0.75f);
+
+    public static final Color OJB_GREEN_BUTTON_COLOR = new Color(0.212f, 0.369f, 0.224f, 1.0f);
+    public static final Color OJB_RED_BUTTON_COLOR = new Color(0.502f, 0.0f, 0.0f, 1.0f);
 
     // UNUSED COLORS
     //public static final Color OJB_BUFF_COLOR = new Color(1.0f, 0.353f, 0.498f, 1.0f); // nice pinkish / too close to red
@@ -148,5 +156,37 @@ public class RenderingUtils {
                 x,
                 y,
                 c);
+    }
+
+    // TODO: add checking to see if any nulls (potential crashes!)
+    public static void openCustomScreen(String soundID) {
+        // SHOW SCREEN (copied from base game)
+        AbstractDungeon.player.releaseCard();
+        CardCrawlGame.sound.play(soundID);
+
+        AbstractDungeon.dynamicBanner.hide();
+        AbstractDungeon.isScreenUp = true;
+        //AbstractDungeon.screen = AbstractDungeon.CurrentScreen.MASTER_DECK_VIEW;
+        AbstractDungeon.overlayMenu.proceedButton.hide();
+        AbstractDungeon.overlayMenu.hideCombatPanels();
+        AbstractDungeon.overlayMenu.showBlackScreen();
+        //AbstractDungeon.overlayMenu.cancelButton.show(TEXT[1]);
+    }
+
+    // a public version of the previously private AbstractDungeon::genericScreenOverlayReset()
+    public static void closeScreens(String soundID) {
+        //if (previousScreen == null) {
+            if (AbstractDungeon.player.isDead) {
+                AbstractDungeon.previousScreen = AbstractDungeon.CurrentScreen.DEATH;
+            } else {
+                AbstractDungeon.isScreenUp = false;
+                AbstractDungeon.overlayMenu.hideBlackScreen();
+                AbstractDungeon.player.releaseCard();
+                CardCrawlGame.sound.play(soundID);
+            }
+        //}
+        if (AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead) {
+            AbstractDungeon.overlayMenu.showCombatPanels();
+        }
     }
 }

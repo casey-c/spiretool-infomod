@@ -171,6 +171,11 @@ public class MonsterInfoOverlay implements PostInitializeSubscriber, RenderSubsc
         if (curr_monster == null)
             return;
 
+
+        // Dim the background
+        sb.setColor(RenderingUtils.OJB_DIM_COLOR);
+        sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0.0F, 0.0F, (float) Settings.WIDTH, (float)Settings.HEIGHT);
+
         // Render the image
         sb.setColor(Color.WHITE);
         sb.draw(img, cx - img_w2, cy - img_h2, img_w2, img_h2, img_w, img_h, Settings.scale, Settings.scale,

@@ -1,5 +1,6 @@
 package InfoMod;
 
+import InfoMod.UI.CustomPotionChanceScreen;
 import basemod.TopPanelItem;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -21,6 +22,9 @@ public class InfoPanelItem extends TopPanelItem {
 
     // TODO: remove / clean up
     private CardPlays cardPlays;
+    //private StringInputScreen stringInputScreen = null;
+    //private StringInputScreen2 stringInputScreen = null;
+    private CustomPotionChanceScreen customPotionChanceScreen;
 
     public InfoPanelItem() {
         super(IMG, ID);
@@ -125,7 +129,19 @@ public class InfoPanelItem extends TopPanelItem {
         //AbstractDungeon.effectList.add(new CardPoofEffect(500, 500));
 
         // TODO: uncomment this again (WIP)
-        cardPlays.toggleVisibility();
+        //cardPlays.toggleVisibility();
+
+        if (customPotionChanceScreen == null) {
+            customPotionChanceScreen = new CustomPotionChanceScreen();
+            // NOTE: implicit show() in the constructor
+        }
+        else {
+            if (customPotionChanceScreen.isVisible())
+                customPotionChanceScreen.hide();
+            else
+                customPotionChanceScreen.show();
+        }
+
 
         // TODO: remove this cheat (for debugging)
         //AbstractDungeon.getCurrRoom().endBattle();
