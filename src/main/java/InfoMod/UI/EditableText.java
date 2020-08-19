@@ -216,4 +216,8 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
     public String getText() {
         return text;
     }
+
+    public void clear() {
+        text = "";
+    }
 }

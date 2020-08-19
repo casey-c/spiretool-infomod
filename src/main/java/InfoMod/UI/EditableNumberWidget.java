@@ -86,6 +86,12 @@ public class EditableNumberWidget implements IScreenWidget {
 
                 System.out.println();
             }
+
+            @Override
+            public void clear() {
+                currValue = 0;
+                add(0);
+            }
         };
 
         plusButton = ButtonFactory.buildPlusButton(x + textArea.TEX_WIDTH + TEXT_BUTTON_GAP,
