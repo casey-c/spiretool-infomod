@@ -5,15 +5,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
-import com.megacrit.cardcrawl.potions.EntropicBrew;
-import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import com.megacrit.cardcrawl.ui.buttons.PeekButton;
-import org.jetbrains.annotations.NotNull;
+
 
 /*
   This utility class holds all the rendering and graphics specific functions and defines that may be needed. It
@@ -148,6 +144,7 @@ public class RenderingUtils {
         Color c = new Color(r, g, b, 1.0f);
 
         FontHelper.renderFontLeftTopAligned(
+        //renderSmarterText(
                 sb,
                 //FontHelper.tipBodyFont,
                 FontHelper.topPanelAmountFont,
@@ -158,6 +155,39 @@ public class RenderingUtils {
                 x,
                 y,
                 c);
+    }
+
+    public static String fixBadPoundSigns(String input) {
+        String cleaned = input;
+        cleaned = cleaned.replaceAll("# ", "#");
+
+        while ((cleaned.endsWith("#")) && cleaned.length() > 0) {
+            cleaned = cleaned.substring(0, cleaned.length() - 1);
+        }
+
+        return cleaned;
+    }
+
+    // IMPORTANT: use these "smarter" font rendering calls if you have unsanitized strings needing rendering
+    //     i.e. letting users type whatever they want
+
+    // Original code will crash with how it handles # symbols. (it expects a two character pair #w, with [w] being a
+    // color e.g. r for r, w for white, b for blue, etc.)
+    // This smarter code will strip any # that end a string
+    public static void renderSmarterText(SpriteBatch sb, BitmapFont font, String msg, float x, float y, Color baseColor) {
+        // Strip # from the end of the string
+        String cleaned = fixBadPoundSigns(msg);
+        FontHelper.renderSmartText(sb, font, cleaned, x, y, baseColor);
+    }
+
+    public static void renderSmarterText(SpriteBatch sb, BitmapFont font, String msg, float x, float y, float lineWidth, float lineSpacing, Color baseColor) {
+        String cleaned = fixBadPoundSigns(msg);
+        FontHelper.renderSmartText(sb, font, cleaned, x, y, lineWidth, lineSpacing, baseColor);
+    }
+
+    public static float getSmarterWidth(BitmapFont font, String msg, float lineWidth, float lineSpacing) {
+        String cleaned = fixBadPoundSigns(msg);
+        return FontHelper.getSmartWidth(font, cleaned, lineWidth, lineSpacing);
     }
 
     // basically the same code called as MasterDeckViewScreen.open() from TopPanel

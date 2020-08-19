@@ -3,10 +3,14 @@ package InfoMod;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+// TODO: i'm a moron :(
+//   saveables are good for things that are specific run based (like the boss text saveable is a-ok)
+//   potion text should go in the config helper instead RIP
+
 public class CustomPotionChanceSaveable extends VeryCustomSavable {
     public static final String DEFAULT_TEXT = "Potions: ";
     public static final int DEFAULT_X = 1494;
-    public static final int DEFAULT_Y = 1060;
+    public static final int DEFAULT_Y = 1056;
 
     public String customText = DEFAULT_TEXT;
     public int x = DEFAULT_X;

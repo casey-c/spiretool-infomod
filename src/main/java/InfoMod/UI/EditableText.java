@@ -1,5 +1,6 @@
 package InfoMod.UI;
 
+import InfoMod.RenderingUtils;
 import basemod.BaseMod;
 import basemod.interfaces.PostUpdateSubscriber;
 import com.badlogic.gdx.graphics.Color;
@@ -156,15 +157,17 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
             sb.draw(TEX_DEFAULT, x, y, TEX_WIDTH, TEX_HEIGHT);
 
         // Render the text
-        FontHelper.renderFontLeftTopAligned(sb, font, text, x + textOffsetX, y + textOffsetY, fontColor);
+        //FontHelper.renderFontLeftTopAligned(sb, font, text, x + textOffsetX, y + textOffsetY, fontColor);
+        RenderingUtils.renderSmarterText(sb, font, text, x + textOffsetX, y + textOffsetY, fontColor);
 
         // Render the glowy "_" at the end
         if (focused) {
             float tmpAlpha = (MathUtils.cosDeg((float)(System.currentTimeMillis() / 3L % 360L)) + 1.25F) / 3.0F * fontColor.a;
-            FontHelper.renderSmartText(sb,
+            //FontHelper.renderSmartText(sb,
+            RenderingUtils.renderSmarterText(sb,
                     font,
                     "_",
-                    x + textOffsetX + FontHelper.getSmartWidth(font, text, 1000000.0F, 0.0F),
+                    x + textOffsetX + RenderingUtils.getSmarterWidth(font, text, 100000000.0f, 0.0f), //FontHelper.getSmartWidth(font, text, 1000000.0F, 0.0F),
                     y + textOffsetY,
                     100000.0F,
                     0.0F,
@@ -217,6 +220,9 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
         }
         else if (c == SpecialKeys.RETURN)
             onReturn.accept(this);
+        else if ((int)c == SpecialKeys.NON_PRINTING) {
+            System.out.println("OJB: SKIPPING keytyped char: '" + c + "' | as int: '" + (int)c + "'");
+        }
         else {
             System.out.println("OJB: keytyped char: '" + c + "' | as int: '" + (int)c + "'");
             appendChar(c);

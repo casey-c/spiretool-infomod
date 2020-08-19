@@ -98,18 +98,23 @@ public class PotionPanelItem extends TopPanelItem {
             return;
 
         // Font stuff
-        float textX = (float) Settings.WIDTH - TEXT_SHIFT * Settings.scale;
-        float textY = (float)Settings.HEIGHT - 26.0F * Settings.scale;
+        //float textX = (float) Settings.WIDTH - TEXT_SHIFT * Settings.scale;
+        //float textY = (float)Settings.HEIGHT - 26.0F * Settings.scale;
+        String text = SaveableManager.potionChanceCustom.customText;
+        float textX = SaveableManager.potionChanceCustom.x;
+        float textY = SaveableManager.potionChanceCustom.y;
 
         // Special rainbow text is locked behind the Terr80 setting
         if ((potion_chance == 80) && ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.TERR80)) {
-            RenderingUtils.renderRainbowTextTipFont(sb, "!Potions: " + potion_chance + "%", textX, textY);
+            //RenderingUtils.renderRainbowTextTipFont(sb, "!Potions: " + potion_chance + "%", textX, textY);
+            RenderingUtils.renderRainbowTextTipFont(sb,  text + potion_chance + "%", textX, textY);
         }
         else {
-            FontHelper.renderFontLeftTopAligned(
+            //FontHelper.renderFontLeftTopAligned(
+            RenderingUtils.renderSmarterText(
                     sb,
                     FontHelper.topPanelAmountFont,
-                    "!Potions: " + potion_chance + "%",
+                    text + potion_chance + "%",
                     textX,
                     textY,
                     Settings.CREAM_COLOR);

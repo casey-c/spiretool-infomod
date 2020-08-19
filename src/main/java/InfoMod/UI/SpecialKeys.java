@@ -17,6 +17,10 @@ public class SpecialKeys {
     // note that this requires a cast to int if coming from a char
     public static final int ESCAPE_KEY = 27;
 
+    // without filtering out this, you can press SHIFT / WINDOWS KEY / and possibly other keys and have them
+    // show up as part of the string but not really. this is a good thing to avoid if using keyTyped
+    public static final int NON_PRINTING = 0;
+
     public static final char BACKSPACE = '\b';
     public static final char TAB = '\t';
     public static final char RETURN = '\r';
