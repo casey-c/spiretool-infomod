@@ -1,6 +1,7 @@
 package InfoMod;
 
 import basemod.TopPanelItem;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 public class PotionPanelItem extends TopPanelItem {
     private static final Texture IMG = new Texture("images/null.png");
     public static final String ID = "ojb_infomod:PotionPanelIcon";
+
+    private static final Texture TEX_POTION = new Texture("images/potion.png");
 
     private static final float ITEM_WIDTH = 213.0f;
     private static final float TEXT_SHIFT = 422.0f;
@@ -84,8 +87,11 @@ public class PotionPanelItem extends TopPanelItem {
         this.potion_chance = p;
         future_tip.body = buildFutureChances(p);
 
-        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_POTIONS) == false)
+        if (!Config.getBool(Config.ConfigOptions.SHOW_POTIONS.toString()))
             return;
+
+//        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_POTIONS) == false)
+//            return;
 
         SlayTheRelicsIntegration.update("potionPanelItem", hitbox, tips);
     }
@@ -94,18 +100,32 @@ public class PotionPanelItem extends TopPanelItem {
     public void render(SpriteBatch sb) {
         super.render(sb);
 
-        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_POTIONS) == false)
+//        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_POTIONS) == false)
+//            return;
+        if (!Config.getBool(Config.ConfigOptions.SHOW_POTIONS.toString()))
             return;
 
         // Font stuff
         //float textX = (float) Settings.WIDTH - TEXT_SHIFT * Settings.scale;
         //float textY = (float)Settings.HEIGHT - 26.0F * Settings.scale;
-        String text = SaveableManager.potionChanceCustom.customText;
-        float textX = SaveableManager.potionChanceCustom.x;
-        float textY = SaveableManager.potionChanceCustom.y;
+//        String text = SaveableManager.potionChanceCustom.customText;
+//        float textX = SaveableManager.potionChanceCustom.x;
+//        float textY = SaveableManager.potionChanceCustom.y;
+
+//        String text = ConfigHelper.getInstance().getString(ConfigHelper.StringSettings.POTION_CHANCE);
+//        float textX = (float)ConfigHelper.getInstance().getInt(ConfigHelper.IntSettings.POTION_X);
+//        float textY = (float)ConfigHelper.getInstance().getInt(ConfigHelper.IntSettings.POTION_Y);
+
+        String text = Config.getString(Config.ConfigOptions.POTION_TEXT.toString());
+        float textX = (float)Config.getInt(Config.ConfigOptions.POTION_X.toString());
+        float textY = (float)Config.getInt(Config.ConfigOptions.POTION_Y.toString());
+
+        sb.setColor(Color.WHITE);
+        sb.draw(TEX_POTION, textX - 64.0f, textY - 39.0f);
 
         // Special rainbow text is locked behind the Terr80 setting
-        if ((potion_chance == 80) && ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.TERR80)) {
+        //if ((potion_chance == 80) && ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.TERR80)) {
+        if ((potion_chance == 80) && Config.getBool(Config.ConfigOptions.TERR80.toString())) {
             //RenderingUtils.renderRainbowTextTipFont(sb, "!Potions: " + potion_chance + "%", textX, textY);
             RenderingUtils.renderRainbowTextTipFont(sb,  text + potion_chance + "%", textX, textY);
         }
@@ -126,7 +146,9 @@ public class PotionPanelItem extends TopPanelItem {
     protected void onHover() {
         super.onHover();
 
-        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_POTIONS) == false)
+//        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_POTIONS) == false)
+//            return;
+        if (!Config.getBool(Config.ConfigOptions.SHOW_POTIONS.toString()))
             return;
 
         float TIP_Y = (float) Settings.HEIGHT - 120.0F * Settings.scale;

@@ -14,7 +14,6 @@ import java.util.Properties;
 
 /*
     A wrapper class for SpireConfig. InfoMod specific options can be reached from the ConfigSettings enum
- */
 public class ConfigHelper {
     // Singleton pattern
     private static class ConfigHolder {
@@ -35,15 +34,29 @@ public class ConfigHelper {
         TERR80("enableTerr80");
 
         private final String val;
-
         private BooleanSettings(String val) {
             this.val = val;
         }
-
-        @Override
-        public String toString() {
+        @Override public String toString() {
             return val;
         }
+    }
+
+    public enum StringSettings {
+        POTION_CHANCE("potionChance");
+
+        private final String val;
+        private StringSettings(String val) { this.val = val; }
+        @Override public String toString() { return val; }
+    }
+
+    public enum IntSettings {
+        POTION_X("potionX"),
+        POTION_Y("potionY");
+
+        private final String val;
+        private IntSettings(String val) { this.val = val; }
+        @Override public String toString() { return val; }
     }
 
     private Properties defaults;
@@ -56,6 +69,13 @@ public class ConfigHelper {
         defaults.put(ConfigHelper.BooleanSettings.SHOW_DECK_TIP.toString(), true);
         defaults.put(ConfigHelper.BooleanSettings.SHOW_MAP_TIP.toString(), true);
         defaults.put(ConfigHelper.BooleanSettings.TERR80.toString(), true);
+
+        defaults.put(ConfigHelper.StringSettings.POTION_CHANCE.toString(), "Potions: ");
+
+        int defaultX = 1494;
+        int defaultY = 1056;
+        defaults.put(ConfigHelper.IntSettings.POTION_X.toString(), defaultX);
+        defaults.put(ConfigHelper.IntSettings.POTION_Y.toString(), defaultY);
 
         try {
             spireConfig = new SpireConfig("Info Mod", "infoModConfig", defaults);
@@ -72,6 +92,14 @@ public class ConfigHelper {
     public void printAll() {
         for (BooleanSettings key : BooleanSettings.values()) {
             boolean val = spireConfig.getBool(key.toString());
+            System.out.println(key.toString() + ": " + val);
+        }
+        for (StringSettings key : StringSettings.values()) {
+            String val = spireConfig.getString(key.toString());
+            System.out.println(key.toString() + ": " + val);
+        }
+        for (IntSettings key : IntSettings.values()) {
+            int val = spireConfig.getInt(key.toString());
             System.out.println(key.toString() + ": " + val);
         }
     }
@@ -102,9 +130,37 @@ public class ConfigHelper {
         return save();
     }
 
-    public boolean getBool(BooleanSettings key) {
-        return spireConfig.getBool(key.toString());
+
+    public boolean setString(StringSettings key, String val) {
+        if (spireConfig == null)
+            return false;
+
+        System.out.println("OJB: config is setting " + key.toString() + " to " + val);
+        spireConfig.setString(key.toString(), val);
+
+        printAll();
+        return save();
     }
+
+
+    public boolean setInt(IntSettings key, int val) {
+        if (spireConfig == null)
+            return false;
+
+        System.out.println("OJB: config is setting " + key.toString() + " to " + val);
+        spireConfig.setInt(key.toString(), val);
+
+        printAll();
+        return save();
+    }
+
+    public boolean getBool(BooleanSettings key) { return spireConfig.getBool(key.toString()); }
+    public String getString(StringSettings key) { return spireConfig.getString(key.toString()); }
+    public int getInt(IntSettings key) { return spireConfig.getInt(key.toString()); }
+
+    public boolean getDefaultBool(BooleanSettings key) { return (boolean)defaults.get(key.toString()); }
+    public String getDefaultString(StringSettings key) { return (String)defaults.get(key.toString()); }
+    public int getDefaultInt(IntSettings key) { return (int)defaults.get(key.toString()); }
 
     public static void setupConfigMenu(CustomHitboxTipItem bossTipItem, CustomHitboxTipItem deckTipItem) {
         ModPanel modPanel = new ModPanel();
@@ -117,7 +173,6 @@ public class ConfigHelper {
         float itemOffsetY = 144.0f * Settings.scale; // 130.0 height / 14 gap
 
         modPanel.addUIElement(new InfoModConfigWrappedLabel("Info Mod Config", leftColX, titleY, Settings.CREAM_COLOR, FontHelper.bannerFont, modPanel));
-        //modPanel.addUIElement(new InfoModConfigWrappedLabel("Info mod has a selection of optional modules for customizing the level of detail provided. While in a run, mousing over a particular module will usually provide additional details in the form of a tool tip.", leftColX, titleOverviewY, Settings.CREAM_COLOR, FontHelper.tipBodyFont, modPanel));
 
         ModTextPanel tp = new ModTextPanel();
         ModButton mb = new ModButton(300.0f, 300.0f, modPanel, modButton -> {
@@ -133,25 +188,6 @@ public class ConfigHelper {
                     });
         });
         modPanel.addUIElement(mb);
-
-//        modPanel.addUIElement(new ModButton(300.0f, 300.0f, modPanel, modButton -> {
-//            System.out.println("OJB: mod button pressed?");
-//            ModTextPanel textPanel = new ModTextPanel();
-//            textPanel.show(modPanel,
-//                    "Name",
-//                    "!Potions: ",
-//                    "Enter the text to be shown by the potion tracker.",
-//                    modTextPanel -> {
-//                        //cancel
-//                        System.out.println("OJB: mod text panel cancel");
-//                        //modTextPanel.cancel();
-//                    },
-//                    modTextPanel -> {
-//                        System.out.println("OJB: mod text panel confirm");
-//                        System.out.println("OJB: text is " + ModTextPanel.textField);
-//                        //modTextPanel.confirm();
-//                    } );
-//        }));
 
         modPanel.addUIElement(new InfoModConfigDescBool(
                 leftColX, firstDescY,
@@ -212,3 +248,4 @@ public class ConfigHelper {
                 modPanel);
     }
 }
+ */

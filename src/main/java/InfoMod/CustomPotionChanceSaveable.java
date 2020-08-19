@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 //   saveables are good for things that are specific run based (like the boss text saveable is a-ok)
 //   potion text should go in the config helper instead RIP
 
+/*
 public class CustomPotionChanceSaveable extends VeryCustomSavable {
     public static final String DEFAULT_TEXT = "Potions: ";
     public static final int DEFAULT_X = 1494;
@@ -43,3 +44,5 @@ public class CustomPotionChanceSaveable extends VeryCustomSavable {
 
     }
 }
+
+ */

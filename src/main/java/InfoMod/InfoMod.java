@@ -350,7 +350,8 @@ public class InfoMod implements PostInitializeSubscriber, PostDungeonUpdateSubsc
         BaseMod.addTopPanelItem(potionPanelItem);
 
         // Main Menu -> Mods -> InfoMod -> Config
-        ConfigHelper.setupConfigMenu(bossTipItem, deckTipItem);
+        //ConfigHelper.setupConfigMenu(bossTipItem, deckTipItem);
+        Config.setupConfigMenu(bossTipItem, deckTipItem);
 
         // Setup all the user facing Config options (i.e. Main Menu -> Mods -> Info Mod -> Config)
 //        ModPanel modPanel = new ModPanel();

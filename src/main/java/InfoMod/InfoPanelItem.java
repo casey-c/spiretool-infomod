@@ -98,7 +98,9 @@ public class InfoPanelItem extends TopPanelItem {
 
         event_tip.body = sb.toString();
 
-        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+//        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+//            return;
+        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX.toString()))
             return;
 
         SlayTheRelicsIntegration.update("infoPanelItem", hitbox, tips);
@@ -113,7 +115,9 @@ public class InfoPanelItem extends TopPanelItem {
 
         card_tip.body = sb.toString();
 
-        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+//        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+//            return;
+        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX.toString()))
             return;
 
         SlayTheRelicsIntegration.update("infoPanelItem", hitbox, tips);
@@ -123,7 +127,9 @@ public class InfoPanelItem extends TopPanelItem {
     @Override
     protected void onClick() {
         // TODO: might need to quit early if config setting is ignored by this function call
-        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+//        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+//            return;
+        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX.toString()))
             return;
 
         //AbstractDungeon.effectList.add(new CardPoofEffect(500, 500));
@@ -149,7 +155,9 @@ public class InfoPanelItem extends TopPanelItem {
 
     @Override
     public void render(SpriteBatch sb) {
-        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+//        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+//            return;
+        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX.toString()))
             return;
 
         super.render(sb);
@@ -162,7 +170,9 @@ public class InfoPanelItem extends TopPanelItem {
     @Override
     protected void onHover() {
         // TODO: after super call?
-        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+//        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
+//            return;
+        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX.toString()))
             return;
 
         super.onHover();

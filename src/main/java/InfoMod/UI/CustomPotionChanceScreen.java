@@ -1,5 +1,6 @@
 package InfoMod.UI;
 
+import InfoMod.Config;
 import InfoMod.RenderingUtils;
 import InfoMod.SaveableManager;
 import basemod.BaseMod;
@@ -106,14 +107,20 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
         mainTextArea = new EditableTextLong(CONTENT_X,
                 MAIN_EDIT_Y,
                 //SaveableManager.potionChanceCustom.DEFAULT_TEXT,
-                SaveableManager.potionChanceCustom.customText,
+                //SaveableManager.potionChanceCustom.customText,
+                //ConfigHelper.getInstance().getString(ConfigHelper.StringSettings.POTION_CHANCE),
+                Config.getString(Config.ConfigOptions.POTION_TEXT.toString()),
                 FontHelper.tipBodyFont,
                 Settings.CREAM_COLOR,
                 editableText -> { setFocus(editableText); },
                 editableText -> { tab(); },
                 editableText -> { hide(); },
                 editableText -> { saveAndClose(); },
-                editableText -> { SaveableManager.potionChanceCustom.customText = editableText.text; }
+                editableText -> {
+                    Config.setString(Config.ConfigOptions.POTION_TEXT.toString(), editableText.text);
+                    //ConfigHelper.getInstance().setString(ConfigHelper.StringSettings.POTION_CHANCE, editableText.text);
+                    //SaveableManager.potionChanceCustom.customText = editableText.text;
+                }
                 );
 
         textX = new EditableNumberWidget(
@@ -123,14 +130,20 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
                 1920,
                 //1494,
                 //SaveableManager.potionChanceCustom.DEFAULT_X,
-                SaveableManager.potionChanceCustom.x,
+                //SaveableManager.potionChanceCustom.x,
+                //ConfigHelper.getInstance().getInt(ConfigHelper.IntSettings.POTION_X),
+                Config.getInt(Config.ConfigOptions.POTION_X.toString()),
                 FontHelper.tipBodyFont,
                 Settings.CREAM_COLOR,
                 editableNumberWidget -> { setFocus(editableNumberWidget.textArea); },
                 editableNumberWidget -> { tab(); },
                 editableNumberWidget -> { hide(); },
                 editableNumberWidget -> { saveAndClose(); },
-                editableText -> { SaveableManager.potionChanceCustom.x = editableText.getValue(); }
+                editableText -> {
+                    Config.setInt(Config.ConfigOptions.POTION_X.toString(), editableText.getValue());
+                    //ConfigHelper.getInstance().setInt(ConfigHelper.IntSettings.POTION_X, editableText.getValue());
+                    //SaveableManager.potionChanceCustom.x = editableText.getValue();
+                }
         );
 
         textY = new EditableNumberWidget(TEXTY_X + SHORT_INFO_GAP,
@@ -139,14 +152,20 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
                 1080,
                 //1060,
                 //SaveableManager.potionChanceCustom.DEFAULT_Y,
-                SaveableManager.potionChanceCustom.y,
+                //SaveableManager.potionChanceCustom.y,
+                //ConfigHelper.getInstance().getInt(ConfigHelper.IntSettings.POTION_Y),
+                Config.getInt(Config.ConfigOptions.POTION_Y.toString()),
                 FontHelper.tipBodyFont,
                 Settings.CREAM_COLOR,
                 editableNumberWidget -> { setFocus(editableNumberWidget.textArea); },
                 editableNumberWidget -> { tab(); },
                 editableNumberWidget -> { hide(); },
                 editableNumberWidget -> { saveAndClose(); },
-                editableText -> { SaveableManager.potionChanceCustom.y = editableText.getValue(); }
+                editableText -> {
+                    Config.setInt(Config.ConfigOptions.POTION_Y.toString(), editableText.getValue());
+                    //ConfigHelper.getInstance().setInt(ConfigHelper.IntSettings.POTION_Y, editableText.getValue());
+                    //SaveableManager.potionChanceCustom.y = editableText.getValue();
+                }
                 );
 
         childWidgets.add(mainTextArea);
@@ -232,9 +251,17 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
     }
 
     private void revertToModDefaults() {
-        mainTextArea.setText(SaveableManager.potionChanceCustom.DEFAULT_TEXT);
-        textX.setValue(SaveableManager.potionChanceCustom.DEFAULT_X);
-        textY.setValue(SaveableManager.potionChanceCustom.DEFAULT_Y);
+//        mainTextArea.setText(SaveableManager.potionChanceCustom.DEFAULT_TEXT);
+//        textX.setValue(SaveableManager.potionChanceCustom.DEFAULT_X);
+//        textY.setValue(SaveableManager.potionChanceCustom.DEFAULT_Y);
+//
+//        mainTextArea.setText(ConfigHelper.getInstance().getDefaultString(ConfigHelper.StringSettings.POTION_CHANCE));
+//        textX.setValue(ConfigHelper.getInstance().getDefaultInt(ConfigHelper.IntSettings.POTION_X));
+//        textY.setValue(ConfigHelper.getInstance().getDefaultInt(ConfigHelper.IntSettings.POTION_Y));
+
+        mainTextArea.setText(Config.getDefaultString(Config.ConfigOptions.POTION_TEXT.toString()));
+        textX.setValue(Config.getDefaultInt(Config.ConfigOptions.POTION_X.toString()));
+        textY.setValue(Config.getDefaultInt(Config.ConfigOptions.POTION_Y.toString()));
     }
 
     private void saveAndClose() {

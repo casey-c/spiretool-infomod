@@ -155,7 +155,9 @@ public class MonsterInfoOverlay implements PostInitializeSubscriber, RenderSubsc
 
     @Override
     public void receiveRender(SpriteBatch sb) {
-        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_MONSTER_DETAILS) == false)
+//        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_MONSTER_DETAILS) == false)
+//            return;
+        if (!Config.getBool(Config.ConfigOptions.SHOW_MONSTER_DETAILS.toString()))
             return;
 
         if (!visible || img == null)
@@ -278,7 +280,9 @@ public class MonsterInfoOverlay implements PostInitializeSubscriber, RenderSubsc
             return;
 
         // Only if the config is set do we try and handle clicks
-        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_MONSTER_DETAILS) == false)
+//        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_MONSTER_DETAILS) == false)
+//            return;
+        if (!Config.getBool(Config.ConfigOptions.SHOW_MONSTER_DETAILS.toString()))
             return;
 
         // Special Case: Don't activate if left click is also down (we probably have a card in hand already?)

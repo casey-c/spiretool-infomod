@@ -44,7 +44,7 @@ public class InfoModConfigDescBool implements IUIElement {
 
     private static final float descGapY = 45.0f;
 
-    public InfoModConfigDescBool(float topLeftX, float topLeftY, String title, String desc, ModPanel parent, ConfigHelper.BooleanSettings key) {
+    public InfoModConfigDescBool(float topLeftX, float topLeftY, String title, String desc, ModPanel parent, Config.ConfigOptions key) {
         this(topLeftX,
                 topLeftY,
                 title,
@@ -55,15 +55,17 @@ public class InfoModConfigDescBool implements IUIElement {
                 //Settings.CREAM_COLOR,
                 RenderingUtils.OJB_GRAY_COLOR,
                 parent,
-                ConfigHelper.getInstance().getBool(key),
+                Config.getBool(key.toString()),
+                //ConfigHelper.getInstance().getBool(key),
                 modToggleButton -> {
-                    ConfigHelper.getInstance().setBool(key, modToggleButton.enabled);
+                    //ConfigHelper.getInstance().setBool(key, modToggleButton.enabled);
+                    Config.setBoolean(key.toString(), modToggleButton.enabled);
                 }
         );
     }
 
     // Includes a custom update function (no need to manually adjust ConfigHelper setBool as it does automatically)
-    public InfoModConfigDescBool(float topLeftX, float topLeftY, String title, String desc, ModPanel parent, ConfigHelper.BooleanSettings key, Consumer<ModToggleButton> update) {
+    public InfoModConfigDescBool(float topLeftX, float topLeftY, String title, String desc, ModPanel parent, Config.ConfigOptions key, Consumer<ModToggleButton> update) {
         this(topLeftX,
                 topLeftY,
                 title,
@@ -74,11 +76,13 @@ public class InfoModConfigDescBool implements IUIElement {
                 //Settings.CREAM_COLOR,
                 RenderingUtils.OJB_GRAY_COLOR,
                 parent,
-                ConfigHelper.getInstance().getBool(key),
+                //ConfigHelper.getInstance().getBool(key),
+                Config.getBool(key.toString()),
                 //update
                 modToggleButton -> {
                     update.accept(modToggleButton);
-                    ConfigHelper.getInstance().setBool(key, modToggleButton.enabled);
+                    //ConfigHelper.getInstance().setBool(key, modToggleButton.enabled);
+                    Config.setBoolean(key.toString(), modToggleButton.enabled);
                 }
 //                modToggleButton -> {
 //                    ConfigHelper.getInstance().setBool(key, modToggleButton.enabled);
