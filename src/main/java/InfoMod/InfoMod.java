@@ -32,7 +32,7 @@ public class InfoMod implements PostInitializeSubscriber, PostDungeonUpdateSubsc
     private static int curr_rare_chance = -1;
     private static int curr_floor = -1;
 
-    private BossStringsSaveable bossStringsSaveable = new BossStringsSaveable();
+    //private BossStringsSaveable bossStringsSaveable = new BossStringsSaveable();
 
     private static PotionPanelItem potionPanelItem;
     private static InfoPanelItem infoPanelItem;
@@ -207,6 +207,7 @@ public class InfoMod implements PostInitializeSubscriber, PostDungeonUpdateSubsc
         ArrayList<String> bossList = AbstractDungeon.bossList;
 
         //BossStringsSaveable bossStringsSaveable = BossStringsSaveable.get();
+        BossStringsSaveable bossStringsSaveable = SaveableManager.bosses;
 
         if ((curr_floor == 0) && (bossList.size() > 1)) {
             bossStringsSaveable.act1 = bossList.get(0);
@@ -459,47 +460,12 @@ public class InfoMod implements PostInitializeSubscriber, PostDungeonUpdateSubsc
 //        );
     }
 
-    @Override
-    public JsonElement onSaveRaw() {
-        return new SaveHelper()
-                //.add("BOSS_STRINGS", bossStringsSaveable.toJson())
-                .add(bossStringsSaveable)
-                .build();
-
-//        JsonArray elt = new JsonArray();
-//        elt.add(bossStringsSaveable.act1);
-//        elt.add(bossStringsSaveable.act2);
-//        elt.add(bossStringsSaveable.act3_1);
-//        elt.add(bossStringsSaveable.act3_2);
-//        elt.add(bossStringsSaveable.combined);
-//        return elt;
-    }
-
+    @Override public JsonElement onSaveRaw() { return SaveableManager.save(); }
     @Override
     public void onLoadRaw(JsonElement jsonElement) {
-        new SaveHelper(jsonElement).load(bossStringsSaveable);
+        SaveableManager.load(jsonElement);
 
-        bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
-
-//        if (jsonElement.isJsonArray()) {
-//            JsonArray arr = jsonElement.getAsJsonArray();
-//
-//            // probably don't need to do all this checking lol
-//            if (arr.size() == 5) {
-//                if (arr.get(0).isJsonPrimitive())
-//                    bossStringsSaveable.act1 = arr.get(0).getAsString();
-//                if (arr.get(1).isJsonPrimitive())
-//                    bossStringsSaveable.act2 = arr.get(1).getAsString();
-//                if (arr.get(2).isJsonPrimitive())
-//                    bossStringsSaveable.act3_1 = arr.get(2).getAsString();
-//                if (arr.get(3).isJsonPrimitive())
-//                    bossStringsSaveable.act3_2 = arr.get(3).getAsString();
-//                if (arr.get(4).isJsonPrimitive())
-//                    bossStringsSaveable.combined = arr.get(4).getAsString();
-//
-//                // Make sure to set the actual thing
-//                bossTipItem.setPrimaryTipBody(bossStringsSaveable.combined);
-//            }
-//        }
+        // Set the initial boss tip item to have the proper starter text
+        bossTipItem.setPrimaryTipBody(SaveableManager.bosses.combined);
     }
 }

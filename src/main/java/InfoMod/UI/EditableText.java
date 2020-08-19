@@ -24,6 +24,8 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
     protected Consumer<EditableText> onEscape;
     protected Consumer<EditableText> onReturn;
 
+    protected Consumer<EditableText> onEdit;
+
     protected Texture TEX_DEFAULT;
     protected Texture TEX_FOCUSED;
 
@@ -51,6 +53,7 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
                         Consumer<EditableText> onTab,
                         Consumer<EditableText> onEscape,
                         Consumer<EditableText> onReturn,
+                        Consumer<EditableText> onEdit,
                         Texture unfocused,
                         Texture focused,
                         float texWidth,
@@ -68,6 +71,7 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
         this.onTab = onTab;
         this.onEscape = onEscape;
         this.onReturn = onReturn;
+        this.onEdit = onEdit;
 
         this.TEX_DEFAULT = unfocused;
         this.TEX_FOCUSED = focused;
@@ -80,7 +84,7 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
 
         // Setup the hitbox
         hb = new Hitbox(TEX_WIDTH, TEX_HEIGHT);
-        hb.move(x + (TEX_WIDTH / 2.0f), y + (TEX_HEIGHT / 2.0f));
+        //hb.move(x + (TEX_WIDTH / 2.0f), y + (TEX_HEIGHT / 2.0f));
 
         // Make this text box visible
         BaseMod.subscribe(this);
@@ -116,11 +120,13 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
     @Override
     public void show() {
         visible = true;
+        hb.move(x + (TEX_WIDTH / 2.0f), y + (TEX_HEIGHT / 2.0f));
     }
 
     @Override
     public void hide() {
         visible = false;
+        hb.move(100000, 100000);
     }
 
     @Override
@@ -199,8 +205,10 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
         }
 
 
-        if (c == SpecialKeys.BACKSPACE)
+        if (c == SpecialKeys.BACKSPACE) {
             backspace();
+            onEdit.accept(this);
+        }
         else if (c == SpecialKeys.TAB)
             onTab.accept(this);
         else if ((int)c == SpecialKeys.ESCAPE_KEY) {
@@ -212,6 +220,7 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
         else {
             System.out.println("OJB: keytyped char: '" + c + "' | as int: '" + (int)c + "'");
             appendChar(c);
+            onEdit.accept(this);
         }
 
         System.out.println();
@@ -219,6 +228,7 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
 
     public void setText(String t) {
         text = t;
+        onEdit.accept(this);
     }
 
     public String getText() {
@@ -227,5 +237,6 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
 
     public void clear() {
         text = "";
+        onEdit.accept(this);
     }
 }

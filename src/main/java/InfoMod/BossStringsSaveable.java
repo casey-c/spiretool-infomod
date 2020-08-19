@@ -1,8 +1,5 @@
 package InfoMod;
 
-import basemod.abstracts.CustomSavableRaw;
-import basemod.patches.com.megacrit.cardcrawl.saveAndContinue.SaveAndContinue.Save;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -16,40 +13,26 @@ public class BossStringsSaveable extends VeryCustomSavable {
 
     @Override
     public JsonElement toJson() {
-        JsonArray elt = new JsonArray();
-        elt.add(act1);
-        elt.add(act2);
-        elt.add(act3_1);
-        elt.add(act3_2);
-        elt.add(combined);
+        JsonObject elt = new JsonObject();
+        elt.addProperty("act1", act1);
+        elt.addProperty("act2", act2);
+        elt.addProperty("act3_1", act3_1);
+        elt.addProperty("act3_2", act3_2);
+        elt.addProperty("combined", combined);
         return elt;
     }
 
     @Override
     public void fromJson(JsonElement elt) {
-        if (!elt.isJsonArray()) {
-            System.out.println("OJB ERROR: could not load boss strings (not json array)");
+        if (elt == null || !elt.isJsonObject())
             return;
-        }
 
-        JsonArray arr = (JsonArray)elt;
-        System.out.println("BOSS STRINGS SAVEABLE FROM JSON: ");
-        System.out.println(arr);
-        System.out.println("*************************");
-        System.out.println();
-        System.out.println();
-        System.out.println("boss strings saveable.size " + arr.size());
-
-        if (arr.size() == 5) {
-            act1 = (arr.get(0).isJsonPrimitive()) ? arr.get(0).getAsString() : "";
-            act2 = (arr.get(1).isJsonPrimitive()) ? arr.get(1).getAsString() : "";
-            act3_1 = (arr.get(2).isJsonPrimitive()) ? arr.get(2).getAsString() : "";
-            act3_2 = (arr.get(3).isJsonPrimitive()) ? arr.get(3).getAsString() : "";
-            combined = (arr.get(4).isJsonPrimitive()) ? arr.get(4).getAsString() : "";
-        }
-        else {
-            System.out.println("OJB ERROR: could not load boss strings (wrong size)");
-        }
+        JsonObject obj = elt.getAsJsonObject();
+        act1 = obj.has("act1") ? obj.get("act1").getAsString() : "";
+        act2 = obj.has("act2") ? obj.get("act2").getAsString() : "";
+        act3_1 = obj.has("act3_1") ? obj.get("act3_1").getAsString() : "";
+        act3_2 = obj.has("act3_2") ? obj.get("act3_2").getAsString() : "";
+        combined = obj.has("combined") ? obj.get("combined").getAsString() : "";
     }
 
 }

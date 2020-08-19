@@ -137,7 +137,7 @@ public class InfoPanelItem extends TopPanelItem {
         }
         else {
             if (customPotionChanceScreen.isVisible())
-                customPotionChanceScreen.hide();
+                customPotionChanceScreen.revertAndClose();
             else
                 customPotionChanceScreen.show();
         }

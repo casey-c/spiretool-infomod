@@ -40,7 +40,7 @@ public abstract class ButtonWidget implements IScreenWidget, PostUpdateSubscribe
             this.onClick = onClick;
 
             hb = new Hitbox(width, height);
-            hb.move(x + (width / 2.0f), y + (height / 2.0f));
+            //hb.move(x + (width / 2.0f), y + (height / 2.0f));
 
             BaseMod.subscribe(this);
             show();
@@ -49,11 +49,13 @@ public abstract class ButtonWidget implements IScreenWidget, PostUpdateSubscribe
     @Override
     public void show() {
         visible = true;
+        hb.move(x + (width / 2.0f), y + (height / 2.0f));
     }
 
     @Override
     public void hide() {
         visible = false;
+        hb.move(100000, 100000);
     }
 
     @Override

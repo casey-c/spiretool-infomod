@@ -1,6 +1,7 @@
 package InfoMod.UI;
 
 import InfoMod.RenderingUtils;
+import InfoMod.SaveableManager;
 import basemod.BaseMod;
 import basemod.interfaces.PostRenderSubscriber;
 import basemod.interfaces.RenderSubscriber;
@@ -13,6 +14,8 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
+
+import java.util.ArrayList;
 
 public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
     private boolean visible = false;
@@ -56,6 +59,8 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
     EditableTextLong mainTextArea;
     EditableNumberWidget textX, textY;
 
+    ArrayList<IScreenWidget> childWidgets = new ArrayList<>();
+
     // Input processor
     CustomInputProcessor inputProcessor;
 
@@ -90,7 +95,8 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
                         System.out.println("OJB: shift is pressed");
 
                         // TODO: revert to InfoMod default values using some sort of Properties thingy like we save with
-                        revertStashedSettings();
+                        //revertStashedSettings();
+                        revertToModDefaults();
                         // remember to update the tool tip when you get to this, future me
                     }
                     else {
@@ -98,44 +104,60 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
                     }
 
                 })
-                .with_tooltip("Reset", "Resets all settings in this dialog to their initial values.");
+                .with_tooltip("Reset", "Resets all settings in this dialog to their initial values. NL NL Hold #bSHIFT to reset everything to the mod defaults.");
 
         mainTextArea = new EditableTextLong(CONTENT_X,
                 MAIN_EDIT_Y,
-                "!Potions: ",
+                //SaveableManager.potionChanceCustom.DEFAULT_TEXT,
+                SaveableManager.potionChanceCustom.customText,
                 FontHelper.tipBodyFont,
                 Settings.CREAM_COLOR,
                 editableText -> { setFocus(editableText); },
                 editableText -> { tab(); },
                 editableText -> { hide(); },
-                editableText -> { saveAndClose(); } );
+                editableText -> { saveAndClose(); },
+                editableText -> { SaveableManager.potionChanceCustom.customText = editableText.text; }
+                );
 
         textX = new EditableNumberWidget(
                 CONTENT_X + SHORT_INFO_GAP,
                 POSITION_BOTTOM_Y,
                 0,
                 1920,
-                1494,
+                //1494,
+                //SaveableManager.potionChanceCustom.DEFAULT_X,
+                SaveableManager.potionChanceCustom.x,
                 FontHelper.tipBodyFont,
                 Settings.CREAM_COLOR,
                 editableNumberWidget -> { setFocus(editableNumberWidget.textArea); },
                 editableNumberWidget -> { tab(); },
                 editableNumberWidget -> { hide(); },
-                editableNumberWidget -> { saveAndClose(); }
+                editableNumberWidget -> { saveAndClose(); },
+                editableText -> { SaveableManager.potionChanceCustom.x = editableText.getValue(); }
         );
 
         textY = new EditableNumberWidget(TEXTY_X + SHORT_INFO_GAP,
                 POSITION_BOTTOM_Y,
                 0,
                 1080,
-                1060,
+                //1060,
+                //SaveableManager.potionChanceCustom.DEFAULT_Y,
+                SaveableManager.potionChanceCustom.y,
                 FontHelper.tipBodyFont,
                 Settings.CREAM_COLOR,
                 editableNumberWidget -> { setFocus(editableNumberWidget.textArea); },
                 editableNumberWidget -> { tab(); },
                 editableNumberWidget -> { hide(); },
-                editableNumberWidget -> { saveAndClose(); } );
+                editableNumberWidget -> { saveAndClose(); },
+                editableText -> { SaveableManager.potionChanceCustom.y = editableText.getValue(); }
+                );
 
+        childWidgets.add(mainTextArea);
+        childWidgets.add(textX);
+        childWidgets.add(textY);
+        childWidgets.add(cancelButton);
+        childWidgets.add(confirmButton);
+        childWidgets.add(resetButton);
         show();
     }
 
@@ -176,11 +198,8 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
 
         RenderingUtils.openCustomScreen("DECK_OPEN");
 
-        confirmButton.show();
-        mainTextArea.show();
-
-        textX.show();
-        textY.show();
+        for (IScreenWidget w : childWidgets)
+            w.show();
 
         stashCurrentSettings();
         setFocus(mainTextArea);
@@ -197,10 +216,8 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
 
         clearAllFocus();
 
-        confirmButton.hide();
-        mainTextArea.hide();
-        textX.hide();
-        textY.hide();
+        for (IScreenWidget w : childWidgets)
+            w.hide();
 
         visible = false;
     }
@@ -217,12 +234,18 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
         textY.setValue(cachedY);
     }
 
+    private void revertToModDefaults() {
+        mainTextArea.setText(SaveableManager.potionChanceCustom.DEFAULT_TEXT);
+        textX.setValue(SaveableManager.potionChanceCustom.DEFAULT_X);
+        textY.setValue(SaveableManager.potionChanceCustom.DEFAULT_Y);
+    }
+
     private void saveAndClose() {
         // TODO: save / etc.
         hide();
     }
 
-    private void revertAndClose() {
+    public void revertAndClose() {
         revertStashedSettings();
         hide();
     }

@@ -18,7 +18,9 @@ public class EditableTextLong extends EditableText {
                             Consumer<EditableText> onClick,
                             Consumer<EditableText> onTab,
                             Consumer<EditableText> onEscape,
-                            Consumer<EditableText> onReturn ) {
+                            Consumer<EditableText> onReturn,
+                            Consumer<EditableText> onEdit
+                            ) {
         super(x,
                 y,
                 defaultText,
@@ -28,6 +30,7 @@ public class EditableTextLong extends EditableText {
                 onTab,
                 onEscape,
                 onReturn,
+                onEdit,
                 new Texture("images/text_long_default.png"),
                 new Texture("images/text_long_focused.png"),
                 600.0f,

@@ -19,6 +19,7 @@ public class SaveHelper {
         if (saveable == null)
             return this;
 
+        System.out.println("OJB: SaveHelper:: saving " + saveable.getID());
         constructedJson.add(saveable.getID(), saveable.toJson());
 
         return this;

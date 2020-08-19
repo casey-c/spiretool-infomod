@@ -18,7 +18,8 @@ public class EditableTextShort extends EditableText {
                              Consumer<EditableText> onClick,
                              Consumer<EditableText> onTab,
                              Consumer<EditableText> onEscape,
-                             Consumer<EditableText> onReturn ) {
+                             Consumer<EditableText> onReturn,
+                             Consumer<EditableText> onEdit ) {
         super(x,
                 y,
                 defaultText,
@@ -28,6 +29,7 @@ public class EditableTextShort extends EditableText {
                 onTab,
                 onEscape,
                 onReturn,
+                onEdit,
                 new Texture("images/text_short_default.png"),
                 new Texture("images/text_short_focused.png"),
                 150.0f,
