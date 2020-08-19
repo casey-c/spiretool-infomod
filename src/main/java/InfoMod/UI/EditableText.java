@@ -193,12 +193,20 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
 
     @Override
     public void keyTyped(char c) {
+        if (InputHelper.pressedEscape)
+        {
+            System.out.println("OJB: key typed escape! stop this from happening?");
+        }
+
+
         if (c == SpecialKeys.BACKSPACE)
             backspace();
         else if (c == SpecialKeys.TAB)
             onTab.accept(this);
-        else if ((int)c == SpecialKeys.ESCAPE_KEY)
+        else if ((int)c == SpecialKeys.ESCAPE_KEY) {
+            //InputHelper.pressedEscape = false;
             onEscape.accept(this);
+        }
         else if (c == SpecialKeys.RETURN)
             onReturn.accept(this);
         else {

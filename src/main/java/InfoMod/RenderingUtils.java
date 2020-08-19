@@ -5,12 +5,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
+import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.potions.EntropicBrew;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
+import com.megacrit.cardcrawl.ui.buttons.PeekButton;
 import org.jetbrains.annotations.NotNull;
 
 /*
@@ -158,35 +160,29 @@ public class RenderingUtils {
                 c);
     }
 
-    // TODO: add checking to see if any nulls (potential crashes!)
+    // basically the same code called as MasterDeckViewScreen.open() from TopPanel
     public static void openCustomScreen(String soundID) {
-        // SHOW SCREEN (copied from base game)
+        AbstractDungeon.closeCurrentScreen();
+
         AbstractDungeon.player.releaseCard();
         CardCrawlGame.sound.play(soundID);
 
         AbstractDungeon.dynamicBanner.hide();
         AbstractDungeon.isScreenUp = true;
-        //AbstractDungeon.screen = AbstractDungeon.CurrentScreen.MASTER_DECK_VIEW;
+
         AbstractDungeon.overlayMenu.proceedButton.hide();
         AbstractDungeon.overlayMenu.hideCombatPanels();
         AbstractDungeon.overlayMenu.showBlackScreen();
-        //AbstractDungeon.overlayMenu.cancelButton.show(TEXT[1]);
     }
 
-    // a public version of the previously private AbstractDungeon::genericScreenOverlayReset()
+    // pretend to be the master deck view and let the base game handle the rest.
+    // (4_000_000 iq)
+    //
+    // (this is like my 5th attempt at this custom screen stuff -- this one seems to work well enough, but there are
+    //   some bugs (i know at least of one: open/close pair while on card rewards screen can hide all rewards)
     public static void closeScreens(String soundID) {
-        //if (previousScreen == null) {
-            if (AbstractDungeon.player.isDead) {
-                AbstractDungeon.previousScreen = AbstractDungeon.CurrentScreen.DEATH;
-            } else {
-                AbstractDungeon.isScreenUp = false;
-                AbstractDungeon.overlayMenu.hideBlackScreen();
-                AbstractDungeon.player.releaseCard();
-                CardCrawlGame.sound.play(soundID);
-            }
-        //}
-        if (AbstractDungeon.getCurrRoom().phase == AbstractRoom.RoomPhase.COMBAT && !AbstractDungeon.player.isDead) {
-            AbstractDungeon.overlayMenu.showCombatPanels();
-        }
+        CardCrawlGame.sound.play(soundID);
+        AbstractDungeon.screen = AbstractDungeon.CurrentScreen.MASTER_DECK_VIEW;
+        AbstractDungeon.closeCurrentScreen();
     }
 }

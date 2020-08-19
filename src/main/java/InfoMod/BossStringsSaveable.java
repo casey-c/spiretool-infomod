@@ -6,40 +6,16 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class BossStringsSaveable implements ISavable {
+public class BossStringsSaveable extends VeryCustomSavable {
     public String act1, act2, act3_1, act3_2;
     public String combined;
 
-    private static final String ID = "OJB_BOSS_STRINGS";
-
-    private BossStringsSaveable() { }
-
-    public static BossStringsSaveable get() {
-        ISavable existing = SaveManager.getSavable(ID);
-
-        if (existing == null) {
-            BossStringsSaveable res = new BossStringsSaveable();
-            JsonElement raw = SaveManager.getSaveableAsJson(ID);
-
-            if (raw != null)
-                res.fromJsonElement(raw);
-
-            SaveManager.setSavable(ID, res);
-            return res;
-        }
-        else {
-            return (BossStringsSaveable)existing;
-        }
-
+    public BossStringsSaveable() {
+        this.ID = "BOSS_STRINGS";
     }
 
     @Override
-    public String getID() {
-        return ID;
-    }
-
-    @Override
-    public JsonElement toJsonEleement() {
+    public JsonElement toJson() {
         JsonArray elt = new JsonArray();
         elt.add(act1);
         elt.add(act2);
@@ -50,20 +26,26 @@ public class BossStringsSaveable implements ISavable {
     }
 
     @Override
-    public void fromJsonElement(JsonElement elt) {
+    public void fromJson(JsonElement elt) {
         if (!elt.isJsonArray()) {
             System.out.println("OJB ERROR: could not load boss strings (not json array)");
             return;
         }
 
         JsonArray arr = (JsonArray)elt;
+        System.out.println("BOSS STRINGS SAVEABLE FROM JSON: ");
+        System.out.println(arr);
+        System.out.println("*************************");
+        System.out.println();
+        System.out.println();
+        System.out.println("boss strings saveable.size " + arr.size());
 
         if (arr.size() == 5) {
-            act1 = arr.get(0).getAsString();
-            act2 = arr.get(0).getAsString();
-            act3_1 = arr.get(0).getAsString();
-            act3_2 = arr.get(0).getAsString();
-            combined = arr.get(0).getAsString();
+            act1 = (arr.get(0).isJsonPrimitive()) ? arr.get(0).getAsString() : "";
+            act2 = (arr.get(1).isJsonPrimitive()) ? arr.get(1).getAsString() : "";
+            act3_1 = (arr.get(2).isJsonPrimitive()) ? arr.get(2).getAsString() : "";
+            act3_2 = (arr.get(3).isJsonPrimitive()) ? arr.get(3).getAsString() : "";
+            combined = (arr.get(4).isJsonPrimitive()) ? arr.get(4).getAsString() : "";
         }
         else {
             System.out.println("OJB ERROR: could not load boss strings (wrong size)");
