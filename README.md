@@ -43,6 +43,10 @@ Better tool tips for the map and deck icons now include quick-access to some imp
 
 Access an in game configuration menu (Main Menu -> Mods -> InfoMod -> Config) to enable or disable each module. You can make the game look as vanilla as you like (e.g. only enabling the "Monster Compendium" and tool tip options) or get the full experience with all the bells and whistles.
 
+![In-Game Potion Text Configuration Menu](readme_images/custom_potion_text.png)
+
+*(New in Alpha 0.5.5)* Access an in-run configuration menu. Just cick the [?] box while in a run to customize the potion text area!
+
 ### Slay The Relics Integration
 
 Built in support for this Twitch extension allows viewers access to all the tool tips provided by InfoMod while on desktop Twitch. This features currently only works in combat due to a limitation of the SlayTheRelics extension.
