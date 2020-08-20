@@ -104,18 +104,24 @@ public class EditableNumberWidget implements IScreenWidget {
         plusButton = ButtonFactory.buildPlusButton(x + textArea.TEX_WIDTH + TEXT_BUTTON_GAP,
                 y + PLUS_OFFSET_Y,
                 buttonWidget -> {
-                    if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-                        add(10);
-                    else
+                    if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT))
+                            add(100);
+                        else
+                            add(10);
+                    } else
                         add(1);
                 });
 
         minusButton = ButtonFactory.buildMinusButton(x + textArea.TEX_WIDTH + TEXT_BUTTON_GAP,
                 y + MINUS_OFFSET_Y,
                 buttonWidget -> {
-                    if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))
-                        add(-10);
-                    else
+                    if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT))
+                            add(-100);
+                        else
+                            add(-10);
+                    } else
                         add(-1);
                 });
 

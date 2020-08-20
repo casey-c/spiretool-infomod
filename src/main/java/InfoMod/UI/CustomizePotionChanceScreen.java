@@ -120,7 +120,7 @@ public class CustomizePotionChanceScreen extends MediumLabeledScreen {
                 HELP_SIZE,
                 new Texture("images/help_tip.png"),
                 "Position Help",
-                "The bottom left of the screen is (0, 0), while the top right is (1920, 1080). These (x,y) coordinates will point to the top left most point of the text. NL NL You can finely adjust the values using the plus/minus buttons next to the input. NL NL Hold #bShift while clicking these buttons to adjust by +10 or -10."
+                "The bottom left of the screen is (0, 0), while the top right is (1920, 1080). These (x,y) coordinates will point to the top left most point of the text. NL NL You can finely adjust the values using the plus/minus buttons next to the input. NL NL Hold #bShift while clicking these buttons to adjust by +10 or -10. Hold #bCTRL+SHIFT while clicking to adjust by +100 or -100."
         );
 
         // Checkbox

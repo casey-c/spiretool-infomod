@@ -12,8 +12,8 @@ public class SimpleCheckboxWidget extends ButtonWidget {
     private boolean enabled;
     private Consumer<SimpleCheckboxWidget> onEnable, onDisable;
 
-    private static final Texture TEX_UNCHECKED = new Texture("images/checkbox_normal.png");
-    private static final Texture TEX_CHECKED = new Texture("images/checkbox_checked.png");
+    private static final Texture TEX_UNCHECKED = new Texture("images/widgets/checkbox.png");
+    private static final Texture TEX_CHECKED = new Texture("images/widgets/checkbox_checked.png");
 
     public static final float WIDTH = 32.0f;
     public static final float HEIGHT = 32.0f;

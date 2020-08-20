@@ -11,7 +11,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 public class MediumLabeledScreen extends AbstractScreen {
     protected String title;
 
-    protected ColorableSmallTextButton confirmButton;
+    protected MediumLabeledButtonWidget confirmButton;
     protected SimpleButtonWidget cancelButton;
 
     protected Color titleColor;
@@ -27,7 +27,7 @@ public class MediumLabeledScreen extends AbstractScreen {
     protected static final float ABSOLUTE_CONTENT_RIGHT_X = 1335.5f;
     protected static final float ABSOLUTE_CONTENT_BOTTOM_Y = 247.0f;
     protected static final float ABSOLUTE_CONTENT_TITLE_TOP_Y = 833.0f;
-    protected static final float ABSOLUTE_CONTENT_BODY_TOP_Y = ABSOLUTE_CONTENT_TITLE_TOP_Y - TITLE_AREA_HEIGHT - 5.0f;
+    protected static final float ABSOLUTE_CONTENT_BODY_TOP_Y = ABSOLUTE_CONTENT_TITLE_TOP_Y - TITLE_AREA_HEIGHT - 25.0f;
 
     protected static final float CONTENT_PADDING_SM = 16.0f;
     protected static final float CONTENT_PADDING_MD = 31.0f;
@@ -53,13 +53,12 @@ public class MediumLabeledScreen extends AbstractScreen {
         this.titleFont = FontHelper.turnNumFont;
 
 
-        confirmButton = new ColorableSmallTextButton(
+        confirmButton = new MediumLabeledButtonWidget(
                 ABSOLUTE_CONTENT_RIGHT_X - CONTENT_PADDING_SM - CONFIRM_BUTTON_WIDTH,
                 ABSOLUTE_CONTENT_BOTTOM_Y + CONTENT_PADDING_SM,
                 21.0f,
                 -2.0f,
                 "Save",
-                RenderingUtils.OJB_GREEN_BUTTON_COLOR,
                 button -> { saveAndClose(); });
 
         cancelButton = (SimpleButtonWidget) ButtonFactory.buildCloseButton(
