@@ -43,7 +43,6 @@ public abstract class ButtonWidget implements IScreenWidget, PostUpdateSubscribe
             //hb.move(x + (width / 2.0f), y + (height / 2.0f));
 
             BaseMod.subscribe(this);
-            show();
     }
 
     @Override

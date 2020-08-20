@@ -19,6 +19,7 @@ public class Config {
         SHOW_DECK_TIP("SHOW_DECK_TIP"),
         SHOW_MAP_TIP("SHOW_MAP_TIP"),
         TERR80("TERR80"),
+        SHOW_POTION_IMG("SHOW_POTION_IMG"),
 
         // strings
         POTION_TEXT("POTION_TEXT"),
@@ -56,6 +57,7 @@ public class Config {
         defaults.put(ConfigOptions.SHOW_DECK_TIP.toString(), trueString);
         defaults.put(ConfigOptions.SHOW_MAP_TIP.toString(), trueString);
         defaults.put(ConfigOptions.TERR80.toString(), trueString);
+        defaults.put(ConfigOptions.SHOW_POTION_IMG.toString(), Boolean.toString(false));
 
         defaults.put(ConfigOptions.POTION_TEXT.toString(), "Potions: ");
         defaults.put(ConfigOptions.POTION_X.toString(), Integer.toString(1494));
@@ -149,6 +151,11 @@ public class Config {
     }
 
     //--------------------------------------------------------------------------------
+
+    public static boolean getDefaultBool(ConfigOptions key) {
+        Config config = getInstance();
+        return Boolean.parseBoolean(config.defaults.getProperty(key.toString()));
+    }
 
     public static String getDefaultString(ConfigOptions key) {
         Config config = getInstance();

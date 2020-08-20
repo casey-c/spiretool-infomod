@@ -157,9 +157,16 @@ public class RenderingUtils {
                 c);
     }
 
+    public static String recursivelyRemovePoundSpace(String input) {
+        String fixed = input.replaceAll("# ", "#");
+        if (fixed == input)
+            return fixed;
+        else
+            return recursivelyRemovePoundSpace(fixed);
+    }
+
     public static String fixBadPoundSigns(String input) {
-        String cleaned = input;
-        cleaned = cleaned.replaceAll("# ", "#");
+        String cleaned = recursivelyRemovePoundSpace(input);
 
         while ((cleaned.endsWith("#")) && cleaned.length() > 0) {
             cleaned = cleaned.substring(0, cleaned.length() - 1);
@@ -192,6 +199,9 @@ public class RenderingUtils {
 
     // basically the same code called as MasterDeckViewScreen.open() from TopPanel
     public static void openCustomScreen(String soundID) {
+        if (!CardCrawlGame.isInARun())
+            return;
+
         AbstractDungeon.closeCurrentScreen();
 
         AbstractDungeon.player.releaseCard();
@@ -211,6 +221,9 @@ public class RenderingUtils {
     // (this is like my 5th attempt at this custom screen stuff -- this one seems to work well enough, but there are
     //   some bugs (i know at least of one: open/close pair while on card rewards screen can hide all rewards)
     public static void closeCustomScreen(String soundID) {
+        if (!CardCrawlGame.isInARun())
+            return;
+
         CardCrawlGame.sound.play(soundID);
         AbstractDungeon.screen = AbstractDungeon.CurrentScreen.MASTER_DECK_VIEW;
         AbstractDungeon.closeCurrentScreen();

@@ -140,7 +140,7 @@ public class InfoPanelItem extends TopPanelItem {
         //cardPlays.toggleVisibility();
 
         if (customPotionChanceScreen == null) {
-            customPotionChanceScreen = new CustomizePotionChanceScreen("Customize Potion Tracker");
+            customPotionChanceScreen = new CustomizePotionChanceScreen();
         }
 
         if (customPotionChanceScreen.isVisible())
