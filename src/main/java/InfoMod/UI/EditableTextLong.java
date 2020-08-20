@@ -10,6 +10,9 @@ public class EditableTextLong extends EditableText {
     private static final float TEXT_OFFSET_X = 44.0f;
     private static final float TEXT_OFFSET_Y = 49.0f;
 
+    public static final float WIDTH = 600.0f;
+    public static final float HEIGHT = 80.0f;
+
     public EditableTextLong(float x,
                             float y,
                             String defaultText,
@@ -33,8 +36,8 @@ public class EditableTextLong extends EditableText {
                 onEdit,
                 new Texture("images/text_long_default.png"),
                 new Texture("images/text_long_focused.png"),
-                600.0f,
-                80.0f,
+                WIDTH,
+                HEIGHT,
                 TEXT_OFFSET_X,
                 TEXT_OFFSET_Y);
     }
