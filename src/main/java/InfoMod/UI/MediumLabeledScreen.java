@@ -49,7 +49,7 @@ public class MediumLabeledScreen extends AbstractScreen {
 
         this.title = title;
 
-        this.titleColor = Settings.CREAM_COLOR;
+        this.titleColor = Settings.GOLD_COLOR;
         this.titleFont = FontHelper.turnNumFont;
 
 

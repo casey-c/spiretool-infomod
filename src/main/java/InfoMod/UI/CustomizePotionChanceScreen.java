@@ -1,6 +1,7 @@
 package InfoMod.UI;
 
 import InfoMod.Config;
+import InfoMod.RenderingUtils;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -246,7 +247,7 @@ public class CustomizePotionChanceScreen extends MediumLabeledScreen {
                 "Customize the text displayed.",
                 ABSOLUTE_CONTENT_LEFT_X + HELP_SIZE + CONTENT_PADDING_MD,
                 ABSOLUTE_CONTENT_BODY_TOP_Y - CONTENT_PADDING_MD,
-                Settings.GOLD_COLOR
+                RenderingUtils.OJB_GRAY_COLOR
                 );
 
         FontHelper.renderFontLeftTopAligned(
@@ -255,7 +256,7 @@ public class CustomizePotionChanceScreen extends MediumLabeledScreen {
                 "Show Icon: ",
                 ABSOLUTE_CONTENT_LEFT_X + HELP_SIZE + CONTENT_PADDING_MD + ICON_TEXT_OFFSET,
                 ABSOLUTE_CONTENT_BODY_TOP_Y - CONTENT_PADDING_MD,
-                Settings.GOLD_COLOR
+                RenderingUtils.OJB_GRAY_COLOR
         );
 
         FontHelper.renderFontLeftTopAligned(
@@ -264,7 +265,7 @@ public class CustomizePotionChanceScreen extends MediumLabeledScreen {
                 "Customize the positioning of the text.",
                 ABSOLUTE_CONTENT_LEFT_X + HELP_SIZE + CONTENT_PADDING_MD,
                 ABSOLUTE_CONTENT_BODY_TOP_Y - CONTENT_PADDING_MD - HELP_SIZE - CONTENT_PADDING_SM - EditableTextLong.HEIGHT - CONTENT_PADDING_MD,
-                Settings.GOLD_COLOR
+                RenderingUtils.OJB_GRAY_COLOR
         );
 
     }
