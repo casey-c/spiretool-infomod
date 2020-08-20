@@ -83,81 +83,81 @@ public class Config {
 
     //--------------------------------------------------------------------------------
 
-    public static boolean setBoolean(String key, boolean val) {
+    public static boolean setBoolean(ConfigOptions key, boolean val) {
         Config config = getInstance();
 
         if (config.spireConfig == null)
             return false;
 
-        System.out.println("OJB: config is setting " + key + " to " + val);
-        config.spireConfig.setBool(key, val);
+        System.out.println("OJB: config is setting " + key.toString() + " to " + val);
+        config.spireConfig.setBool(key.toString(), val);
 
         return config.save();
     }
 
-    public static boolean setString(String key, String val) {
+    public static boolean setString(ConfigOptions key, String val) {
         Config config = getInstance();
 
         if (config.spireConfig == null)
             return false;
 
-        System.out.println("OJB: config is setting " + key + " to " + val);
-        config.spireConfig.setString(key, val);
+        System.out.println("OJB: config is setting " + key.toString() + " to " + val);
+        config.spireConfig.setString(key.toString(), val);
 
         return config.save();
     }
 
-    public static boolean setInt(String key, int val) {
+    public static boolean setInt(ConfigOptions key, int val) {
         Config config = getInstance();
 
         if (config.spireConfig == null)
             return false;
 
-        System.out.println("OJB: config is setting " + key + " to " + val);
-        config.spireConfig.setInt(key, val);
+        System.out.println("OJB: config is setting " + key.toString() + " to " + val);
+        config.spireConfig.setInt(key.toString(), val);
 
         return config.save();
     }
 
     //--------------------------------------------------------------------------------
 
-    public static boolean getBool(String key) {
+    public static boolean getBool(ConfigOptions key) {
         Config config = getInstance();
 
-        if (config.spireConfig == null || !config.spireConfig.has(key))
+        if (config.spireConfig == null || !config.spireConfig.has(key.toString()))
             return false;
 
-        return config.spireConfig.getBool(key);
+        return config.spireConfig.getBool(key.toString());
     }
 
-    public static String getString(String key) {
+    public static String getString(ConfigOptions key) {
         Config config = getInstance();
 
-        if (config.spireConfig == null || !config.spireConfig.has(key))
+        if (config.spireConfig == null || !config.spireConfig.has(key.toString()))
             return "";
 
-        return config.spireConfig.getString(key);
+        return config.spireConfig.getString(key.toString());
     }
 
-    public static int getInt(String key) {
+    public static int getInt(ConfigOptions key) {
         Config config = getInstance();
 
-        if (config.spireConfig == null || !config.spireConfig.has(key))
+        if (config.spireConfig == null || !config.spireConfig.has(key.toString()))
             return 0;
 
-        return config.spireConfig.getInt(key);
+        return config.spireConfig.getInt(key.toString());
     }
 
     //--------------------------------------------------------------------------------
 
-    public static String getDefaultString(String key) {
+    public static String getDefaultString(ConfigOptions key) {
         Config config = getInstance();
-        return (String)config.defaults.getProperty(key);
+        return (String)config.defaults.getProperty(key.toString());
     }
 
-    public static int getDefaultInt(String key) {
+    public static int getDefaultInt(ConfigOptions key) {
         Config config = getInstance();
-        return Integer.parseInt(config.defaults.getProperty(key));
+        return Integer.parseInt(config.defaults.getProperty(key.toString()));
     }
 
     //--------------------------------------------------------------------------------

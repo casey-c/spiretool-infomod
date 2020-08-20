@@ -87,7 +87,7 @@ public class PotionPanelItem extends TopPanelItem {
         this.potion_chance = p;
         future_tip.body = buildFutureChances(p);
 
-        if (!Config.getBool(Config.ConfigOptions.SHOW_POTIONS.toString()))
+        if (!Config.getBool(Config.ConfigOptions.SHOW_POTIONS))
             return;
 
 //        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_POTIONS) == false)
@@ -102,7 +102,7 @@ public class PotionPanelItem extends TopPanelItem {
 
 //        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_POTIONS) == false)
 //            return;
-        if (!Config.getBool(Config.ConfigOptions.SHOW_POTIONS.toString()))
+        if (!Config.getBool(Config.ConfigOptions.SHOW_POTIONS))
             return;
 
         // Font stuff
@@ -116,16 +116,16 @@ public class PotionPanelItem extends TopPanelItem {
 //        float textX = (float)ConfigHelper.getInstance().getInt(ConfigHelper.IntSettings.POTION_X);
 //        float textY = (float)ConfigHelper.getInstance().getInt(ConfigHelper.IntSettings.POTION_Y);
 
-        String text = Config.getString(Config.ConfigOptions.POTION_TEXT.toString());
-        float textX = (float)Config.getInt(Config.ConfigOptions.POTION_X.toString());
-        float textY = (float)Config.getInt(Config.ConfigOptions.POTION_Y.toString());
+        String text = Config.getString(Config.ConfigOptions.POTION_TEXT);
+        float textX = (float)Config.getInt(Config.ConfigOptions.POTION_X);
+        float textY = (float)Config.getInt(Config.ConfigOptions.POTION_Y);
 
         sb.setColor(Color.WHITE);
         sb.draw(TEX_POTION, textX - 64.0f, textY - 39.0f);
 
         // Special rainbow text is locked behind the Terr80 setting
         //if ((potion_chance == 80) && ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.TERR80)) {
-        if ((potion_chance == 80) && Config.getBool(Config.ConfigOptions.TERR80.toString())) {
+        if ((potion_chance == 80) && Config.getBool(Config.ConfigOptions.TERR80)) {
             //RenderingUtils.renderRainbowTextTipFont(sb, "!Potions: " + potion_chance + "%", textX, textY);
             RenderingUtils.renderRainbowTextTipFont(sb,  text + potion_chance + "%", textX, textY);
         }
@@ -148,7 +148,7 @@ public class PotionPanelItem extends TopPanelItem {
 
 //        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_POTIONS) == false)
 //            return;
-        if (!Config.getBool(Config.ConfigOptions.SHOW_POTIONS.toString()))
+        if (!Config.getBool(Config.ConfigOptions.SHOW_POTIONS))
             return;
 
         float TIP_Y = (float) Settings.HEIGHT - 120.0F * Settings.scale;

@@ -1,7 +1,6 @@
 package InfoMod;
 
 import InfoMod.UI.ColorableSmallTextButton;
-import InfoMod.UI.EditableText;
 import InfoMod.UI.EditableTextLong;
 import InfoMod.UI.IScreen;
 import basemod.BaseMod;
@@ -10,7 +9,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
@@ -94,7 +92,7 @@ public class StringInputScreen2 implements IScreen, RenderSubscriber {
         System.out.println("OJB: hide string input screen");
 
         Gdx.input.setInputProcessor(oldInputProcessor);
-        RenderingUtils.closeScreens("DECK_CLOSE");
+        RenderingUtils.closeCustomScreen("DECK_CLOSE");
 
         // TODO:
         button.hide();

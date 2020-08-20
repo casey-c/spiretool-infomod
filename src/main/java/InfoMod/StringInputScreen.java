@@ -9,7 +9,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
@@ -18,8 +17,6 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
-
-import java.awt.*;
 
 /*
  Some testing around to replace ModTextPanel with something a bit more flexible?
@@ -111,7 +108,7 @@ public class StringInputScreen implements RenderSubscriber, PostUpdateSubscriber
 //            return;
 
         //AbstractDungeon.genericScreenOverlayReset();
-        RenderingUtils.closeScreens("DECK_CLOSE");
+        RenderingUtils.closeCustomScreen("DECK_CLOSE");
         //AbstractDungeon.overlayMenu.cancelButton.hide();
 
 

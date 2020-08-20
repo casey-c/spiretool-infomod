@@ -210,7 +210,7 @@ public class RenderingUtils {
     //
     // (this is like my 5th attempt at this custom screen stuff -- this one seems to work well enough, but there are
     //   some bugs (i know at least of one: open/close pair while on card rewards screen can hide all rewards)
-    public static void closeScreens(String soundID) {
+    public static void closeCustomScreen(String soundID) {
         CardCrawlGame.sound.play(soundID);
         AbstractDungeon.screen = AbstractDungeon.CurrentScreen.MASTER_DECK_VIEW;
         AbstractDungeon.closeCurrentScreen();

@@ -55,11 +55,11 @@ public class InfoModConfigDescBool implements IUIElement {
                 //Settings.CREAM_COLOR,
                 RenderingUtils.OJB_GRAY_COLOR,
                 parent,
-                Config.getBool(key.toString()),
+                Config.getBool(key),
                 //ConfigHelper.getInstance().getBool(key),
                 modToggleButton -> {
                     //ConfigHelper.getInstance().setBool(key, modToggleButton.enabled);
-                    Config.setBoolean(key.toString(), modToggleButton.enabled);
+                    Config.setBoolean(key, modToggleButton.enabled);
                 }
         );
     }
@@ -77,12 +77,12 @@ public class InfoModConfigDescBool implements IUIElement {
                 RenderingUtils.OJB_GRAY_COLOR,
                 parent,
                 //ConfigHelper.getInstance().getBool(key),
-                Config.getBool(key.toString()),
+                Config.getBool(key),
                 //update
                 modToggleButton -> {
                     update.accept(modToggleButton);
                     //ConfigHelper.getInstance().setBool(key, modToggleButton.enabled);
-                    Config.setBoolean(key.toString(), modToggleButton.enabled);
+                    Config.setBoolean(key, modToggleButton.enabled);
                 }
 //                modToggleButton -> {
 //                    ConfigHelper.getInstance().setBool(key, modToggleButton.enabled);

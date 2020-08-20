@@ -1,6 +1,7 @@
 package InfoMod;
 
 import InfoMod.UI.CustomPotionChanceScreen;
+import InfoMod.UI.CustomizePotionChanceScreen;
 import basemod.TopPanelItem;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -24,7 +25,8 @@ public class InfoPanelItem extends TopPanelItem {
     private CardPlays cardPlays;
     //private StringInputScreen stringInputScreen = null;
     //private StringInputScreen2 stringInputScreen = null;
-    private CustomPotionChanceScreen customPotionChanceScreen;
+    //private CustomPotionChanceScreen customPotionChanceScreen;
+    private CustomizePotionChanceScreen customPotionChanceScreen;
 
     public InfoPanelItem() {
         super(IMG, ID);
@@ -100,7 +102,7 @@ public class InfoPanelItem extends TopPanelItem {
 
 //        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
 //            return;
-        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX.toString()))
+        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX))
             return;
 
         SlayTheRelicsIntegration.update("infoPanelItem", hitbox, tips);
@@ -117,7 +119,7 @@ public class InfoPanelItem extends TopPanelItem {
 
 //        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
 //            return;
-        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX.toString()))
+        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX))
             return;
 
         SlayTheRelicsIntegration.update("infoPanelItem", hitbox, tips);
@@ -129,7 +131,7 @@ public class InfoPanelItem extends TopPanelItem {
         // TODO: might need to quit early if config setting is ignored by this function call
 //        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
 //            return;
-        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX.toString()))
+        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX))
             return;
 
         //AbstractDungeon.effectList.add(new CardPoofEffect(500, 500));
@@ -138,15 +140,13 @@ public class InfoPanelItem extends TopPanelItem {
         //cardPlays.toggleVisibility();
 
         if (customPotionChanceScreen == null) {
-            customPotionChanceScreen = new CustomPotionChanceScreen();
-            // NOTE: implicit show() in the constructor
+            customPotionChanceScreen = new CustomizePotionChanceScreen("Customize Potion Tracker");
         }
-        else {
-            if (customPotionChanceScreen.isVisible())
-                customPotionChanceScreen.revertAndClose();
-            else
-                customPotionChanceScreen.show();
-        }
+
+        if (customPotionChanceScreen.isVisible())
+            customPotionChanceScreen.revertAndClose();
+        else
+            customPotionChanceScreen.show();
 
 
         // TODO: remove this cheat (for debugging)
@@ -157,7 +157,7 @@ public class InfoPanelItem extends TopPanelItem {
     public void render(SpriteBatch sb) {
 //        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
 //            return;
-        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX.toString()))
+        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX))
             return;
 
         super.render(sb);
@@ -172,7 +172,7 @@ public class InfoPanelItem extends TopPanelItem {
         // TODO: after super call?
 //        if (ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.SHOW_QBOX) == false)
 //            return;
-        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX.toString()))
+        if (!Config.getBool(Config.ConfigOptions.SHOW_QBOX))
             return;
 
         super.onHover();
