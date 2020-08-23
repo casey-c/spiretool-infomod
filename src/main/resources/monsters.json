@@ -1377,7 +1377,9 @@
           "name": "Smash",
           "details": {
             "d0": "38",
-            "d0c": "DAMAGE"
+            "d0c": "DAMAGE",
+            "d1": "99",
+            "d1c": "BLOCK"
           }
         }
       ],

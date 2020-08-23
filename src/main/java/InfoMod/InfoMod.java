@@ -1,20 +1,23 @@
 package InfoMod;
 
+import InfoMod.modules.events.InfoPanelItem;
+import InfoMod.modules.potions.PotionPanelItem;
+import InfoMod.ui.labels.CustomHitboxTipItem;
+import InfoMod.utils.RenderingUtils;
+import InfoMod.utils.config.Config;
+import InfoMod.utils.math.ProbabiltyUtils;
+import InfoMod.utils.saveable.BossStringsSaveable;
+import InfoMod.utils.saveable.SaveableManager;
 import basemod.BaseMod;
-import basemod.ModPanel;
 import basemod.abstracts.CustomSavableRaw;
 import basemod.interfaces.*;
-import com.badlogic.gdx.graphics.Texture;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.megacrit.cardcrawl.cards.CardSave;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
-import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.EventHelper;
-import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.CardStrings;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import org.apache.commons.lang3.tuple.Pair;
@@ -285,7 +288,7 @@ public class InfoMod implements PostInitializeSubscriber, PostDungeonUpdateSubsc
         boolean anyChanges = false;
 
         // Potions
-        int new_potion_chance = room.blizzardPotionMod + 40;
+        int new_potion_chance = AbstractRoom.blizzardPotionMod + 40;
 
         // Relic overrides
         if (player != null) {
@@ -461,7 +464,11 @@ public class InfoMod implements PostInitializeSubscriber, PostDungeonUpdateSubsc
 //        );
     }
 
-    @Override public JsonElement onSaveRaw() { return SaveableManager.save(); }
+    @Override
+    public JsonElement onSaveRaw() {
+        return SaveableManager.save();
+    }
+
     @Override
     public void onLoadRaw(JsonElement jsonElement) {
         SaveableManager.load(jsonElement);
