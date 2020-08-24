@@ -2,6 +2,7 @@ package InfoMod.ui.screens;
 
 import InfoMod.InfoMod;
 import InfoMod.utils.RenderingUtils;
+import InfoMod.utils.ScreenHelper;
 import basemod.BaseMod;
 import basemod.interfaces.PostUpdateSubscriber;
 import basemod.interfaces.RenderSubscriber;
@@ -110,7 +111,7 @@ public class StringInputScreen implements RenderSubscriber, PostUpdateSubscriber
 //            return;
 
         //AbstractDungeon.genericScreenOverlayReset();
-        RenderingUtils.closeCustomScreen("DECK_CLOSE");
+        ScreenHelper.closeCustomScreen("DECK_CLOSE");
         //AbstractDungeon.overlayMenu.cancelButton.hide();
 
 

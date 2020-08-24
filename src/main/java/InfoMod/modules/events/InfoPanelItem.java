@@ -2,6 +2,9 @@ package InfoMod.modules.events;
 
 import InfoMod.modules.cardplays.CardPlays;
 import InfoMod.ui.screens.CustomizePotionChanceScreen;
+import InfoMod.utils.MiscUtils;
+import InfoMod.utils.RenderingUtils;
+import InfoMod.utils.RightClickWatcher;
 import InfoMod.utils.SoundHelper;
 import InfoMod.utils.config.Config;
 import InfoMod.utils.integration.SlayTheRelicsIntegration;
@@ -14,6 +17,11 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.PowerTip;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
+import com.megacrit.cardcrawl.vfx.SpotlightEffect;
+import com.megacrit.cardcrawl.vfx.combat.BlizzardEffect;
+import com.megacrit.cardcrawl.vfx.combat.CardPoofEffect;
+import com.megacrit.cardcrawl.vfx.combat.GiantEyeEffect;
+
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -48,6 +56,24 @@ public class InfoPanelItem extends TopPanelItem {
         tips.add(help_tip);
 
         cardPlays = new CardPlays();
+
+        RightClickWatcher.watch("InfoPanelItem", this, onRightClick -> {
+            if (hitbox.hovered && CardCrawlGame.isInARun()) {
+                if (MiscUtils.isShiftPressed()) {
+                    //AbstractDungeon.effectList.add(new BlizzardEffect(10, false));
+                    //AbstractDungeon.effectList.add(new SpotlightEffect());
+                    CardCrawlGame.sound.play("ATTACK_MAGIC_FAST_2");
+                    AbstractDungeon.effectList.add(new CardPoofEffect(500, 500));
+
+                    RenderingUtils.renderEyes(498.0f, 502.0f, 5);
+                    SoundHelper.cawCaw();
+                }
+                else {
+                    CardCrawlGame.sound.play("ATTACK_MAGIC_FAST_2");
+                    AbstractDungeon.effectList.add(new CardPoofEffect(500, 500));
+                }
+            }
+        });
     }
 
     public void setEventsAndShrines(ArrayList<String> eventList, ArrayList<String> shrineList, ArrayList<String> specialList, float[] prAfter, float prEvent, float prMonster, float prShop, float prTreasure) {
@@ -151,11 +177,11 @@ public class InfoPanelItem extends TopPanelItem {
         if (customPotionChanceScreen.isVisible())
             customPotionChanceScreen.revertAndClose();
         else {
-            if (!CardCrawlGame.isInARun())
-                return;
+//            if (!CardCrawlGame.isInARun())
+//                return;
 
             // TODO: more restrictions?
-            if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.COMBAT_REWARD)
+//            if (AbstractDungeon.screen != AbstractDungeon.CurrentScreen.COMBAT_REWARD)
                 customPotionChanceScreen.show();
 
         }

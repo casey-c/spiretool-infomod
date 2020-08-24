@@ -49,6 +49,12 @@ public class SoundHelper {
         }
     }
 
+    public static void cawCaw() {
+        int roll = MathUtils.random(3);
+        String sound = (roll == 0) ? "VO_CULTIST_1A" : (roll == 1) ? "VO_CULTIST_1B" : "VO_CULTIST_1C";
+        CardCrawlGame.sound.play(sound, 0.1f);
+    }
+
     public static void playUIHoverSound() {
         CardCrawlGame.sound.play("UI_HOVER");
     }

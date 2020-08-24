@@ -5,6 +5,7 @@ import InfoMod.ui.buttons.ButtonFactory;
 import InfoMod.ui.buttons.ColorableSmallTextButton;
 import InfoMod.ui.buttons.SimpleButtonWidget;
 import InfoMod.ui.textedit.*;
+import InfoMod.utils.ScreenHelper;
 import InfoMod.utils.config.Config;
 import InfoMod.utils.RenderingUtils;
 import basemod.BaseMod;
@@ -216,7 +217,7 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
 
         visible = true;
 
-        RenderingUtils.openCustomScreen("DECK_OPEN");
+        ScreenHelper.openCustomScreen("DECK_OPEN");
 
         for (IScreenWidget w : childWidgets)
             w.show();
@@ -232,7 +233,7 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
 
         inputProcessor.reset();
 
-        RenderingUtils.closeCustomScreen("DECK_CLOSE");
+        ScreenHelper.closeCustomScreen("DECK_CLOSE");
 
         clearAllFocus();
 

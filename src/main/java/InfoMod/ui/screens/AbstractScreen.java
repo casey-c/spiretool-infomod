@@ -2,6 +2,7 @@ package InfoMod.ui.screens;
 
 import InfoMod.ui.IScreenWidget;
 import InfoMod.utils.RenderingUtils;
+import InfoMod.utils.ScreenHelper;
 import basemod.BaseMod;
 import basemod.interfaces.RenderSubscriber;
 import com.badlogic.gdx.graphics.Color;
@@ -37,7 +38,7 @@ public abstract class AbstractScreen implements RenderSubscriber {
         if (visible)
             return;
 
-        RenderingUtils.openCustomScreen("DECK_OPEN");
+        ScreenHelper.openCustomScreen("DECK_OPEN");
 
         for (IScreenWidget w : childWidgets)
             w.show();
@@ -49,7 +50,7 @@ public abstract class AbstractScreen implements RenderSubscriber {
         if (!visible)
             return;
 
-        RenderingUtils.closeCustomScreen("DECK_CLOSE");
+        ScreenHelper.closeCustomScreen("DECK_CLOSE");
 
         for (IScreenWidget w : childWidgets)
             w.hide();

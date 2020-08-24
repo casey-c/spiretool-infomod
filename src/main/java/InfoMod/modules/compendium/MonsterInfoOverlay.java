@@ -277,11 +277,8 @@ public class MonsterInfoOverlay implements PostInitializeSubscriber, RenderSubsc
                 hide();
             else {
                 boolean reqShift = Config.getBool(Config.ConfigOptions.MONSTER_OVERLAY_REQ_SHIFT);
-                System.out.println("OJB: reqShift: " + reqShift);
-                System.out.println("isShiftPresseed: " + MiscUtils.isShiftPressed());
-                Config.print();
 
-                if (!reqShift || MiscUtils.isShiftPressed()) {
+                if (!reqShift || MiscUtils.isShiftPressed() || visible) {
                     currentlySelectedMonsterID = id;
                     show();
                 }

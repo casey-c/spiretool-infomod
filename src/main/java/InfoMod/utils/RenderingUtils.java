@@ -10,6 +10,7 @@ import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
+import com.megacrit.cardcrawl.vfx.combat.GiantEyeEffect;
 
 
 /*
@@ -198,35 +199,13 @@ public class RenderingUtils {
         return FontHelper.getSmartWidth(font, cleaned, lineWidth, lineSpacing);
     }
 
-    // basically the same code called as MasterDeckViewScreen.open() from TopPanel
-    public static void openCustomScreen(String soundID) {
-        if (!CardCrawlGame.isInARun())
-            return;
+    public static void renderEyes(float cx, float cy, int count) {
+        for (int i = 0; i < count; ++i) {
+            float dx = MathUtils.random(200.0f) - 100.0f;
+            float dy = MathUtils.random(200.0f) - 100.0f;
 
-        AbstractDungeon.closeCurrentScreen();
-
-        AbstractDungeon.player.releaseCard();
-        CardCrawlGame.sound.play(soundID);
-
-        AbstractDungeon.dynamicBanner.hide();
-        AbstractDungeon.isScreenUp = true;
-
-        AbstractDungeon.overlayMenu.proceedButton.hide();
-        AbstractDungeon.overlayMenu.hideCombatPanels();
-        AbstractDungeon.overlayMenu.showBlackScreen();
+            AbstractDungeon.effectList.add(new GiantEyeEffect(cx + dx, cy + dy, Settings.PURPLE_COLOR));
+        }
     }
 
-    // pretend to be the master deck view and let the base game handle the rest.
-    // (4_000_000 iq)
-    //
-    // (this is like my 5th attempt at this custom screen stuff -- this one seems to work well enough, but there are
-    //   some bugs (i know at least of one: open/close pair while on card rewards screen can hide all rewards)
-    public static void closeCustomScreen(String soundID) {
-        if (!CardCrawlGame.isInARun())
-            return;
-
-        CardCrawlGame.sound.play(soundID);
-        AbstractDungeon.screen = AbstractDungeon.CurrentScreen.MASTER_DECK_VIEW;
-        AbstractDungeon.closeCurrentScreen();
-    }
 }
