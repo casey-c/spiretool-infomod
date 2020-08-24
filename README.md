@@ -45,7 +45,7 @@ Access an in game configuration menu (Main Menu -> Mods -> InfoMod -> Config) to
 
 ![In-Game Potion Text Configuration Menu](readme_images/custom_potion_text.png)
 
-*(New in Alpha 0.5.5)* Access an in-run configuration menu. Just cick the [?] box while in a run to customize the potion text area!
+*(New in Alpha 0.5.5)* Access an in-run configuration menu. Just click the [?] box while in a run to customize the potion text area!
 
 ### Slay The Relics Integration
 
