@@ -266,43 +266,39 @@ public class Config {
     //--------------------------------------------------------------------------------
 
     public static void setupConfigMenu(CustomHitboxTipItem bossTipItem, CustomHitboxTipItem deckTipItem) {
-        ModPanel modPanel = new ModPanel();
-        float titleY = 745.0f * Settings.scale;
+        //ModPanel modPanel = new ModPanel();
+        BetterModPanel modPanel = new BetterModPanel();
+
+        float titleY = 889.0f * Settings.scale;
 
         float leftColX = 400.0f * Settings.scale;
         float rightColX = 1014.0f * Settings.scale;
 
-        float firstDescY = 661.0f * Settings.scale;
-        float itemOffsetY = 144.0f * Settings.scale; // 130.0 height / 14 gap
+        float firstDescY = 805.0f * Settings.scale;
+        //float itemOffsetY = 144.0f * Settings.scale; // 130.0 height / 14 gap
+        float itemOffsetY = 174.0f * Settings.scale; // 130.0 height / 14 gap
 
         modPanel.addUIElement(new InfoModConfigWrappedLabel("Info Mod Config", leftColX, titleY, Settings.CREAM_COLOR, FontHelper.bannerFont, modPanel));
 
-//        ModTextPanel tp = new ModTextPanel();
-//        ModButton mb = new ModButton(300.0f, 300.0f, modPanel, modButton -> {
-//            tp.show(modPanel,
-//                    "curr",
-//                    "default",
-//                    "explan",
-//                    modTextPanel -> {
-//                        System.out.println("OJB: mod text panel cancel");
-//                    },
-//                    modTextPanel -> {
-//                        System.out.println("OJB: mod text panel confirm");
-//                    });
-//        });
-//        modPanel.addUIElement(mb);
-
+        // LEFT COLUMN --------------------------------------------------------------------------------
         modPanel.addUIElement(new InfoModConfigDescBool(
                 leftColX, firstDescY,
                 "Monster Compendium",
                 "Right click an enemy while in combat to see their AI and moveset. Right click again to close this overlay.",
                 modPanel,
                 ConfigOptions.SHOW_MONSTER_DETAILS
-                //ConfigHelper.BooleanSettings.SHOW_MONSTER_DETAILS
         ));
 
         modPanel.addUIElement(new InfoModConfigDescBool(
                 leftColX, firstDescY - itemOffsetY,
+                "Monster Compendium -- Require Shift",
+                "The monster compendium requires SHIFT to be held while right clicking to open the overlay. (Prevents accidental openings)",
+                modPanel,
+                ConfigOptions.MONSTER_OVERLAY_REQ_SHIFT
+        ));
+
+        modPanel.addUIElement(new InfoModConfigDescBool(
+                leftColX, firstDescY - 2 * itemOffsetY,
                 "Potion Chance Tracker",
                 "Displays the chance to see a potion after the next few combats. Shown as text on the top bar.",
                 modPanel,
@@ -310,7 +306,7 @@ public class Config {
                 //ConfigHelper.BooleanSettings.SHOW_POTIONS
         ));
         modPanel.addUIElement(new InfoModConfigDescBool(
-                leftColX, firstDescY - itemOffsetY - itemOffsetY,
+                leftColX, firstDescY - 3 * itemOffsetY,
                 "Event Chance Tracker",
                 "Displays the possible events you can get in the remaining question mark floors of the act. Shown as a [?] box on the top bar.",
                 modPanel,
@@ -318,7 +314,7 @@ public class Config {
                 //ConfigHelper.BooleanSettings.SHOW_QBOX
         ));
 
-        // Second column
+        // RIGHT COLUMN --------------------------------------------------------------------------------
         modPanel.addUIElement(new InfoModConfigDescBool(
                 rightColX, firstDescY,
                 "Map Tool Tip Override (Show Bosses)",
