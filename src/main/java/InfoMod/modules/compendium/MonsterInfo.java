@@ -109,6 +109,8 @@ public class MonsterInfo {
                 return RenderingUtils.OJB_BLOCK_COLOR;
             case "SKIP":
                 return RenderingUtils.OJB_GRAY_COLOR;
+            case "SPECIAL":
+                return RenderingUtils.OJB_SPECIAL_COLOR;
             default:
                 System.out.println("OJB: invalid color at some point (bug in monsters.JSON!)");
                 System.out.println("OJB: invalid color is: " + s);

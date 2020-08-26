@@ -468,7 +468,7 @@
           "name": "Rally!",
           "details": {
             "d0": "Summon 2 Gremlins",
-            "d0c": "SKIP"
+            "d0c": "SPECIAL"
           }
         },
         {
@@ -639,7 +639,7 @@
           "name": "Escape",
           "details": {
             "d0": "Leave Combat",
-            "d0c": "SKIP"
+            "d0c": "SPECIAL"
           }
         }
       ],
@@ -777,7 +777,7 @@
           "name": "Escape",
           "details": {
             "d0": "Leave Combat",
-            "d0c": "SKIP"
+            "d0c": "SPECIAL"
           }
         }
       ],
@@ -927,7 +927,7 @@
           "name": "Summon",
           "details": {
             "d0": "Spawn 2 Daggers (Up to 4)",
-            "d0c": "SKIP"
+            "d0c": "SPECIAL"
           }
         },
         {
@@ -969,7 +969,7 @@
             "d0": "25",
             "d0c": "DAMAGE",
             "d1": "Suicide",
-            "d1c": "SKIP"
+            "d1c": "SPECIAL"
           }
         }
       ],
@@ -1276,7 +1276,7 @@
           "name": "Split",
           "details": {
             "d0": "Split in two",
-            "d0c": "SKIP"
+            "d0c": "SPECIAL"
           }
         }
       ],
@@ -1527,7 +1527,7 @@
           "name": "Rebirth (Phase 1)",
           "details": {
             "d0": "Start Stage 2",
-            "d0c": "SKIP"
+            "d0c": "SPECIAL"
           }
         },
         {
@@ -1566,7 +1566,7 @@
           "name": "Spawn Orbs",
           "details": {
             "d0": "Summon 2 Bronze Orbs",
-            "d0c": "SKIP"
+            "d0c": "SPECIAL"
           }
         },
         {
@@ -1680,7 +1680,7 @@
           }
         }
       ],
-      "ai": "Every 4 turns, uses #wTaunt. Otherwise, approximately 30-0-25-45 probability split between #wDefensive #wStance - #wGloat - #wFace #wSlap - #wHeavy #wSlash. No move can be used twice in a row, and #wDefensive #wStance cannot be used more than 2 times total. When attempting to use an invalid move, will use the next move in the order of #wDefensive #wStance -> #wGloat -> #wFace #wSlap -> #wHeavy #wSlash -> #wFace #wSlap. NL NL After dropping below 50% HP, the Champ will use #wAnger (not shown), which will cleanse all debuffs and add #uStrength #u12. Then, next turn and every three turns thereafter, uses Execute."
+      "ai": "Every 4 turns, uses #wTaunt. Otherwise, approximately 30-0-25-45 probability split between #wDefensive #wStance - #wGloat - #wFace #wSlap - #wHeavy #wSlash. No move can be used twice in a row, and #wDefensive #wStance cannot be used more than 2 times total. When attempting to use an invalid move, will use the next move in the order of #wDefensive #wStance -> #wGloat -> #wFace #wSlap -> #wHeavy #wSlash -> #wFace #wSlap. NL NL After dropping below 50% HP, the Champ will use #wAnger (not shown), which will cleanse all debuffs and add #uStrength #u12. Then, next turn and every three turns thereafter, uses #wExecute."
     },
     {
       "id": "TheCollector",
@@ -1691,14 +1691,14 @@
           "name": "Spawn",
           "details": {
             "d0": "Spawn 2 Torch Heads",
-            "d0c": "SKIP"
+            "d0c": "SPECIAL"
           }
         },
         {
           "name": "Revive",
           "details": {
             "d0": "Spawn Torch Heads in Empty Slots (max 2)",
-            "d0c": "SKIP"
+            "d0c": "SPECIAL"
           }
         },
         {
@@ -1782,7 +1782,7 @@
           "name": "Buff",
           "details": {
             "d0": "Cleanse Str Down",
-            "d0c": "SKIP",
+            "d0c": "SPECIAL",
             "d2": "Str +2",
             "d2c": "BUFF",
             "d3": "Additional Buff",
@@ -1889,11 +1889,11 @@
           "name": "Twin Slam",
           "details": {
             "d0": "Enter Offensive Mode",
-            "d0c": "SKIP",
+            "d0c": "SPECIAL",
             "d3": "8x2",
             "d3c": "DAMAGE",
             "d4": "Remove Sharp Hide",
-            "d4c": "SKIP"
+            "d4c": "SPECIAL"
           }
         }
       ],
@@ -1966,7 +1966,7 @@
           "name": "Goop Spray",
           "details": {
             "d0": "Slimed 5",
-            "d0c": "SKIP"
+            "d0c": "DEBUFF"
           }
         },
         {
@@ -1987,7 +1987,7 @@
           "name": "Split",
           "details": {
             "d0": "Split into Spike Slime (L) and Acid Slime (L)",
-            "d0c": "SKIP"
+            "d0c": "SPECIAL"
           }
         }
       ],
@@ -2034,7 +2034,7 @@
           "name": "Haste",
           "details": {
             "d0": "Cleanse Debuffs",
-            "d0c": "SKIP",
+            "d0c": "SPECIAL",
             "d2": "Heal to 50% HP",
             "d2c": "BUFF"
           }
