@@ -45,7 +45,7 @@ Access an in game configuration menu (Main Menu -> Mods -> InfoMod -> Config) to
 
 ![In-Game Potion Text Configuration Menu](readme_images/custom_potion_text.png)
 
-*(New in Alpha 0.5.5)* Access an in-run configuration menu. Just cick the [?] box while in a run to customize the potion text area!
+*(New in Alpha 0.5.5)* Access an in-run configuration menu. Just click the [?] box while in a run to customize the potion text area!
 
 ### Slay The Relics Integration
 
@@ -64,12 +64,14 @@ You will need to download the InfoMod.jar file (not the source code zips) and pl
 
 Future releases of InfoMod will come to the Steam Workshop to make this process easier (and gain auto-updating benefits), but for now you'll have to check back periodically for updates!
 
-## Bug Reports and Suggestions
+*NOTE:* InfoMod is still in development. If you find bugs or run into problems, please let me know - thanks!
+
+## Bug Reports, Issues, and Errors
 
 If you find a bug / crash or other issue with InfoMod, please start an issue [here on Github](https://github.com/casey-c/spiretool-infomod/issues) with as many details as you can provide, as well as any helpful information that might help me reproduce the problem on my end.
 
 If you find any typos or errors within the Monster Compendium (wrong AI / damage etc.), please let me know after you confirm the mistake against the [reference spreadsheet](https://docs.google.com/spreadsheets/d/1ZsxNXebbELpcCi8N7FVOTNGdX_K9-BRC_LMgx4TORo4/edit#gid=1146624812). I had to transcode a lot of these details manually, so it is more than possible that I made mistakes! Please note that currently the Monster Compendium is only built for A20 movesets (as it was a ton of work just to get that working!), but if you would like to help build it for lower ascensions, please leave me a message [here on the issues page](https://github.com/casey-c/spiretool-infomod/issues).
 
-## Future Suggestions
+## Suggestions, Requests, and Other Contributions
 
-Additional requests, desired improvements, and other feedback is more than welcome. Please leave a note over on the [issues page](https://github.com/casey-c/spiretool-infomod/issues) here on Github.
+Additional requests, desired improvements, and other feedback is more than welcome. Please leave a note over on the [issues page](https://github.com/casey-c/spiretool-infomod/issues) here on Github. This project is MIT licensed and more than happy to accept high quality merge requests or additional contributions. Get in touch via the issues page!
