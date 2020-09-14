@@ -5,6 +5,7 @@ import basemod.BaseMod;
 import basemod.interfaces.PostUpdateSubscriber;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
@@ -36,7 +37,7 @@ public abstract class ButtonWidget implements IScreenWidget, PostUpdateSubscribe
 
             this.onClick = onClick;
 
-            hb = new Hitbox(width, height);
+            hb = new Hitbox(width * Settings.scale, height * Settings.scale);
             //hb.move(x + (width / 2.0f), y + (height / 2.0f));
 
             BaseMod.subscribe(this);
@@ -45,7 +46,7 @@ public abstract class ButtonWidget implements IScreenWidget, PostUpdateSubscribe
     @Override
     public void show() {
         visible = true;
-        hb.move(x + (width / 2.0f), y + (height / 2.0f));
+        hb.move((x + (width / 2.0f)) * Settings.scale, (y + (height / 2.0f)) * Settings.scale);
     }
 
     @Override

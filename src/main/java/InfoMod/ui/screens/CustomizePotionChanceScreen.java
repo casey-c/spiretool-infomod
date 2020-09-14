@@ -72,7 +72,7 @@ public class CustomizePotionChanceScreen extends MediumLabeledScreen {
                 ABSOLUTE_CONTENT_LEFT_X + CONTENT_PADDING_MD,
                 TEXT_Y,
                 0,
-                1920,
+                Settings.WIDTH,
                 Config.getInt(Config.ConfigOptions.POTION_X),
                 FontHelper.tipBodyFont,
                 Settings.CREAM_COLOR,
@@ -91,7 +91,7 @@ public class CustomizePotionChanceScreen extends MediumLabeledScreen {
                 ABSOLUTE_CONTENT_LEFT_X + CONTENT_PADDING_MD + TEXT_WIDGET_GAP,
                 TEXT_Y,
                 0,
-                1080,
+                Settings.HEIGHT,
                 Config.getInt(Config.ConfigOptions.POTION_Y),
                 FontHelper.tipBodyFont,
                 Settings.CREAM_COLOR,
@@ -250,8 +250,8 @@ public class CustomizePotionChanceScreen extends MediumLabeledScreen {
                 sb,
                 FontHelper.tipBodyFont,
                 "Customize the text displayed.",
-                ABSOLUTE_CONTENT_LEFT_X + HELP_SIZE + CONTENT_PADDING_MD,
-                ABSOLUTE_CONTENT_BODY_TOP_Y - CONTENT_PADDING_MD,
+                (ABSOLUTE_CONTENT_LEFT_X + HELP_SIZE + CONTENT_PADDING_MD) * Settings.scale,
+                (ABSOLUTE_CONTENT_BODY_TOP_Y - CONTENT_PADDING_MD) * Settings.scale,
                 RenderingUtils.OJB_GRAY_COLOR
                 );
 
@@ -259,8 +259,8 @@ public class CustomizePotionChanceScreen extends MediumLabeledScreen {
                 sb,
                 FontHelper.tipBodyFont,
                 "Show Icon: ",
-                ABSOLUTE_CONTENT_LEFT_X + HELP_SIZE + CONTENT_PADDING_MD + ICON_TEXT_OFFSET,
-                ABSOLUTE_CONTENT_BODY_TOP_Y - CONTENT_PADDING_MD,
+                (ABSOLUTE_CONTENT_LEFT_X + HELP_SIZE + CONTENT_PADDING_MD + ICON_TEXT_OFFSET) * Settings.scale,
+                (ABSOLUTE_CONTENT_BODY_TOP_Y - CONTENT_PADDING_MD) * Settings.scale,
                 RenderingUtils.OJB_GRAY_COLOR
         );
 
@@ -268,8 +268,8 @@ public class CustomizePotionChanceScreen extends MediumLabeledScreen {
                 sb,
                 FontHelper.tipBodyFont,
                 "Customize the positioning of the text.",
-                ABSOLUTE_CONTENT_LEFT_X + HELP_SIZE + CONTENT_PADDING_MD,
-                ABSOLUTE_CONTENT_BODY_TOP_Y - CONTENT_PADDING_MD - HELP_SIZE - CONTENT_PADDING_SM - EditableTextLong.HEIGHT - CONTENT_PADDING_MD,
+                (ABSOLUTE_CONTENT_LEFT_X + HELP_SIZE + CONTENT_PADDING_MD) * Settings.scale,
+                (ABSOLUTE_CONTENT_BODY_TOP_Y - CONTENT_PADDING_MD - HELP_SIZE - CONTENT_PADDING_SM - EditableTextLong.HEIGHT - CONTENT_PADDING_MD) * Settings.scale,
                 RenderingUtils.OJB_GRAY_COLOR
         );
 

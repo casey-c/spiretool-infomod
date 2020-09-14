@@ -4,6 +4,7 @@ import InfoMod.ui.buttons.ButtonWidget;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.core.Settings;
 
 import java.util.function.Consumer;
 
@@ -27,9 +28,18 @@ public class SimpleButtonWidget extends ButtonWidget {
 
         sb.setColor(Color.WHITE);
 
-        if (hb.hovered)
-            sb.draw(TEX_PRESSED, x, y, width, height);
-        else
-            sb.draw(TEX_NORMAL, x, y, width, height);
+        if (hb.hovered) {
+            sb.draw(TEX_PRESSED,
+                    x * Settings.scale,
+                    y * Settings.scale,
+                    width * Settings.scale,
+                    height * Settings.scale);
+        } else {
+            sb.draw(TEX_NORMAL,
+                    x * Settings.scale,
+                    y * Settings.scale,
+                    width * Settings.scale,
+                    height * Settings.scale);
+        }
     }
 }

@@ -52,17 +52,35 @@ public class ColorableSmallTextButton extends ButtonWidget {
 
         // Render the color portion
         sb.setColor(buttonColor);
-        sb.draw(TEX_NORMAL_COLOR, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        sb.draw(TEX_NORMAL_COLOR,
+                x * Settings.scale,
+                y * Settings.scale,
+                BUTTON_WIDTH * Settings.scale,
+                BUTTON_HEIGHT * Settings.scale);
 
         // Render the frame
         sb.setColor(Color.WHITE);
-        if (!hb.hovered)
-            sb.draw(TEX_NORMAL_FRAME, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
-        else
-            sb.draw(TEX_PRESSED_FRAME, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        if (!hb.hovered) {
+            sb.draw(TEX_NORMAL_FRAME,
+                    x * Settings.scale,
+                    y * Settings.scale,
+                    BUTTON_WIDTH * Settings.scale,
+                    BUTTON_HEIGHT * Settings.scale);
+        } else {
+            sb.draw(TEX_PRESSED_FRAME,
+                    x * Settings.scale,
+                    y * Settings.scale,
+                    BUTTON_WIDTH * Settings.scale,
+                    BUTTON_HEIGHT * Settings.scale);
+        }
 
         // Render the text
-        FontHelper.renderFontLeftTopAligned(sb, font, text, x + textOffsetX + additionalTextOffsetX, y + textOffsetY + additionalTextOffsetY, fontColor);
+        FontHelper.renderFontLeftTopAligned(sb,
+                font,
+                text,
+                (x + textOffsetX + additionalTextOffsetX) * Settings.scale,
+                (y + textOffsetY + additionalTextOffsetY) * Settings.scale,
+                fontColor);
     }
 }
 

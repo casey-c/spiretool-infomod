@@ -20,6 +20,7 @@ import com.megacrit.cardcrawl.helpers.FontHelper;
 
 import java.util.ArrayList;
 
+/*
 public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
     private boolean visible = false;
 
@@ -290,7 +291,12 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
             return;
 
         sb.setColor(Color.WHITE);
-        sb.draw( SCREEN_BG, ((float)Settings.WIDTH / 2.0f) - (SCREEN_W / 2.0f), (Settings.HEIGHT - SCREEN_H) / 2.0f );
+        sb.draw( SCREEN_BG,
+                (((float)Settings.WIDTH / 2.0f) - (SCREEN_W / 2.0f)) * Settings.scale,
+                ((Settings.HEIGHT - SCREEN_H) / 2.0f ) * Settings.scale,
+                SCREEN_W * Settings.scale,
+                SCREEN_H * Settings.scale
+        );
 
         FontHelper.renderFontLeftTopAligned(sb, FontHelper.tipHeaderFont, "Customize the text displayed by the Potion Tracker.", CONTENT_X, TITLE_TEXT_Y, Settings.GOLD_COLOR);
         FontHelper.renderSmartText(sb, FontHelper.tipHeaderFont, "Customize the positioning of the text. NL (0,0) bottom left -> (1920, 1080) top right", CONTENT_X, POSITION_INFO_Y,  Settings.GOLD_COLOR);
@@ -308,3 +314,5 @@ public class CustomPotionChanceScreen implements IScreen, RenderSubscriber {
         textY.render(sb);
     }
 }
+
+ */

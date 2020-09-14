@@ -43,12 +43,26 @@ public class MediumLabeledButtonWidget extends ButtonWidget {
             return;
 
         sb.setColor(Color.WHITE);
-        if (!hb.hovered)
-            sb.draw(TEX_NORMAL, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
-        else
-            sb.draw(TEX_HOVERED, x, y, BUTTON_WIDTH, BUTTON_HEIGHT);
+        if (!hb.hovered) {
+            sb.draw(TEX_NORMAL,
+                    x * Settings.scale,
+                    y * Settings.scale,
+                    BUTTON_WIDTH * Settings.scale,
+                    BUTTON_HEIGHT * Settings.scale);
+        } else {
+            sb.draw(TEX_HOVERED,
+                    x * Settings.scale,
+                    y * Settings.scale,
+                    BUTTON_WIDTH * Settings.scale,
+                    BUTTON_HEIGHT * Settings.scale);
+        }
 
         // Render the text
-        FontHelper.renderFontLeftTopAligned(sb, font, text, x + textOffsetX + additionalTextOffsetX, y + textOffsetY + additionalTextOffsetY, fontColor);
+        FontHelper.renderFontLeftTopAligned(sb,
+                font,
+                text,
+                (x + textOffsetX + additionalTextOffsetX) * Settings.scale,
+                (y + textOffsetY + additionalTextOffsetY) * Settings.scale,
+                fontColor);
     }
 }

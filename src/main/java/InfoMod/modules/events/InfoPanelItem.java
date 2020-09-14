@@ -33,6 +33,7 @@ public class InfoPanelItem extends TopPanelItem {
 
     private ArrayList<PowerTip> tips;
     private PowerTip event_tip, card_tip, help_tip;
+    private PowerTip extra_tip;
 
     // TODO: remove / clean up
     private CardPlays cardPlays;
@@ -50,10 +51,12 @@ public class InfoPanelItem extends TopPanelItem {
         event_tip = new PowerTip("Event Chance", "TODO");
         card_tip = new PowerTip("Card Chances", "TODO");
         help_tip = new PowerTip("Info", "NOTE: Event list does not contain special one time events. (e.g. Ominous Forge, The Joust, etc.)");
+        extra_tip = new PowerTip("Extra", "Current Turn: 0");
 
         tips.add(event_tip);
         tips.add(card_tip);
         tips.add(help_tip);
+        tips.add(extra_tip);
 
         cardPlays = new CardPlays();
 
@@ -62,15 +65,17 @@ public class InfoPanelItem extends TopPanelItem {
                 if (MiscUtils.isShiftPressed()) {
                     //AbstractDungeon.effectList.add(new BlizzardEffect(10, false));
                     //AbstractDungeon.effectList.add(new SpotlightEffect());
-                    CardCrawlGame.sound.play("ATTACK_MAGIC_FAST_2");
-                    AbstractDungeon.effectList.add(new CardPoofEffect(500, 500));
+                    //CardCrawlGame.sound.play("ATTACK_MAGIC_FAST_2");
+                    CardCrawlGame.sound.play("ATTACK_WHIFF_2");
+                    AbstractDungeon.effectList.add(new CardPoofEffect(500 * Settings.scale, 500 * Settings.scale));
 
-                    RenderingUtils.renderEyes(498.0f, 502.0f, 5);
+                    RenderingUtils.renderEyes(498.0f * Settings.scale, 502.0f * Settings.scale, 5);
                     SoundHelper.cawCaw();
                 }
                 else {
-                    CardCrawlGame.sound.play("ATTACK_MAGIC_FAST_2");
-                    AbstractDungeon.effectList.add(new CardPoofEffect(500, 500));
+                    //CardCrawlGame.sound.play("ATTACK_MAGIC_FAST_2");
+                    CardCrawlGame.sound.play("ATTACK_WHIFF_2");
+                    AbstractDungeon.effectList.add(new CardPoofEffect(500 * Settings.scale, 500 * Settings.scale));
                 }
             }
         });
@@ -154,6 +159,13 @@ public class InfoPanelItem extends TopPanelItem {
             return;
 
         SlayTheRelicsIntegration.update("infoPanelItem", hitbox, tips);
+    }
+
+    public void setTurn(int turn) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Current Turn: ");
+        sb.append(turn);
+        extra_tip.body = sb.toString();
     }
 
 

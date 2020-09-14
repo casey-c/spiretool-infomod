@@ -16,22 +16,36 @@ public class BetterModPanel extends ModPanel {
     @Override
     public void renderBg(SpriteBatch sb) {
         sb.setColor(Color.WHITE);
+
         sb.draw(BACKGROUND,
-                (float) Settings.WIDTH / 2.0F - BG_WIDTH_2,
-                Settings.OPTION_Y - BG_HEIGHT_2,
-                BG_WIDTH_2,
-                BG_HEIGHT_2,
-                (float)BG_WIDTH,
-                (float)BG_HEIGHT,
-                Settings.scale,
-                Settings.scale,
-                0.0F,
-                0,
-                0,
-                BG_WIDTH,
-                BG_HEIGHT,
-                false,
-                false);
+                (Settings.WIDTH - (BACKGROUND.getWidth() * Settings.scale)) * 0.5f,
+                (Settings.HEIGHT - (BACKGROUND.getHeight() * Settings.scale)) * 0.5f,
+                BACKGROUND.getWidth() * Settings.scale,
+                BACKGROUND.getHeight() * Settings.scale
+        );
+
+//                (((float)Settings.WIDTH - BACKGROUND.getWidth()) / 2.0f) * Settings.scale,
+//                (((float)Settings.HEIGHT - BACKGROUND.getHeight()) / 2.0f)  * Settings.scale,
+//                BACKGROUND.getWidth() * Settings.scale,
+//                BACKGROUND.getHeight() * Settings.scale
+//        );
+
+//        sb.draw(BACKGROUND,
+//                ((float) Settings.WIDTH / 2.0F - BG_WIDTH_2) * Settings.scale,
+//                (Settings.OPTION_Y - BG_HEIGHT_2) * Settings.scale,
+//                BG_WIDTH_2 * Settings.scale,
+//                BG_HEIGHT_2 * Settings.scale,
+//                (float)BG_WIDTH,
+//                (float)BG_HEIGHT,
+//                Settings.scale,
+//                Settings.scale,
+//                0.0F,
+//                0,
+//                0,
+//                BG_WIDTH,
+//                BG_HEIGHT,
+//                false,
+//                false);
     }
 
 }

@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 
@@ -84,7 +85,7 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
         this.textOffsetY = textOffsetY;
 
         // Setup the hitbox
-        hb = new Hitbox(TEX_WIDTH, TEX_HEIGHT);
+        hb = new Hitbox(TEX_WIDTH * Settings.scale, TEX_HEIGHT * Settings.scale);
         //hb.move(x + (TEX_WIDTH / 2.0f), y + (TEX_HEIGHT / 2.0f));
 
         // Make this text box visible
@@ -121,7 +122,8 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
     @Override
     public void show() {
         visible = true;
-        hb.move(x + (TEX_WIDTH / 2.0f), y + (TEX_HEIGHT / 2.0f));
+        hb.move((x + (TEX_WIDTH / 2.0f)) * Settings.scale,
+                (y + (TEX_HEIGHT / 2.0f)) * Settings.scale);
     }
 
     @Override
@@ -151,14 +153,28 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
             return;
 
         sb.setColor(Color.WHITE);
-        if (focused)
-            sb.draw(TEX_FOCUSED, x, y, TEX_WIDTH, TEX_HEIGHT);
-        else
-            sb.draw(TEX_DEFAULT, x, y, TEX_WIDTH, TEX_HEIGHT);
+        if (focused) {
+            sb.draw(TEX_FOCUSED,
+                    x * Settings.scale,
+                    y * Settings.scale,
+                    TEX_WIDTH * Settings.scale,
+                    TEX_HEIGHT * Settings.scale);
+        } else {
+            sb.draw(TEX_DEFAULT,
+                    x * Settings.scale,
+                    y * Settings.scale,
+                    TEX_WIDTH * Settings.scale,
+                    TEX_HEIGHT * Settings.scale);
+        }
 
         // Render the text
         //FontHelper.renderFontLeftTopAligned(sb, font, text, x + textOffsetX, y + textOffsetY, fontColor);
-        RenderingUtils.renderSmarterText(sb, font, text, x + textOffsetX, y + textOffsetY, fontColor);
+        RenderingUtils.renderSmarterText(sb,
+                font,
+                text,
+                (x + textOffsetX) * Settings.scale,
+                (y + textOffsetY) * Settings.scale,
+                fontColor);
 
         // Render the glowy "_" at the end
         if (focused) {
@@ -167,8 +183,8 @@ public abstract class EditableText implements IFocusableScreenWidget, PostUpdate
             RenderingUtils.renderSmarterText(sb,
                     font,
                     "_",
-                    x + textOffsetX + RenderingUtils.getSmarterWidth(font, text, 100000000.0f, 0.0f), //FontHelper.getSmartWidth(font, text, 1000000.0F, 0.0F),
-                    y + textOffsetY,
+                    (x + textOffsetX + RenderingUtils.getSmarterWidth(font, text, 100000000.0f, 0.0f)) * Settings.scale, //FontHelper.getSmartWidth(font, text, 1000000.0F, 0.0F),
+                    (y + textOffsetY) * Settings.scale,
                     100000.0F,
                     0.0F,
                     new Color(1.0F, 1.0F, 1.0F, tmpAlpha));

@@ -13,6 +13,7 @@ import basemod.abstracts.CustomSavableRaw;
 import basemod.interfaces.*;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.JsonElement;
+import com.megacrit.cardcrawl.actions.GameActionManager;
 import com.megacrit.cardcrawl.cards.CardSave;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
@@ -34,6 +35,8 @@ public class InfoMod implements PostInitializeSubscriber, PostDungeonUpdateSubsc
     private static int curr_potion_chance = -1;
     private static int curr_rare_chance = -1;
     private static int curr_floor = -1;
+
+    private int curr_turn = -1;
 
     //private BossStringsSaveable bossStringsSaveable = new BossStringsSaveable();
 
@@ -312,6 +315,19 @@ public class InfoMod implements PostInitializeSubscriber, PostDungeonUpdateSubsc
         return anyChanges;
     }
 
+    private boolean updateTurn() {
+        boolean anyChanges = false;
+
+        int currTurn = GameActionManager.turn;
+        if (curr_turn != currTurn) {
+            curr_turn = currTurn;
+            anyChanges = true;
+            infoPanelItem.setTurn(curr_turn);
+        }
+
+        return anyChanges;
+    }
+
 
     @Override
     public void receivePostDungeonUpdate() {
@@ -332,6 +348,7 @@ public class InfoMod implements PostInitializeSubscriber, PostDungeonUpdateSubsc
             anyChanges |= updatePotions(room, player);
             anyChanges |= updateEvents(player);
             anyChanges |= updateCards();
+            anyChanges |= updateTurn();
             updateBoss();
 
             // DEBUG Logging

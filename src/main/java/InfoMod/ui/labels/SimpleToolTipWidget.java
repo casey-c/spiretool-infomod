@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
@@ -34,7 +35,7 @@ public class SimpleToolTipWidget implements IScreenWidget, PostUpdateSubscriber 
         this.tipHeader = header;
         this.tipBody = body;
 
-        hb = new Hitbox(width, height);
+        hb = new Hitbox(width * Settings.scale, height * Settings.scale);
 
         BaseMod.subscribe(this);
     }
@@ -42,7 +43,8 @@ public class SimpleToolTipWidget implements IScreenWidget, PostUpdateSubscriber 
     @Override
     public void show() {
         visible = true;
-        hb.move(x + (width / 2.0f), y + (height / 2.0f));
+        hb.move((x + (width / 2.0f) ) * Settings.scale,
+                (y + (height / 2.0f)) * Settings.scale);
     }
 
     @Override
@@ -57,7 +59,11 @@ public class SimpleToolTipWidget implements IScreenWidget, PostUpdateSubscriber 
             return;
 
         sb.setColor(Color.WHITE);
-        sb.draw(texture, x, y);
+        sb.draw(texture,
+                x * Settings.scale,
+                y * Settings.scale,
+                texture.getWidth() * Settings.scale,
+                texture.getHeight() * Settings.scale);
 
         if (hb.hovered) {
             //TipHelper.renderGenericTip(x, y, toolTipHeader, toolTipBody);

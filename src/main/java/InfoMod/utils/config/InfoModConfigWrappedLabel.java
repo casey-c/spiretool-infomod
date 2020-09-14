@@ -6,6 +6,7 @@ import basemod.ModPanel;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 
 import java.util.function.Consumer;
@@ -40,7 +41,14 @@ public class InfoModConfigWrappedLabel implements IUIElement {
     public void render(SpriteBatch sb) {
         //FontHelper.renderFontLeftDownAligned(sb, this.font, this.text, this.x, this.y, this.color);
         //FontHelper.renderFontLeftTopAligned(sb, this.font, this.text, this.x, this.y, this.color);
-        FontHelper.renderSmartText(sb, this.font, this.text, this.x, this.y, this.lineWidth, this.lineSpacing, this.color);
+        FontHelper.renderSmartText(sb,
+                font,
+                text,
+                x * Settings.scale,
+                y * Settings.scale,
+                lineWidth * Settings.scale,
+                lineSpacing * Settings.scale,
+                color);
     }
 
     @Override

@@ -126,8 +126,25 @@ public class PotionPanelItem extends TopPanelItem {
 
         sb.setColor(Color.WHITE);
 
-        if (Config.getBool(Config.ConfigOptions.SHOW_POTION_IMG))
-            sb.draw(TEX_POTION, textX - 64.0f, textY - 39.0f);
+        if (Config.getBool(Config.ConfigOptions.SHOW_POTION_IMG)) {
+            sb.draw(TEX_POTION,
+                    textX - (64.0f * Settings.scale),
+                    textY - (39.0f * Settings.scale),
+                    0.0f,
+                    0.0f,
+                    TEX_POTION.getWidth() * Settings.scale,
+                    TEX_POTION.getHeight() * Settings.scale,
+                    1.0f,
+                    1.0f,
+                    0.0f,
+                    0,
+                    0,
+                    TEX_POTION.getWidth(),
+                    TEX_POTION.getHeight(),
+                    false,
+                    false
+                    );
+        }
 
         // Special rainbow text is locked behind the Terr80 setting
         //if ((potion_chance == 80) && ConfigHelper.getInstance().getBool(ConfigHelper.BooleanSettings.TERR80)) {

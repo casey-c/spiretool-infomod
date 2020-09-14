@@ -186,8 +186,11 @@ public class MonsterInfoOverlay implements PostInitializeSubscriber, RenderSubsc
 
         // Render the image
         sb.setColor(Color.WHITE);
-        sb.draw(img, cx - img_w2, cy - img_h2, img_w2, img_h2, img_w, img_h, Settings.scale, Settings.scale,
-                0.0F, 0, 0, img_w, img_h, false, false);
+        sb.draw(img,
+                (Settings.WIDTH - (img.getWidth() * Settings.scale)) * 0.5f,
+                (Settings.HEIGHT - (img.getHeight() * Settings.scale)) * 0.5f,
+                img.getWidth() * Settings.scale,
+                img.getHeight() * Settings.scale );
 
 
         // HEADERS
@@ -249,6 +252,8 @@ public class MonsterInfoOverlay implements PostInitializeSubscriber, RenderSubsc
 
     // Figure out if we right clicked on a monster in a combat (this behavior can pull from the base game)
     private void rightClickHandler() {
+        System.out.println("OJB: monster info overlay recv the right click handler");
+
         if (!Config.getBool(Config.ConfigOptions.SHOW_MONSTER_DETAILS))
             return;
 
@@ -264,6 +269,8 @@ public class MonsterInfoOverlay implements PostInitializeSubscriber, RenderSubsc
         MonsterGroup monsters = room.monsters;
         if (monsters == null)
             return;
+
+        System.out.println("OJB: monster info overlay here, checking if hovered monster");
 
         AbstractMonster hovered = monsters.hoveredMonster;
         if (hovered != null) {

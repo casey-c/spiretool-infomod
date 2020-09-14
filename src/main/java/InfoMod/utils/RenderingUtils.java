@@ -159,8 +159,8 @@ public class RenderingUtils {
                 //FontHelper.charTitleFont,
                 //FontHelper.topPanelInfoFont,
                 msg,
-                x,
-                y,
+                x * Settings.scale,
+                y * Settings.scale,
                 c);
     }
 
@@ -209,7 +209,7 @@ public class RenderingUtils {
             float dx = MathUtils.random(200.0f) - 100.0f;
             float dy = MathUtils.random(200.0f) - 100.0f;
 
-            AbstractDungeon.effectList.add(new GiantEyeEffect(cx + dx, cy + dy, Settings.PURPLE_COLOR));
+            AbstractDungeon.effectList.add(new GiantEyeEffect((cx + dx), (cy + dy), Settings.PURPLE_COLOR));
         }
     }
 

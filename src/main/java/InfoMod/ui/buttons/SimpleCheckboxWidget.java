@@ -3,6 +3,7 @@ package InfoMod.ui.buttons;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.TipHelper;
 import com.megacrit.cardcrawl.helpers.input.InputHelper;
 
@@ -64,10 +65,19 @@ public class SimpleCheckboxWidget extends ButtonWidget {
 
         sb.setColor(Color.WHITE);
 
-        if (enabled)
-            sb.draw(TEX_CHECKED, x, y);
-        else
-            sb.draw(TEX_UNCHECKED, x, y);
+        if (enabled) {
+            sb.draw(TEX_CHECKED,
+                    x * Settings.scale,
+                    y * Settings.scale,
+                    TEX_CHECKED.getWidth() * Settings.scale,
+                    TEX_CHECKED.getHeight() * Settings.scale);
+        } else {
+            sb.draw(TEX_UNCHECKED,
+                    x * Settings.scale,
+                    y * Settings.scale,
+                    TEX_UNCHECKED.getWidth() * Settings.scale,
+                    TEX_UNCHECKED.getHeight() * Settings.scale);
+        }
 
         if (hasToolTip && hb.hovered) {
             TipHelper.renderGenericTip(InputHelper.mX + 40.0f, InputHelper.mY, toolTipHeader, toolTipBody);

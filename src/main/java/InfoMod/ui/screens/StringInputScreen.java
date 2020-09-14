@@ -23,7 +23,6 @@ import com.megacrit.cardcrawl.helpers.input.InputHelper;
 
 /*
  Some testing around to replace ModTextPanel with something a bit more flexible?
- */
 public class StringInputScreen implements RenderSubscriber, PostUpdateSubscriber {
     private boolean visible = false;
 
@@ -188,15 +187,14 @@ public class StringInputScreen implements RenderSubscriber, PostUpdateSubscriber
         sb.setColor(this.uiColor);
         sb.draw(
                 ImageMaster.OPTION_CONFIRM,
-                //ImageMaster.WHITE_SQUARE_IMG,
-                (float)Settings.WIDTH / 2.0F - 300.0F, //(float)Settings.WIDTH / 2.0F - 180.0F,
-                Settings.OPTION_Y - 207.0F,
-                180.0F,
-                207.0F,
-                600.0F, //360.0F,
-                414.0F, //414.0F,
-                Settings.scale,
-                Settings.scale,
+                ((float)Settings.WIDTH / 2.0F - 300.0F) * Settings.scale,
+                (Settings.OPTION_Y - 207.0F) * Settings.scale,
+                180.0F * Settings.scale,
+                207.0F * Settings.scale,
+                600.0F * Settings.scale, //360.0F,
+                414.0F * Settings.scale, //414.0F,
+                1.0f, //Settings.scale,
+                1.0f, //Settings.scale,
                 0.0F,
                 0,
                 0,
@@ -318,7 +316,6 @@ public class StringInputScreen implements RenderSubscriber, PostUpdateSubscriber
 
         c.a = this.uiColor.a;
         FontHelper.renderFontCentered(sb, FontHelper.cardTitleFont_small_N, "Cancel", (float)Settings.WIDTH / 2.0F + 110.0F * Settings.scale, Settings.OPTION_Y - 118.0F * Settings.scale, c, 1.0F);
-         */
 
         //if (this.visible) {
         // show the hitbox when debug true is set
@@ -329,3 +326,4 @@ public class StringInputScreen implements RenderSubscriber, PostUpdateSubscriber
     }
 
 }
+                    */

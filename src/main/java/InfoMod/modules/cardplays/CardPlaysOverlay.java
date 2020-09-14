@@ -198,11 +198,27 @@ public class CardPlaysOverlay implements RenderSubscriber {
 
         // Render the image
         sb.setColor(Color.WHITE);
-        sb.draw(img, cx - img_w2, cy - img_h2, img_w2, img_h2, img_w, img_h, Settings.scale, Settings.scale,
-                0.0F, 0, 0, img_w, img_h, false, false);
+//        sb.draw(img, cx - img_w2, cy - img_h2, img_w2, img_h2, img_w, img_h, Settings.scale, Settings.scale,
+//                0.0F, 0, 0, img_w, img_h, false, false);
+        sb.draw(img,
+                (cx - img_w2) * Settings.scale,
+                (cy - img_h2) * Settings.scale,
+                0,
+                0,
+                img_w * Settings.scale,
+                img_h * Settings.scale,
+                1.0f,
+                1.0f,
+                0.0F,
+                0,
+                0,
+                img_w,
+                img_h,
+                false,
+                false);
 
 
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.bannerFont, "Cards Played (EARLY WIP - NOT IMPLEMENTED)", title_x, title_y, Settings.GOLD_COLOR);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.bannerFont, "Cards Played (EARLY WIP - NOT IMPLEMENTED)", title_x * Settings.scale, title_y * Settings.scale, Settings.GOLD_COLOR);
 
         // Top row headers (grouped over top)
         FontHelper.renderFontLeftTopAligned(sb, FontHelper.tipBodyFont, "This Combat", thgx_comb, thgy, Settings.CREAM_COLOR);

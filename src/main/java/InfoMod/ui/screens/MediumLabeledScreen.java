@@ -84,8 +84,8 @@ public class MediumLabeledScreen extends AbstractScreen {
         FontHelper.renderSmartText(sb,
                 titleFont,
                 title,
-                TITLE_X,
-                TITLE_Y,
+                TITLE_X * Settings.scale,
+                TITLE_Y * Settings.scale,
                 titleColor);
     }
 }

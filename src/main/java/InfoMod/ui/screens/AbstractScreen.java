@@ -77,7 +77,9 @@ public abstract class AbstractScreen implements RenderSubscriber {
         sb.setColor(Color.WHITE);
         sb.draw(SCREEN_BG,
                 ((float) Settings.WIDTH - SCREEN_W * Settings.scale) * 0.5f,
-                ((float) Settings.HEIGHT - SCREEN_H * Settings.scale) * 0.5f
+                ((float) Settings.HEIGHT - SCREEN_H * Settings.scale) * 0.5f,
+                SCREEN_W * Settings.scale,
+                SCREEN_H * Settings.scale
         );
 
         for (IScreenWidget w : childWidgets)

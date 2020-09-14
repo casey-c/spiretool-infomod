@@ -65,8 +65,8 @@ public class Config {
         defaults.put(ConfigOptions.MONSTER_OVERLAY_REQ_SHIFT.toString(), trueString);
 
         defaults.put(ConfigOptions.POTION_TEXT.toString(), "Potions: ");
-        defaults.put(ConfigOptions.POTION_X.toString(), Integer.toString(1494));
-        defaults.put(ConfigOptions.POTION_Y.toString(), Integer.toString(1056));
+        defaults.put(ConfigOptions.POTION_X.toString(), Integer.toString((int)(1494 * Settings.scale)));
+        defaults.put(ConfigOptions.POTION_Y.toString(), Integer.toString((int)(1056 * Settings.scale)));
 
         try {
             spireConfig = new SpireConfig("Info Mod", "infoModConfig", defaults);
@@ -269,14 +269,14 @@ public class Config {
         //ModPanel modPanel = new ModPanel();
         BetterModPanel modPanel = new BetterModPanel();
 
-        float titleY = 889.0f * Settings.scale;
+        float titleY = 889.0f;
 
-        float leftColX = 400.0f * Settings.scale;
-        float rightColX = 1014.0f * Settings.scale;
+        float leftColX = 400.0f;
+        float rightColX = 1014.0f;
 
-        float firstDescY = 805.0f * Settings.scale;
+        float firstDescY = 805.0f;
         //float itemOffsetY = 144.0f * Settings.scale; // 130.0 height / 14 gap
-        float itemOffsetY = 174.0f * Settings.scale; // 130.0 height / 14 gap
+        float itemOffsetY = 174.0f; // 130.0 height / 14 gap
 
         modPanel.addUIElement(new InfoModConfigWrappedLabel("Info Mod Config", leftColX, titleY, Settings.CREAM_COLOR, FontHelper.bannerFont, modPanel));
 
