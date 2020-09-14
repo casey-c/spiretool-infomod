@@ -2,8 +2,8 @@
   "modid": "ojb_infomod",
   "name": "ojb's Info Mod",
   "author_list": ["ojb"],
-  "description": "Displays tedious to calculate information",
-  "version": "0.5.7",
+  "description": "Displays helpful information",
+  "version": "0.5.8",
   "sts_version": "06-22-2020",
   "mts_version": "2.6.0",
   "dependencies": ["basemod"]
