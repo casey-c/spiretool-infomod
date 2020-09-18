@@ -689,7 +689,7 @@
           }
         }
       ],
-      "ai": "75% chance of #wBite, and 25% chance of #wGrow, but cannot #wSpit #wWeb twice in a row or #wBite 3 times in a row.",
+      "ai": "75% chance of #wBite, and 25% chance of #wSpit #wWeb, but cannot #wSpit #wWeb twice in a row or #wBite 3 times in a row.",
       "notes": "Innate #uCurl #uUp #uC, where #uC is random [9, 12]. #rD is randomly chosen in [6, 8] at the start of the fight."
     },
     {
