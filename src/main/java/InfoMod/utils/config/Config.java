@@ -278,7 +278,7 @@ public class Config {
         //float itemOffsetY = 144.0f * Settings.scale; // 130.0 height / 14 gap
         float itemOffsetY = 174.0f; // 130.0 height / 14 gap
 
-        modPanel.addUIElement(new InfoModConfigWrappedLabel("Info Mod Config", leftColX, titleY, Settings.CREAM_COLOR, FontHelper.bannerFont, modPanel));
+        modPanel.addUIElement(new InfoModConfigWrappedLabel("Info Mod Config", leftColX, titleY, Settings.CREAM_COLOR, FontHelper.tipHeaderFont, modPanel));
 
         // LEFT COLUMN --------------------------------------------------------------------------------
         modPanel.addUIElement(new InfoModConfigDescBool(

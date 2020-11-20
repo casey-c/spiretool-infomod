@@ -194,9 +194,9 @@ public class MonsterInfoOverlay implements PostInitializeSubscriber, RenderSubsc
 
 
         // HEADERS
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.bannerFont, curr_monster.getNameAndHP(), left_x, top_header_y, Settings.GOLD_COLOR);
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.bannerFont, "AI", right_x, top_header_y, Settings.GOLD_COLOR);
-        FontHelper.renderFontLeftTopAligned(sb, FontHelper.bannerFont, "Notes", right_x, notes_header_y, Settings.GOLD_COLOR);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.tipHeaderFont, curr_monster.getNameAndHP(), left_x, top_header_y, Settings.GOLD_COLOR);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.tipHeaderFont, "AI", right_x, top_header_y, Settings.GOLD_COLOR);
+        FontHelper.renderFontLeftTopAligned(sb, FontHelper.tipHeaderFont, "Notes", right_x, notes_header_y, Settings.GOLD_COLOR);
 
         // AI text
         RenderingUtils.renderSmartText(sb,

@@ -61,9 +61,20 @@ public class MonsterInfoDatabase implements PostInitializeSubscriber {
     public void printAll() {
         System.out.println("***************************************");
         System.out.println("OJB: Monster Database has " + monsters.size() + " elements");
+        System.out.println();
+
+        System.out.println("{");
+        System.out.println("\"monsters\": [");
+
         for (MonsterInfo m : monsters.values()) {
             m.print();
         }
+
+        System.out.println("]");
+
+        System.out.println("}");
+
+        System.out.println();
         System.out.println("***************************************");
     }
 
@@ -90,7 +101,6 @@ public class MonsterInfoDatabase implements PostInitializeSubscriber {
                             monsters.put(monster.getId(), monster);
                     }
                 }
-
 
             } catch (IOException e) {
                 e.printStackTrace();

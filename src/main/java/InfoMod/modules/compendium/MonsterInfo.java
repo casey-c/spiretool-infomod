@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.function.BiConsumer;
 
 /*
    Utility class for storing data about the monster's moveset and AI. MonsterInfoDatabase loads this information from
@@ -185,13 +186,56 @@ public class MonsterInfo {
 
     // DEBUG
     public void print() {
-        System.out.println("Monster name: " + name + " (" + id + ") -- " + hp_string);
+//        System.out.println("Monster name: " + name + " (" + id + ") -- " + hp_string);
+//
+//        System.out.print("\t");
+//        for (Move m : moves) {
+//            System.out.print(m.move_name + ", ");
+//        }
+//        System.out.println();
 
-        System.out.print("\t");
+        // so give me midnight songs in the half light no real life
+        // give me hope in the form of a christmas light no real light
+        System.out.println("{");
+        System.out.println("\t\"name\": \"" + name + "\",");
+        System.out.println("\t\"id\": \"" + id + "\",");
+        System.out.println("\t\"hp\": \"" + hp_string + "\",");
+
+        System.out.println("\t\"movesets\": [");
+        System.out.println("\t\t{");
+
+        System.out.println("\t\t\t\"min_asc\": 0,");
+        System.out.println("\t\t\t\"ai\": \"" + ai_description + "\",");
+        System.out.println("\t\t\t\"moves\": [");
+
+        BiConsumer<String, String> fn = (String d0, String c0) -> {
+            if (d0 != null && !d0.isEmpty()) {
+                System.out.println("\t\t\t\t\t\t{");
+                System.out.println("\t\t\t\t\t\t\t\"name\": \"" + d0 + "\", ");
+                System.out.println("\t\t\t\t\t\t\t\"color\": \"" + c0 + "\"");
+                System.out.println("\t\t\t\t\t\t},");
+            }
+        };
+
         for (Move m : moves) {
-            System.out.print(m.move_name + ", ");
+            System.out.println("\t\t\t\t{");
+            System.out.println("\t\t\t\t\t\"name\": \"" + m.move_name + "\",");
+            System.out.println("\t\t\t\t\t\"effects\": [");
+
+            fn.accept(m.d0, m.c0.toString());
+            fn.accept(m.d1, m.c1.toString());
+            fn.accept(m.d2, m.c2.toString());
+            fn.accept(m.d3, m.c3.toString());
+            fn.accept(m.d4, m.c4.toString());
+            fn.accept(m.d5, m.c5.toString());
+
+            System.out.println("\t\t\t\t\t]");
+            System.out.println("\t\t\t\t}");
         }
-        System.out.println();
+
+        System.out.println("\t\t}");
+        System.out.println("},");
+
     }
 
     // Getters
