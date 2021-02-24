@@ -1,3 +1,14 @@
+**No longer being developed! Check out:**
+
+https://github.com/casey-c/infomod2 
+
+https://github.com/casey-c/bestiary 
+
+**...the more polished successors of this project!**
+
+---
+
+
 # InfoMod
 
 InfoMod is a mod for Slay The Spire designed to help make hidden or lesser known game mechanics more visible to the player seeking to improve their game. It is *NOT* a cheat mod, and does not provide any additional information that the player cannot access without it (via tedious calculation or lookup). It is an in-game spiritual successor to SpireTool, an external application that parsed save files to try and compute useful information to help improve decision making. 
